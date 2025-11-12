@@ -1,0 +1,67 @@
+# AI Customer Agent - Application Settings
+
+# Application Settings
+app:
+  name: "AI Customer Agent"
+  version: "1.0.0"
+  description: "Local AI customer service agent with DeepSeek API integration"
+  debug: false
+  log_level: "INFO"
+
+# DeepSeek API Configuration
+deepseek:
+  base_url: "https://api.deepseek.com"
+  model: "deepseek-chat"
+  temperature: 0.7
+  max_tokens: 2000
+  timeout: 30
+
+# Knowledge Base Configuration
+knowledge_base:
+  persist_directory: "./knowledge_base/chroma_db"
+  embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+  chunk_size: 1000
+  chunk_overlap: 200
+  max_documents: 10000
+
+# Vector Search Configuration
+vector_search:
+  similarity_threshold: 0.7
+  max_results: 3
+  search_type: "similarity"
+
+# File Processing Configuration
+file_processing:
+  supported_formats:
+    - "pdf"
+    - "txt"
+    - "docx"
+    - "doc"
+    - "xlsx"
+    - "xls"
+  max_file_size_mb: 10
+
+# Chat Configuration
+chat:
+  max_history_length: 20
+  enable_streaming: true
+  system_prompt: "You are a helpful customer service assistant. Provide accurate and friendly responses to customer queries."
+
+# GPU Configuration
+gpu:
+  enable_cuda: true
+  device: "cuda"
+  max_memory_gb: 8
+
+# API Server Configuration
+api:
+  host: "localhost"
+  port: 8000
+  reload: true
+  workers: 1
+
+# Streamlit UI Configuration
+ui:
+  port: 8501
+  theme: "light"
+  page_title: "AI Customer Agent"

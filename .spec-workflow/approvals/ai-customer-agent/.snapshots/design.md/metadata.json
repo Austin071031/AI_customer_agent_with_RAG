@@ -1,0 +1,14 @@
+{
+  "filePath": ".spec-workflow/specs/ai-customer-agent/design.md",
+  "currentVersion": 1,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2025-10-30T07:27:27.302Z",
+      "trigger": "initial",
+      "approvalId": "approval_1761809247291_ly3ngq7l8",
+      "approvalTitle": "AI Customer Agent Design Specification"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "filePath": ".spec-workflow/steering/product.md",
+  "currentVersion": 1,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2025-11-12T06:01:56.980Z",
+      "trigger": "initial",
+      "approvalId": "approval_1762927316965_u2lwmfp9d",
+      "approvalTitle": "Product Steering Document for AI Customer Agent"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "filePath": ".spec-workflow/steering/structure.md",
+  "currentVersion": 1,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2025-11-12T06:10:02.906Z",
+      "trigger": "initial",
+      "approvalId": "approval_1762927802894_meefjia56",
+      "approvalTitle": "Project Structure Document for AI Customer Agent"
+    }
+  ]
+}

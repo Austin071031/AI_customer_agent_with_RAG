@@ -1,0 +1,14 @@
+{
+  "filePath": ".spec-workflow/specs/ai-customer-agent/tasks.md",
+  "currentVersion": 1,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2025-10-30T07:34:20.084Z",
+      "trigger": "initial",
+      "approvalId": "approval_1761809660074_aq9sipz6p",
+      "approvalTitle": "AI Customer Agent Task Breakdown"
+    }
+  ]
+}
