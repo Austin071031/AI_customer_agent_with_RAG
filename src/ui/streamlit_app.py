@@ -22,6 +22,7 @@ sys.path.insert(0, project_root)
 API_BASE_URL = "http://localhost:8001"
 CHAT_ENDPOINT = f"{API_BASE_URL}/api/chat"
 KB_ENDPOINT = f"{API_BASE_URL}/api/knowledge-base"
+EXCEL_FILES_ENDPOINT = f"{API_BASE_URL}/api/excel-files"
 CONFIG_ENDPOINT = f"{API_BASE_URL}/api/config"
 HEALTH_ENDPOINT = f"{API_BASE_URL}/health"
 INFO_ENDPOINT = f"{API_BASE_URL}/info"
@@ -216,6 +217,136 @@ def clear_knowledge_base() -> bool:
         return False
 
 
+def list_excel_files() -> List[Dict]:
+    """
+    List all Excel files from the API.
+    
+    Returns:
+        List of Excel file dictionaries
+    """
+    try:
+        response = requests.get(f"{EXCEL_FILES_ENDPOINT}/", timeout=10)
+        if response.status_code == 200:
+            return response.json()
+        return []
+    except requests.exceptions.RequestException:
+        return []
+
+
+def get_excel_file(file_id: str) -> Optional[Dict]:
+    """
+    Get specific Excel file details.
+    
+    Args:
+        file_id: ID of the Excel file
+        
+    Returns:
+        Excel file dictionary if found, None otherwise
+    """
+    try:
+        response = requests.get(f"{EXCEL_FILES_ENDPOINT}/{file_id}", timeout=10)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except requests.exceptions.RequestException:
+        return None
+
+
+def delete_excel_file(file_id: str) -> bool:
+    """
+    Delete an Excel file.
+    
+    Args:
+        file_id: ID of the Excel file to delete
+        
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        response = requests.delete(f"{EXCEL_FILES_ENDPOINT}/{file_id}", timeout=10)
+        return response.status_code == 200
+    except requests.exceptions.RequestException:
+        return False
+
+
+def get_excel_sheets(file_id: str, sheet_name: Optional[str] = None) -> List[Dict]:
+    """
+    Get sheet data for an Excel file.
+    
+    Args:
+        file_id: ID of the Excel file
+        sheet_name: Optional specific sheet name
+        
+    Returns:
+        List of sheet data dictionaries
+    """
+    try:
+        params = {}
+        if sheet_name:
+            params["sheet_name"] = sheet_name
+            
+        response = requests.get(f"{EXCEL_FILES_ENDPOINT}/{file_id}/sheets", 
+                              params=params, timeout=10)
+        if response.status_code == 200:
+            return response.json()
+        return []
+    except requests.exceptions.RequestException:
+        return []
+
+
+def search_excel_data(query: str, file_id: Optional[str] = None, 
+                     sheet_name: Optional[str] = None, 
+                     column_name: Optional[str] = None,
+                     max_results: int = 50) -> List[Dict]:
+    """
+    Search for data within Excel files.
+    
+    Args:
+        query: Search query string
+        file_id: Optional specific file ID to search within
+        sheet_name: Optional specific sheet name
+        column_name: Optional specific column name
+        max_results: Maximum number of results to return
+        
+    Returns:
+        List of search result dictionaries
+    """
+    try:
+        if file_id:
+            # Search within specific file
+            params = {
+                "query": query,
+                "max_results": max_results
+            }
+            if sheet_name:
+                params["sheet_name"] = sheet_name
+            if column_name:
+                params["column_name"] = column_name
+                
+            response = requests.get(f"{EXCEL_FILES_ENDPOINT}/{file_id}/search", 
+                                  params=params, timeout=10)
+        else:
+            # Search across all files
+            payload = {
+                "query": query,
+                "max_results": max_results
+            }
+            if sheet_name:
+                payload["sheet_name"] = sheet_name
+            if column_name:
+                payload["column_name"] = column_name
+                
+            response = requests.post(f"{EXCEL_FILES_ENDPOINT}/search", 
+                                   json=payload, timeout=10)
+            
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("results", [])
+        return []
+    except requests.exceptions.RequestException:
+        return []
+
+
 def get_configuration() -> Optional[Dict]:
     """
     Get current configuration from the API.
@@ -379,12 +510,12 @@ def main():
         # Knowledge Base Management
         st.subheader("📚 Knowledge Base")
         
-        # File upload
+        # File upload - now includes Excel formats
         uploaded_files = st.file_uploader(
             "Add documents to knowledge base",
-            type=["pdf", "txt", "docx", "doc", "md"],
+            type=["pdf", "txt", "docx", "doc", "md", "xlsx", "xls", "xlsm", "xlsb"],
             accept_multiple_files=True,
-            help="Supported formats: PDF, TXT, DOCX, DOC, MD"
+            help="Supported formats: PDF, TXT, DOCX, DOC, MD, XLSX, XLS, XLSM, XLSB"
         )
         
         if uploaded_files and st.button("Upload Documents"):
@@ -423,6 +554,67 @@ def main():
                     st.success("Knowledge base cleared")
                 else:
                     st.error("Failed to clear knowledge base")
+        
+        # Excel File Management Panel
+        st.subheader("📊 Excel File Management")
+        
+        # List Excel files
+        if st.button("📋 List Excel Files", use_container_width=True):
+            excel_files = list_excel_files()
+            if excel_files:
+                st.write(f"Found {len(excel_files)} Excel files:")
+                for file in excel_files:
+                    with st.expander(f"📄 {file.get('file_name', 'Unknown')}"):
+                        st.write(f"**ID:** {file.get('id', 'N/A')}")
+                        st.write(f"**Size:** {file.get('file_size', 0)} bytes")
+                        st.write(f"**Sheets:** {', '.join(file.get('sheet_names', []))}")
+                        st.write(f"**Uploaded:** {file.get('uploaded_at', 'Unknown')}")
+                        
+                        # File actions
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            if st.button("View Details", key=f"view_{file.get('id')}"):
+                                file_details = get_excel_file(file.get('id'))
+                                if file_details:
+                                    st.json(file_details)
+                        with col2:
+                            if st.button("View Sheets", key=f"sheets_{file.get('id')}"):
+                                sheets = get_excel_sheets(file.get('id'))
+                                if sheets:
+                                    st.write(f"Found {len(sheets)} sheets:")
+                                    for sheet in sheets:
+                                        with st.expander(f"Sheet: {sheet.get('sheet_name', 'Unknown')}"):
+                                            st.write(f"**Rows:** {sheet.get('row_count', 0)}")
+                                            st.write(f"**Columns:** {sheet.get('column_count', 0)}")
+                                            st.write(f"**Sample Data:**")
+                                            if sheet.get('sample_data'):
+                                                st.dataframe(sheet['sample_data'])
+                        with col3:
+                            if st.button("Delete", key=f"delete_{file.get('id')}"):
+                                if delete_excel_file(file.get('id')):
+                                    st.success("File deleted successfully")
+                                    st.rerun()
+                                else:
+                                    st.error("Failed to delete file")
+            else:
+                st.info("No Excel files found in the database")
+        
+        # Excel Search
+        if st.button("🔍 Search Excel Data", use_container_width=True):
+            search_query = st.text_input("Search query:", key="excel_search")
+            if search_query:
+                with st.spinner("Searching Excel data..."):
+                    results = search_excel_data(search_query, max_results=20)
+                    if results:
+                        st.write(f"Found {len(results)} matches:")
+                        for result in results:
+                            with st.expander(f"Match in {result.get('file_name', 'Unknown')}"):
+                                st.write(f"**File:** {result.get('file_name')}")
+                                st.write(f"**Sheet:** {result.get('sheet_name')}")
+                                st.write(f"**Location:** Row {result.get('row_number')}, Column {result.get('column_name')}")
+                                st.write(f"**Value:** {result.get('cell_value')}")
+                    else:
+                        st.info("No matches found")
         
         # Configuration
         st.subheader("⚙️ Configuration")

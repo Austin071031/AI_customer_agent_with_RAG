@@ -258,7 +258,7 @@ class TestKnowledgeBaseManager:
         mock_collection = Mock()
         mock_chromadb.PersistentClient.return_value = mock_client
         mock_client.get_or_create_collection.return_value = mock_collection
-        
+
         mock_processor = Mock()
         mock_processor.extract_text_from_file.return_value = ("Test document content", {
             'file_name': 'test.txt',
@@ -267,31 +267,34 @@ class TestKnowledgeBaseManager:
             'last_modified': 1234567890
         })
         mock_document_processor.return_value = mock_processor
-        
+
         mock_embedding_service_instance = Mock()
         mock_embedding_service_instance.generate_embeddings.return_value = [[0.1, 0.2, 0.3]]
         mock_embedding_service.return_value = mock_embedding_service_instance
-        
+
         # Create temporary test file
         with tempfile.NamedTemporaryFile(suffix='.txt', mode='w', delete=False, encoding='utf-8') as temp_file:
             temp_file.write("Test content")
             temp_file_path = temp_file.name
-            
+
         try:
             manager = KnowledgeBaseManager()
             manager.document_processor = mock_processor
             manager.embedding_service = mock_embedding_service_instance
+
+            # Call the method - now returns a dictionary
+            result = manager.add_documents([temp_file_path])
+
+            # Verify the results - check the dictionary structure
+            assert len(result['documents']) == 1
+            assert len(result['excel_files']) == 0
+            assert len(result['errors']) == 0
             
-            # Call the method
-            documents = manager.add_documents([temp_file_path])
-            
-            # Verify the results
-            assert len(documents) == 1
-            assert isinstance(documents[0], KBDocument)
-            assert documents[0].content == "Test document content"
-            assert documents[0].file_path == temp_file_path
-            assert documents[0].embedding == [0.1, 0.2, 0.3]
-            
+            document_result = result['documents'][0]
+            assert document_result['status'] == 'success'
+            assert document_result['file_name'] == 'test.txt'
+            assert document_result['storage_type'] == 'vector'
+
             # Verify the vector store was called correctly
             mock_collection.add.assert_called_once()
             call_args = mock_collection.add.call_args
@@ -299,7 +302,7 @@ class TestKnowledgeBaseManager:
             assert len(call_args[1]['documents']) == 1
             assert len(call_args[1]['metadatas']) == 1
             assert len(call_args[1]['embeddings']) == 1
-            
+
         finally:
             os.unlink(temp_file_path)
             
@@ -328,9 +331,14 @@ class TestKnowledgeBaseManager:
             manager = KnowledgeBaseManager()
             manager.document_processor = mock_processor
             
-            # Should skip empty documents and return empty list
-            with pytest.raises(KnowledgeBaseError, match="No valid documents found to process"):
-                manager.add_documents([temp_file_path])
+            # Should handle empty content by adding error to results
+            result = manager.add_documents([temp_file_path])
+            
+            # Verify the error is captured in results
+            assert len(result['documents']) == 0
+            assert len(result['excel_files']) == 0
+            assert len(result['errors']) == 1
+            assert "Empty content" in result['errors'][0]
             
         finally:
             os.unlink(temp_file_path)
@@ -403,7 +411,10 @@ class TestKnowledgeBaseManager:
         
         result = manager.clear_knowledge_base()
         
-        assert result is True
+        # Now returns a dictionary with both vector_store and sqlite_database status
+        assert isinstance(result, dict)
+        assert result['vector_store'] is True
+        assert result['sqlite_database'] is False  # SQLite clear is not implemented
         mock_client.delete_collection.assert_called_once_with("knowledge_base")
         
     @patch('src.services.knowledge_base.chromadb')
@@ -417,7 +428,10 @@ class TestKnowledgeBaseManager:
         
         result = manager.clear_knowledge_base()
         
-        assert result is False
+        # Now returns a dictionary with both vector_store and sqlite_database status
+        assert isinstance(result, dict)
+        assert result['vector_store'] is False
+        assert result['sqlite_database'] is False
         
     @patch('src.services.knowledge_base.chromadb')
     def test_get_knowledge_base_info(self, mock_chromadb):
@@ -430,12 +444,26 @@ class TestKnowledgeBaseManager:
         
         manager = KnowledgeBaseManager()
         
-        info = manager.get_knowledge_base_info()
-        
-        assert info['document_count'] == 5
-        assert info['persist_directory'] == "./knowledge_base/chroma_db"
-        assert 'embedding_model' in info
-        assert 'supported_formats' in info
+        # Mock the SQLite service to avoid actual database calls
+        with patch.object(manager.sqlite_service, 'get_database_info') as mock_db_info:
+            mock_db_info.return_value = {'document_count': 2, 'sheet_count': 3, 'total_size_bytes': 1024}
+            
+            info = manager.get_knowledge_base_info()
+            
+            # Check the nested structure
+            assert 'vector_store' in info
+            assert 'sqlite_database' in info
+            assert 'total_documents' in info
+            assert 'health_status' in info
+            
+            # Check vector store info
+            assert info['vector_store']['document_count'] == 5
+            assert info['vector_store']['persist_directory'] == "./knowledge_base/chroma_db"
+            assert 'embedding_model' in info['vector_store']
+            assert 'supported_formats' in info['vector_store']
+            
+            # Check total documents calculation
+            assert info['total_documents'] == 7  # 5 (vector) + 2 (sqlite)
         
     @patch('src.services.knowledge_base.chromadb')
     def test_health_check_success(self, mock_chromadb):

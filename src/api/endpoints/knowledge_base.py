@@ -31,7 +31,11 @@ SUPPORTED_EXTENSIONS = {
     '.doc': 'Word Document',
     '.md': 'Markdown File',
     '.json': 'JSON File',
-    '.csv': 'CSV File'
+    '.csv': 'CSV File',
+    '.xlsx': 'Excel File',
+    '.xls': 'Excel File',
+    '.xlsm': 'Excel File',
+    '.xlsb': 'Excel File'
 }
 
 # Maximum file size (10MB)
@@ -424,16 +428,25 @@ async def upload_documents(
                 
                 try:
                     # Add document to knowledge base
-                    documents = kb_manager.add_documents([temp_file_path])
+                    result = kb_manager.add_documents([temp_file_path])
                     
-                    if documents:
+                    # Check if file was successfully processed (either as Excel or document)
+                    if result.get('excel_files') or result.get('documents'):
                         uploaded_files.append(file.filename)
                         logger.info(f"Successfully processed: {file.filename}")
                     else:
-                        failed_files.append({
-                            "filename": file.filename,
-                            "reason": "Failed to process document content"
-                        })
+                        # Check for specific errors
+                        if result.get('errors'):
+                            error_msg = result['errors'][0] if result['errors'] else "Unknown processing error"
+                            failed_files.append({
+                                "filename": file.filename,
+                                "reason": error_msg
+                            })
+                        else:
+                            failed_files.append({
+                                "filename": file.filename,
+                                "reason": "Failed to process document content - no results returned"
+                            })
                         
                 finally:
                     # Clean up temporary file

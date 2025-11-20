@@ -15,7 +15,7 @@ from ..services.config_manager import ConfigManager
 from ..services.deepseek_service import DeepSeekService
 from ..services.knowledge_base import KnowledgeBaseManager
 from ..services.chat_manager import ChatManager
-from .endpoints import chat, knowledge_base, config
+from .endpoints import chat, knowledge_base, config, excel_files
 from .state import app_state
 
 # Configure logging
@@ -53,7 +53,10 @@ async def lifespan(app: FastAPI):
         app_state["deepseek_service"] = deepseek_service
         
         # Initialize knowledge base manager
-        kb_manager = KnowledgeBaseManager(settings.knowledge_base.persist_directory)
+        kb_manager = KnowledgeBaseManager(
+            persist_directory=settings.knowledge_base.persist_directory,
+            sqlite_db_path=settings.database.sqlite_db_path
+        )
         app_state["kb_manager"] = kb_manager
         
         # Initialize chat manager
@@ -128,6 +131,12 @@ app.include_router(
     config.router,
     prefix="/api/config",
     tags=["Configuration"]
+)
+
+app.include_router(
+    excel_files.router,
+    prefix="/api/excel-files",
+    tags=["Excel Files"]
 )
 
 

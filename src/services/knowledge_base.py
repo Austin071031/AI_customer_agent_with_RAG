@@ -1,15 +1,15 @@
 """
-Knowledge Base Manager for AI Customer Agent.
+Enhanced Knowledge Base Manager for AI Customer Agent.
 
-This module provides the knowledge base management functionality including
-document processing, embedding generation, and vector search using ChromaDB.
+This module provides enhanced knowledge base management with file type detection
+and intelligent routing: Excel files to SQLite database, other documents to vector storage.
 Supports multiple file formats and GPU-accelerated embeddings.
 """
 
 import os
 import uuid
 import logging
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Optional, Tuple, Union
 from pathlib import Path
 
 import torch
@@ -18,6 +18,8 @@ import chromadb
 from chromadb.config import Settings
 
 from ..models.chat_models import KBDocument
+from ..models.excel_models import ExcelDocument, ExcelSearchQuery, ExcelSheetData
+from .sqlite_database_service import SQLiteDatabaseService, SQLiteDatabaseError
 
 
 class KnowledgeBaseError(Exception):
@@ -234,25 +236,29 @@ class EmbeddingService:
         }
 
 
-class KnowledgeBaseManager:
+class EnhancedKnowledgeBaseManager:
     """
-    Manages the knowledge base with document processing and vector search.
+    Enhanced Knowledge Base Manager with file type detection and routing.
     
-    This class provides the main interface for knowledge base operations
-    including adding documents, searching, and managing the vector database.
+    This class provides intelligent file routing: Excel files to SQLite database,
+    other documents to vector storage. Supports multiple file formats and
+    GPU-accelerated embeddings.
     """
     
-    def __init__(self, persist_directory: str = "./knowledge_base/chroma_db"):
+    def __init__(self, persist_directory: str = "./knowledge_base/chroma_db",
+                 sqlite_db_path: str = "./excel_database.db"):
         """
-        Initialize the knowledge base manager.
+        Initialize the enhanced knowledge base manager.
         
         Args:
             persist_directory: Directory to persist ChromaDB data
+            sqlite_db_path: Path to SQLite database for Excel files
         """
         self.logger = logging.getLogger(__name__)
         self.persist_directory = persist_directory
         self.document_processor = DocumentProcessor()
         self.embedding_service = EmbeddingService()
+        self.sqlite_service = SQLiteDatabaseService(sqlite_db_path)
         self.vector_store = self._initialize_vector_store()
         
     def _initialize_vector_store(self) -> chromadb.Collection:
@@ -288,15 +294,33 @@ class KnowledgeBaseManager:
             self.logger.error(f"Failed to initialize vector store: {str(e)}")
             raise KnowledgeBaseError(f"Vector store initialization failed: {str(e)}")
             
-    def add_documents(self, file_paths: List[str]) -> List[KBDocument]:
+    def _detect_file_type(self, file_path: str) -> str:
         """
-        Process and add documents to the knowledge base.
+        Detect file type and determine storage method.
+        
+        Args:
+            file_path: Path to the file
+            
+        Returns:
+            File type category: 'excel' or 'document'
+        """
+        file_extension = Path(file_path).suffix.lower()
+        excel_extensions = {'.xlsx', '.xls', '.xlsm', '.xlsb'}
+        
+        if file_extension in excel_extensions:
+            return 'excel'
+        else:
+            return 'document'
+            
+    def add_documents(self, file_paths: List[str]) -> Dict[str, Any]:
+        """
+        Process and add documents to appropriate storage based on file type.
         
         Args:
             file_paths: List of file paths to add to the knowledge base
             
         Returns:
-            List of KBDocument objects representing the processed documents
+            Dictionary with processing results for both Excel and document files
             
         Raises:
             KnowledgeBaseError: If document processing or addition fails
@@ -304,77 +328,167 @@ class KnowledgeBaseManager:
         if not file_paths:
             raise KnowledgeBaseError("No file paths provided")
             
-        processed_documents = []
-        texts_to_embed = []
-        document_metadatas = []
+        results = {
+            'excel_files': [],
+            'documents': [],
+            'errors': []
+        }
         
         try:
-            # Process each document
             for file_path in file_paths:
-                self.logger.info(f"Processing document: {file_path}")
-                
-                # Extract text and metadata
-                text, file_metadata = self.document_processor.extract_text_from_file(file_path)
-                
-                if not text.strip():
-                    self.logger.warning(f"Empty content in file: {file_path}")
+                file_path = Path(file_path)
+                if not file_path.exists():
+                    error_msg = f"File not found: {file_path}"
+                    results['errors'].append(error_msg)
+                    self.logger.error(error_msg)
                     continue
                     
-                # Create document ID
-                doc_id = str(uuid.uuid4())
+                file_type = self._detect_file_type(str(file_path))
                 
-                # Create KBDocument
-                kb_doc = KBDocument(
-                    id=doc_id,
-                    content=text,
-                    metadata=file_metadata,
-                    file_path=file_path,
-                    file_type=Path(file_path).suffix.lower()
-                )
-                
-                processed_documents.append(kb_doc)
-                texts_to_embed.append(text)
-                document_metadatas.append({
-                    "file_path": file_path,
-                    "file_type": kb_doc.file_type,
-                    "file_size": file_metadata.get('file_size', 0),
-                    "document_id": doc_id
-                })
-                
-            if not processed_documents:
-                raise KnowledgeBaseError("No valid documents found to process")
-                
-            # Generate embeddings in batch for efficiency
-            self.logger.info(f"Generating embeddings for {len(texts_to_embed)} documents")
-            embeddings = self.embedding_service.generate_embeddings(texts_to_embed)
-            
-            # Prepare data for ChromaDB
-            ids = [doc.id for doc in processed_documents]
-            documents = [doc.content for doc in processed_documents]
-            metadatas = document_metadatas
-            
-            # Add to vector store
-            self.vector_store.add(
-                embeddings=embeddings,
-                documents=documents,
-                metadatas=metadatas,
-                ids=ids
-            )
-            
-            # Update KBDocuments with their embeddings
-            for i, doc in enumerate(processed_documents):
-                doc.embedding = embeddings[i]
-                
-            self.logger.info(f"Successfully added {len(processed_documents)} documents to knowledge base")
-            return processed_documents
+                try:
+                    if file_type == 'excel':
+                        excel_result = self._process_excel_file(str(file_path))
+                        results['excel_files'].append(excel_result)
+                    else:
+                        document_result = self._process_document_file(str(file_path))
+                        results['documents'].append(document_result)
+                        
+                except Exception as e:
+                    error_msg = f"Failed to process file {file_path}: {str(e)}"
+                    results['errors'].append(error_msg)
+                    self.logger.error(error_msg)
+                    
+            self.logger.info(f"Processing complete: {len(results['excel_files'])} Excel files, "
+                           f"{len(results['documents'])} documents, {len(results['errors'])} errors")
+            return results
             
         except Exception as e:
             self.logger.error(f"Failed to add documents: {str(e)}")
             raise KnowledgeBaseError(f"Document addition failed: {str(e)}")
             
+    def _process_excel_file(self, file_path: str) -> Dict[str, Any]:
+        """
+        Process Excel file and store in SQLite database.
+        
+        Args:
+            file_path: Path to the Excel file
+            
+        Returns:
+            Dictionary with processing results
+        """
+        try:
+            file_path_obj = Path(file_path)
+            file_name = file_path_obj.name
+            file_size = file_path_obj.stat().st_size
+            
+            # Extract sheet names from Excel file
+            import openpyxl
+            workbook = openpyxl.load_workbook(file_path, read_only=True)
+            sheet_names = workbook.sheetnames
+            workbook.close()
+            
+            # Prepare metadata
+            metadata = {
+                'file_name': file_name,
+                'file_size': file_size,
+                'file_path': file_path,
+                'uploaded_by': 'system',
+                'description': f'Excel file: {file_name}'
+            }
+            
+            # Store in SQLite database
+            file_id = self.sqlite_service.store_excel_file(
+                file_path=file_path,
+                file_name=file_name,
+                file_size=file_size,
+                sheet_names=sheet_names,
+                metadata=metadata
+            )
+            
+            result = {
+                'file_id': file_id,
+                'file_name': file_name,
+                'file_size': file_size,
+                'sheet_names': sheet_names,
+                'storage_type': 'sqlite',
+                'status': 'success'
+            }
+            
+            self.logger.info(f"Successfully processed Excel file: {file_name}")
+            return result
+            
+        except Exception as e:
+            self.logger.error(f"Failed to process Excel file {file_path}: {str(e)}")
+            raise KnowledgeBaseError(f"Excel file processing failed: {str(e)}")
+            
+    def _process_document_file(self, file_path: str) -> Dict[str, Any]:
+        """
+        Process document file and store in vector database.
+        
+        Args:
+            file_path: Path to the document file
+            
+        Returns:
+            Dictionary with processing results
+        """
+        try:
+            # Extract text and metadata
+            text, file_metadata = self.document_processor.extract_text_from_file(file_path)
+            
+            if not text.strip():
+                raise KnowledgeBaseError(f"Empty content in file: {file_path}")
+                
+            # Create document ID
+            doc_id = str(uuid.uuid4())
+            
+            # Create KBDocument
+            kb_doc = KBDocument(
+                id=doc_id,
+                content=text,
+                metadata=file_metadata,
+                file_path=file_path,
+                file_type=Path(file_path).suffix.lower()
+            )
+            
+            # Generate embedding
+            embedding = self.embedding_service.generate_embeddings([text])[0]
+            kb_doc.embedding = embedding
+            
+            # Prepare data for ChromaDB
+            document_metadata = {
+                "file_path": file_path,
+                "file_type": kb_doc.file_type,
+                "file_size": file_metadata.get('file_size', 0),
+                "document_id": doc_id
+            }
+            
+            # Add to vector store
+            self.vector_store.add(
+                embeddings=[embedding],
+                documents=[text],
+                metadatas=[document_metadata],
+                ids=[doc_id]
+            )
+            
+            result = {
+                'document_id': doc_id,
+                'file_name': file_metadata['file_name'],
+                'file_size': file_metadata['file_size'],
+                'file_type': kb_doc.file_type,
+                'storage_type': 'vector',
+                'status': 'success'
+            }
+            
+            self.logger.info(f"Successfully processed document file: {file_metadata['file_name']}")
+            return result
+            
+        except Exception as e:
+            self.logger.error(f"Failed to process document file {file_path}: {str(e)}")
+            raise KnowledgeBaseError(f"Document file processing failed: {str(e)}")
+            
     def search_similar(self, query: str, k: int = 3) -> List[KBDocument]:
         """
-        Search for similar documents in the knowledge base.
+        Search for similar documents in the knowledge base (vector storage only).
         
         Args:
             query: Search query string
@@ -425,58 +539,175 @@ class KnowledgeBaseManager:
             self.logger.error(f"Search failed: {str(e)}")
             raise KnowledgeBaseError(f"Search operation failed: {str(e)}")
             
-    def clear_knowledge_base(self) -> bool:
+    def search_excel_data(self, search_query: ExcelSearchQuery) -> List[Dict[str, Any]]:
         """
-        Clear all documents from the knowledge base.
+        Search for data within Excel files stored in SQLite database.
         
+        Args:
+            search_query: ExcelSearchQuery object with search parameters
+            
         Returns:
-            True if successful, False otherwise
+            List of search results with file and location information
+            
+        Raises:
+            KnowledgeBaseError: If search operation fails
         """
         try:
-            # ChromaDB doesn't have a direct clear method, so we recreate the collection
+            results = self.sqlite_service.search_excel_data(
+                query=search_query.query,
+                file_id=search_query.file_id,
+                sheet_name=search_query.sheet_name,
+                column_name=search_query.column_name,
+                case_sensitive=search_query.case_sensitive,
+                max_results=search_query.max_results
+            )
+            
+            self.logger.info(f"Found {len(results)} Excel data matches for query")
+            return results
+            
+        except SQLiteDatabaseError as e:
+            self.logger.error(f"Excel data search failed: {str(e)}")
+            raise KnowledgeBaseError(f"Excel data search failed: {str(e)}")
+            
+    def list_excel_files(self) -> List[ExcelDocument]:
+        """
+        List all Excel files stored in SQLite database.
+        
+        Returns:
+            List of ExcelDocument objects
+        """
+        try:
+            return self.sqlite_service.list_excel_files()
+        except SQLiteDatabaseError as e:
+            self.logger.error(f"Failed to list Excel files: {str(e)}")
+            raise KnowledgeBaseError(f"Failed to list Excel files: {str(e)}")
+            
+    def get_excel_file(self, file_id: str) -> Optional[ExcelDocument]:
+        """
+        Get specific Excel file details from SQLite database.
+        
+        Args:
+            file_id: ID of the Excel file to retrieve
+            
+        Returns:
+            ExcelDocument object if found, None otherwise
+        """
+        try:
+            return self.sqlite_service.get_excel_file(file_id)
+        except SQLiteDatabaseError as e:
+            self.logger.error(f"Failed to get Excel file: {str(e)}")
+            raise KnowledgeBaseError(f"Failed to get Excel file: {str(e)}")
+            
+    def delete_excel_file(self, file_id: str) -> bool:
+        """
+        Delete Excel file from SQLite database.
+        
+        Args:
+            file_id: ID of the Excel file to delete
+            
+        Returns:
+            True if deletion was successful, False otherwise
+        """
+        try:
+            return self.sqlite_service.delete_excel_file(file_id)
+        except SQLiteDatabaseError as e:
+            self.logger.error(f"Failed to delete Excel file: {str(e)}")
+            raise KnowledgeBaseError(f"Failed to delete Excel file: {str(e)}")
+            
+    def get_sheet_data(self, file_id: str, sheet_name: Optional[str] = None) -> List[ExcelSheetData]:
+        """
+        Get sheet data for an Excel file.
+        
+        Args:
+            file_id: ID of the Excel file
+            sheet_name: Optional specific sheet name
+            
+        Returns:
+            List of ExcelSheetData objects
+        """
+        try:
+            return self.sqlite_service.get_sheet_data(file_id, sheet_name)
+        except SQLiteDatabaseError as e:
+            self.logger.error(f"Failed to get sheet data: {str(e)}")
+            raise KnowledgeBaseError(f"Failed to get sheet data: {str(e)}")
+            
+    def clear_knowledge_base(self) -> Dict[str, bool]:
+        """
+        Clear all documents from both storage systems.
+        
+        Returns:
+            Dictionary with clear operation results for both storage systems
+        """
+        results = {
+            'vector_store': False,
+            'sqlite_database': False
+        }
+        
+        try:
+            # Clear vector store
             client = chromadb.PersistentClient(path=self.persist_directory)
             client.delete_collection("knowledge_base")
-            
-            # Reinitialize the collection
             self.vector_store = self._initialize_vector_store()
-            
-            self.logger.info("Knowledge base cleared successfully")
-            return True
+            results['vector_store'] = True
+            self.logger.info("Vector store cleared successfully")
             
         except Exception as e:
-            self.logger.error(f"Failed to clear knowledge base: {str(e)}")
-            return False
+            self.logger.error(f"Failed to clear vector store: {str(e)}")
+            
+        try:
+            # Note: SQLite database clear would require recreating tables
+            # For now, we'll just log that SQLite clear is not implemented
+            self.logger.warning("SQLite database clear requires manual table recreation")
+            results['sqlite_database'] = False
+            
+        except Exception as e:
+            self.logger.error(f"Failed to clear SQLite database: {str(e)}")
+            
+        return results
             
     def get_knowledge_base_info(self) -> Dict[str, Any]:
         """
-        Get information about the current state of the knowledge base.
+        Get comprehensive information about the knowledge base.
         
         Returns:
             Dictionary containing knowledge base statistics and information
         """
         try:
-            # Get collection count (this might be approximate in ChromaDB)
-            count = self.vector_store.count()
-            
-            return {
-                "document_count": count,
+            # Get vector store info
+            vector_count = self.vector_store.count()
+            vector_info = {
+                "document_count": vector_count,
                 "persist_directory": self.persist_directory,
                 "embedding_model": self.embedding_service.get_model_info(),
                 "supported_formats": list(self.document_processor.supported_formats)
             }
+            
+            # Get SQLite database info
+            sqlite_info = self.sqlite_service.get_database_info()
+            
+            return {
+                "vector_store": vector_info,
+                "sqlite_database": sqlite_info,
+                "total_documents": vector_count + sqlite_info.get('document_count', 0),
+                "health_status": self.health_check()
+            }
+            
         except Exception as e:
             self.logger.error(f"Failed to get knowledge base info: {str(e)}")
             return {"error": str(e)}
             
     def get_document_count(self) -> int:
         """
-        Get the number of documents in the knowledge base.
+        Get the total number of documents in both storage systems.
 
         Returns:
-            Number of documents in the knowledge base
+            Total number of documents
         """
         try:
-            return self.vector_store.count()
+            vector_count = self.vector_store.count()
+            sqlite_info = self.sqlite_service.get_database_info()
+            sqlite_count = sqlite_info.get('document_count', 0)
+            return vector_count + sqlite_count
         except Exception as e:
             self.logger.error(f"Failed to get document count: {str(e)}")
             return 0
@@ -489,47 +720,57 @@ class KnowledgeBaseManager:
             Dictionary containing knowledge base statistics
         """
         try:
-            count = self.vector_store.count()
+            vector_count = self.vector_store.count()
+            sqlite_info = self.sqlite_service.get_database_info()
             
-            # Get document type distribution (this would require querying metadata)
-            # For now, we return basic stats
             return {
-                'total_documents': count,
-                'document_types': {},  # This would require additional logic to populate
-                'total_size_bytes': 0,  # This would require additional logic
+                'total_documents': vector_count + sqlite_info.get('document_count', 0),
+                'vector_documents': vector_count,
+                'excel_documents': sqlite_info.get('document_count', 0),
+                'total_sheets': sqlite_info.get('sheet_count', 0),
+                'total_size_bytes': sqlite_info.get('total_size_bytes', 0),
                 'embedding_model': self.embedding_service.model_name,
-                'collection_name': 'knowledge_base',
+                'gpu_available': torch.cuda.is_available(),
                 'last_updated': '2024-01-01T12:00:00Z'  # This would need to be tracked
             }
         except Exception as e:
             self.logger.error(f"Failed to get statistics: {str(e)}")
             return {
                 'total_documents': 0,
-                'document_types': {},
+                'vector_documents': 0,
+                'excel_documents': 0,
+                'total_sheets': 0,
                 'total_size_bytes': 0,
                 'embedding_model': self.embedding_service.model_name,
-                'collection_name': 'knowledge_base',
+                'gpu_available': False,
                 'last_updated': '2024-01-01T12:00:00Z'
             }
 
     def health_check(self) -> bool:
         """
-        Perform a health check on the knowledge base.
+        Perform a comprehensive health check on the knowledge base.
 
         Returns:
             True if knowledge base is healthy, False otherwise
         """
         try:
-            # Test basic operations
-            info = self.get_knowledge_base_info()
+            # Test vector store
+            vector_info = self.get_knowledge_base_info()
             embedding_info = self.embedding_service.get_model_info()
-
-            # Check if essential components are working
-            if (isinstance(info, dict) and 
+            
+            # Test SQLite database
+            sqlite_health = self.sqlite_service.health_check()
+            
+            # Check if all essential components are working
+            if (isinstance(vector_info, dict) and 
                 isinstance(embedding_info, dict) and 
-                self.vector_store is not None):
+                self.vector_store is not None and
+                sqlite_health):
                 return True
             return False
 
         except Exception:
             return False
+
+# For backward compatibility, alias the enhanced class as KnowledgeBaseManager
+KnowledgeBaseManager = EnhancedKnowledgeBaseManager

@@ -67,6 +67,36 @@ Develop a Python-based AI customer service agent that uses DeepSeek API and can 
   - **Response**: New information available for queries
   - **State**: Knowledge base management interface functional
 
+**US-009: Excel File Upload with SQLite Storage**
+- **As a** user
+- **I want to** upload Excel files that are automatically stored in a SQLite database
+- **So that** structured data can be efficiently queried and retrieved
+- **EARS Criteria:**
+  - **Event**: User uploads Excel file
+  - **Action**: System detects file type and stores in SQLite database
+  - **Response**: File metadata and content stored successfully
+  - **State**: Excel data available for structured queries
+
+**US-010: Text-to-SQL Query Service**
+- **As a** user
+- **I want to** ask natural language questions about Excel data and have them automatically converted to SQL queries
+- **So that** I can get accurate answers from Excel data without needing SQL knowledge
+- **EARS Criteria:**
+  - **Event**: User asks a question about Excel data
+  - **Action**: System converts natural language to SQL using Text-to-SQL service
+  - **Response**: SQL query executed and results combined with LLM for natural response
+  - **State**: Text-to-SQL service available and integrated with chat system
+
+**US-011: Intelligent Excel Data Query Routing**
+- **As a** user
+- **I want to** have my queries automatically routed to appropriate services (knowledge base vs Excel data)
+- **So that** I get the most relevant responses without manual intervention
+- **EARS Criteria:**
+  - **Event**: User submits any query
+  - **Action**: System analyzes query intent and routes to appropriate service
+  - **Response**: Combined response from relevant data sources
+  - **State**: Query routing mechanism functional and accurate
+
 ### Technical Requirements
 **US-007: Python Implementation**
 - **As a** developer
@@ -116,6 +146,8 @@ Develop a Python-based AI customer service agent that uses DeepSeek API and can 
 4. Chat interface is intuitive and responsive
 5. Error conditions are handled gracefully with user-friendly messages
 6. All user stories are implemented and tested
+7. Excel files are automatically detected and stored in SQLite database with proper metadata
+8. Excel data can be efficiently queried and retrieved from SQLite storage
 
 ## Open Questions
 1. What specific file formats should the local knowledge base support? (PDF, TXT, DOCX, etc.)

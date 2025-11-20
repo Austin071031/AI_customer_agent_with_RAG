@@ -171,6 +171,18 @@ class APIConfig(BaseModel):
     workers: int = Field(default=1, ge=1)
 
 
+class DatabaseConfig(BaseModel):
+    """Database configuration."""
+    sqlite_db_path: str = Field(default="./excel_database.db")
+    
+    @field_validator('sqlite_db_path')
+    def validate_sqlite_db_path(cls, v):
+        """Validate SQLite database path."""
+        if not v or not v.strip():
+            raise ValueError('SQLite database path cannot be empty')
+        return v.strip()
+
+
 class UIConfig(BaseModel):
     """Streamlit UI configuration."""
     port: int = Field(default=8501, ge=1024, le=65535)
@@ -188,6 +200,7 @@ class FullConfig(BaseModel):
     chat: ChatConfig = Field(default_factory=ChatConfig)
     gpu: GPUConfig = Field(default_factory=GPUConfig)
     api: APIConfig = Field(default_factory=APIConfig)
+    database: DatabaseConfig = Field(default_factory=DatabaseConfig)
     ui: UIConfig = Field(default_factory=UIConfig)
 
 
@@ -358,6 +371,9 @@ class ConfigManager:
                 "port": 8000,
                 "reload": True,
                 "workers": 1
+            },
+            "database": {
+                "sqlite_db_path": "./excel_database.db"
             },
             "ui": {
                 "port": 8501,
