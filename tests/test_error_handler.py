@@ -15,6 +15,8 @@ from src.utils.error_handler import (
     APIConnectionError,
     KnowledgeBaseError,
     ValidationError,
+    TextToSQLError,
+    SQLExecutionError,
     ErrorHandler,
     ErrorSeverity,
     error_handler
@@ -131,6 +133,40 @@ class TestSpecificErrorClasses:
         assert error.error_code == "VALIDATION_ERROR"
         assert error.context["field"] == "username"
         assert error.context["value"] == ""
+
+    def test_text_to_sql_error(self):
+        """Test TextToSQLError creation."""
+        error = TextToSQLError(
+            message="SQL generation failed",
+            natural_language_query="Show me sales data",
+            generated_sql="SELECT * FROM sales",
+            table_name="sales_data",
+            sql_error="Table not found"
+        )
+        
+        assert error.message == "SQL generation failed"
+        assert error.severity == ErrorSeverity.MEDIUM
+        assert error.error_code == "TEXT_TO_SQL_ERROR"
+        assert error.context["natural_language_query"] == "Show me sales data"
+        assert error.context["generated_sql"] == "SELECT * FROM sales"
+        assert error.context["table_name"] == "sales_data"
+        assert error.context["sql_error"] == "Table not found"
+
+    def test_sql_execution_error(self):
+        """Test SQLExecutionError creation."""
+        error = SQLExecutionError(
+            message="Query execution failed",
+            sql_query="SELECT * FROM non_existent_table",
+            table_name="non_existent_table",
+            sql_error="no such table: non_existent_table"
+        )
+        
+        assert error.message == "Query execution failed"
+        assert error.severity == ErrorSeverity.HIGH
+        assert error.error_code == "SQL_EXECUTION_ERROR"
+        assert error.context["sql_query"] == "SELECT * FROM non_existent_table"
+        assert error.context["table_name"] == "non_existent_table"
+        assert error.context["sql_error"] == "no such table: non_existent_table"
 
 
 class TestErrorHandler:

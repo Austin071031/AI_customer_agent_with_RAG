@@ -378,17 +378,21 @@ async def upload_documents(
     overwrite: bool = Form(default=False, description="Overwrite existing documents with same name")
 ) -> DocumentUploadResponse:
     """
-    Upload documents to the knowledge base.
+    Upload documents to the knowledge base with intelligent file type routing.
     
-    This endpoint accepts multiple files, validates them, processes their content,
-    and adds them to the knowledge base with vector embeddings.
+    This endpoint accepts multiple files, validates them, and processes them based on file type:
+    - Excel files (.xlsx, .xls, .xlsm, .xlsb): Processed and stored in SQLite database with 
+      dynamic table creation for each sheet, supporting relational data operations
+    - Other document types (PDF, TXT, DOCX, etc.): Processed and stored in vector database 
+      with semantic search capabilities
     
     Args:
         files: List of files to upload
         overwrite: Whether to overwrite existing documents with same names
         
     Returns:
-        DocumentUploadResponse with upload results
+        DocumentUploadResponse with upload results, including separate tracking for 
+        Excel files (stored in relational tables) and other documents (stored in vector DB)
         
     Raises:
         HTTPException: If upload fails or service is unavailable

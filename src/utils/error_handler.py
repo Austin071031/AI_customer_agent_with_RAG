@@ -173,6 +173,87 @@ class ValidationError(ApplicationError):
         )
 
 
+class TextToSQLError(ApplicationError):
+    """Error raised for Text-to-SQL operation failures."""
+    
+    def __init__(
+        self,
+        message: str,
+        natural_language_query: Optional[str] = None,
+        generated_sql: Optional[str] = None,
+        table_name: Optional[str] = None,
+        sql_error: Optional[str] = None,
+        **kwargs
+    ):
+        """
+        Initialize Text-to-SQL error.
+        
+        Args:
+            message: Technical error message
+            natural_language_query: The original natural language query
+            generated_sql: The SQL query that was generated (if any)
+            table_name: The table involved in the query
+            sql_error: The specific SQL error encountered
+            **kwargs: Additional arguments for ApplicationError
+        """
+        context = {
+            "natural_language_query": natural_language_query,
+            "generated_sql": generated_sql,
+            "table_name": table_name,
+            "sql_error": sql_error
+        }
+        if "context" in kwargs:
+            context.update(kwargs.pop("context"))
+            
+        super().__init__(
+            message=message,
+            severity=ErrorSeverity.MEDIUM,
+            error_code="TEXT_TO_SQL_ERROR",
+            user_message="Unable to process your data query. Please try rephrasing your question.",
+            context=context,
+            **kwargs
+        )
+
+
+class SQLExecutionError(ApplicationError):
+    """Error raised for SQL execution failures."""
+    
+    def __init__(
+        self,
+        message: str,
+        sql_query: Optional[str] = None,
+        table_name: Optional[str] = None,
+        sql_error: Optional[str] = None,
+        **kwargs
+    ):
+        """
+        Initialize SQL execution error.
+        
+        Args:
+            message: Technical error message
+            sql_query: The SQL query that failed
+            table_name: The table involved in the query
+            sql_error: The specific SQL error encountered
+            **kwargs: Additional arguments for ApplicationError
+        """
+        context = {
+            "sql_query": sql_query,
+            "table_name": table_name,
+            "sql_error": sql_error
+        }
+        if "context" in kwargs:
+            context.update(kwargs.pop("context"))
+            
+        super().__init__(
+            message=message,
+            severity=ErrorSeverity.HIGH,
+            error_code="SQL_EXECUTION_ERROR",
+            user_message="Database query failed. Please try again or contact support.",
+            context=context,
+            **kwargs
+        )
+
+
 class ErrorHandler:
     """
     Centralized error handler for the application.

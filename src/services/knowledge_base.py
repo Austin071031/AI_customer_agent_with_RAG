@@ -368,13 +368,16 @@ class EnhancedKnowledgeBaseManager:
             
     def _process_excel_file(self, file_path: str) -> Dict[str, Any]:
         """
-        Process Excel file and store in SQLite database.
+        Process Excel file and store in SQLite database with dynamic table creation.
         
         Args:
             file_path: Path to the Excel file
             
         Returns:
-            Dictionary with processing results
+            Dictionary with processing results including dynamic table information
+            
+        Raises:
+            KnowledgeBaseError: If Excel file processing fails
         """
         try:
             file_path_obj = Path(file_path)
@@ -393,11 +396,12 @@ class EnhancedKnowledgeBaseManager:
                 'file_size': file_size,
                 'file_path': file_path,
                 'uploaded_by': 'system',
-                'description': f'Excel file: {file_name}'
+                'description': f'Excel file: {file_name}',
+                'dynamic_tables_created': True
             }
             
-            # Store in SQLite database
-            file_id = self.sqlite_service.store_excel_file(
+            # Store in SQLite database with dynamic table creation
+            storage_result = self.sqlite_service.store_excel_file_with_dynamic_tables(
                 file_path=file_path,
                 file_name=file_name,
                 file_size=file_size,
@@ -406,15 +410,17 @@ class EnhancedKnowledgeBaseManager:
             )
             
             result = {
-                'file_id': file_id,
+                'file_id': storage_result['file_id'],
                 'file_name': file_name,
                 'file_size': file_size,
                 'sheet_names': sheet_names,
                 'storage_type': 'sqlite',
-                'status': 'success'
+                'status': 'success',
+                'tables_created': storage_result['tables_created'],
+                'total_sheets': storage_result['total_sheets']
             }
             
-            self.logger.info(f"Successfully processed Excel file: {file_name}")
+            self.logger.info(f"Successfully processed Excel file with dynamic tables: {file_name}")
             return result
             
         except Exception as e:

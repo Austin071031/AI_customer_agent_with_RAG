@@ -8526,3 +8526,480 @@ client_session: <aiohttp.client.ClientSession object at 0x0000025515C86E40>
 2025-11-20 11:12:50,108 - src.services.chat_manager - INFO - Excluded document from context: tmp5c7ebwq5.pdf (score: -1.0019 < threshold: -0.5)
 2025-11-20 11:12:50,108 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
 2025-11-20 11:12:55,675 - src.services.chat_manager - INFO - Successfully streamed response
+2025-11-26 10:20:57,130 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-11-26 10:20:57,130 - __main__ - INFO - Waiting for API server to be ready...
+2025-11-26 10:20:57,218 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-11-26 10:20:57,418 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-11-26 10:20:57,418 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-11-26 10:20:59,165 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000023361F27A10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-11-26 10:21:01,735 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-11-26 10:21:01,742 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-11-26 10:21:01,919 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-11-26 10:21:01,919 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-11-26 10:21:01,919 - src.api.main - INFO - All services initialized successfully
+2025-11-26 10:21:02,200 - __main__ - INFO - API server is ready and responding to requests
+2025-11-26 10:21:02,200 - __main__ - INFO - API server is running and ready to accept requests
+2025-11-26 10:23:40,708 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-11-26 10:23:40,736 - src.services.sqlite_database_service - INFO - Stored Excel file: tmpvobx9ctc.xlsx with ID: excel_399635cb-f4e3-4dc0-a2e4-6dc1e568d25e
+2025-11-26 10:23:40,736 - src.services.knowledge_base - INFO - Successfully processed Excel file: tmpvobx9ctc.xlsx
+2025-11-26 10:23:40,736 - src.services.knowledge_base - INFO - Processing complete: 1 Excel files, 0 documents, 0 errors
+2025-11-26 10:23:40,736 - src.api.endpoints.knowledge_base - INFO - Successfully processed: customer_profile.xlsx
+2025-11-26 10:24:02,733 - src.api.endpoints.excel_files - INFO - Listed 3 Excel files (skip=0, limit=100)
+2025-11-26 10:24:43,833 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-11-26 10:24:43,833 - src.services.chat_manager - INFO - Processing user message: what is the monthly total charge for site JBY?...
+2025-11-26 10:24:43,833 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-11-26 10:24:43,833 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-11-26 10:24:43,833 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-11-26 10:24:44,260 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-11-26 10:24:44,260 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is the monthly total charge for site JBY?
+2025-11-26 10:24:44,260 - src.services.chat_manager - INFO - Document 1: tmpf0_k3u9a.pdf, Similarity: -0.9532, Threshold: 0.7
+2025-11-26 10:24:44,260 - src.services.chat_manager - INFO - Document 2: tmpnh1a375w.pdf, Similarity: -0.9532, Threshold: 0.7
+2025-11-26 10:24:44,260 - src.services.chat_manager - INFO - Document 3: tmpobjzywrx.pdf, Similarity: -1.0019, Threshold: 0.7
+2025-11-26 10:24:44,260 - src.services.chat_manager - INFO - Excluded document from context: tmpf0_k3u9a.pdf (score: -0.9532 < threshold: 0.7)
+2025-11-26 10:24:44,260 - src.services.chat_manager - INFO - Excluded document from context: tmpnh1a375w.pdf (score: -0.9532 < threshold: 0.7)
+2025-11-26 10:24:44,260 - src.services.chat_manager - INFO - Excluded document from context: tmpobjzywrx.pdf (score: -1.0019 < threshold: 0.7)
+2025-11-26 10:24:44,261 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-11-26 10:24:44,261 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-11-26 10:24:44,484 - src.services.deepseek_service - ERROR - Unexpected error in DeepSeek API call: DeepSeek API error (401): Authentication Fails, Your api key: ****XXXX is invalid
+2025-11-26 10:24:44,485 - src.services.chat_manager - ERROR - DeepSeek API error in process_message: Unexpected error: DeepSeek API error (401): Authentication Fails, Your api key: ****XXXX is invalid
+2025-11-26 10:24:44,485 - src.api.endpoints.chat - ERROR - Unexpected error in process_chat_message: Unexpected error: DeepSeek API error (401): Authentication Fails, Your api key: ****XXXX is invalid
+2025-11-26 10:25:39,181 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-26 10:25:39,279 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-11-26 10:25:39,279 - __main__ - INFO - API server shutdown complete
+2025-11-26 10:25:39,364 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-11-26 10:25:39,365 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x0000023368BAD940>
+2025-11-26 10:25:45,511 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-11-26 10:25:45,511 - __main__ - INFO - Waiting for API server to be ready...
+2025-11-26 10:25:45,531 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-11-26 10:25:45,687 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-11-26 10:25:45,688 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-11-26 10:25:47,555 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002C751A27B60>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-11-26 10:25:50,122 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-11-26 10:25:50,123 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-11-26 10:25:50,201 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-11-26 10:25:50,201 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-11-26 10:25:50,201 - src.api.main - INFO - All services initialized successfully
+2025-11-26 10:25:50,604 - __main__ - INFO - API server is ready and responding to requests
+2025-11-26 10:25:50,605 - __main__ - INFO - API server is running and ready to accept requests
+2025-11-26 10:27:07,227 - src.api.endpoints.chat - INFO - Streaming chat message (KB: True)
+2025-11-26 10:27:07,231 - src.services.chat_manager - INFO - Streaming response for user message: what is the monthly total charge for site JBY?...
+2025-11-26 10:27:07,232 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-11-26 10:27:07,451 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-11-26 10:27:07,452 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is the monthly total charge for site JBY?
+2025-11-26 10:27:07,452 - src.services.chat_manager - INFO - Document 1: tmpf0_k3u9a.pdf, Similarity: -0.9532, Threshold: 0.7
+2025-11-26 10:27:07,452 - src.services.chat_manager - INFO - Document 2: tmpnh1a375w.pdf, Similarity: -0.9532, Threshold: 0.7
+2025-11-26 10:27:07,452 - src.services.chat_manager - INFO - Document 3: tmp5c7ebwq5.pdf, Similarity: -1.0019, Threshold: 0.7
+2025-11-26 10:27:07,452 - src.services.chat_manager - INFO - Excluded document from context: tmpf0_k3u9a.pdf (score: -0.9532 < threshold: 0.7)
+2025-11-26 10:27:07,452 - src.services.chat_manager - INFO - Excluded document from context: tmpnh1a375w.pdf (score: -0.9532 < threshold: 0.7)
+2025-11-26 10:27:07,452 - src.services.chat_manager - INFO - Excluded document from context: tmp5c7ebwq5.pdf (score: -1.0019 < threshold: 0.7)
+2025-11-26 10:27:07,452 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-11-26 10:27:12,776 - src.services.chat_manager - INFO - Successfully streamed response with intelligent routing
+2025-11-26 10:28:35,092 - src.api.endpoints.chat - INFO - Clearing conversation history
+2025-11-26 10:28:35,092 - src.services.chat_manager - INFO - Cleared conversation history (2 messages)
+2025-11-26 10:29:07,285 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-11-26 10:29:07,286 - src.services.chat_manager - INFO - Processing user message: what is the monthly total charge for site JBY in t...
+2025-11-26 10:29:07,286 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-11-26 10:29:07,286 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-11-26 10:29:07,286 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-11-26 10:29:07,294 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-11-26 10:29:07,294 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is the monthly total charge for site JBY in the excel statistics?
+2025-11-26 10:29:07,295 - src.services.chat_manager - INFO - Document 1: tmpf0_k3u9a.pdf, Similarity: -0.9406, Threshold: 0.7
+2025-11-26 10:29:07,295 - src.services.chat_manager - INFO - Document 2: tmpnh1a375w.pdf, Similarity: -0.9406, Threshold: 0.7
+2025-11-26 10:29:07,295 - src.services.chat_manager - INFO - Document 3: tmp5c7ebwq5.pdf, Similarity: -0.9976, Threshold: 0.7
+2025-11-26 10:29:07,295 - src.services.chat_manager - INFO - Excluded document from context: tmpf0_k3u9a.pdf (score: -0.9406 < threshold: 0.7)
+2025-11-26 10:29:07,295 - src.services.chat_manager - INFO - Excluded document from context: tmpnh1a375w.pdf (score: -0.9406 < threshold: 0.7)
+2025-11-26 10:29:07,295 - src.services.chat_manager - INFO - Excluded document from context: tmp5c7ebwq5.pdf (score: -0.9976 < threshold: 0.7)
+2025-11-26 10:29:07,296 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-11-26 10:29:07,296 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-11-26 10:29:13,780 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-11-26 10:30:54,784 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-11-26 10:30:54,784 - src.services.chat_manager - INFO - Processing user message: what is the monthly total charge for site JBY in t...
+2025-11-26 10:30:54,784 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-11-26 10:30:54,784 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-11-26 10:30:54,784 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-11-26 10:30:54,790 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-11-26 10:30:54,791 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is the monthly total charge for site JBY in the excel?
+2025-11-26 10:30:54,791 - src.services.chat_manager - INFO - Document 1: tmpf0_k3u9a.pdf, Similarity: -0.9179, Threshold: 0.7
+2025-11-26 10:30:54,791 - src.services.chat_manager - INFO - Document 2: tmpnh1a375w.pdf, Similarity: -0.9179, Threshold: 0.7
+2025-11-26 10:30:54,791 - src.services.chat_manager - INFO - Document 3: tmp5c7ebwq5.pdf, Similarity: -0.9742, Threshold: 0.7
+2025-11-26 10:30:54,791 - src.services.chat_manager - INFO - Excluded document from context: tmpf0_k3u9a.pdf (score: -0.9179 < threshold: 0.7)
+2025-11-26 10:30:54,791 - src.services.chat_manager - INFO - Excluded document from context: tmpnh1a375w.pdf (score: -0.9179 < threshold: 0.7)
+2025-11-26 10:30:54,791 - src.services.chat_manager - INFO - Excluded document from context: tmp5c7ebwq5.pdf (score: -0.9742 < threshold: 0.7)
+2025-11-26 10:30:54,791 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-11-26 10:30:54,792 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-11-26 10:31:02,820 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-11-26 10:52:07,891 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-26 10:52:08,046 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-11-26 10:52:08,046 - __main__ - INFO - API server shutdown complete
+2025-11-26 10:52:08,081 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-11-26 10:52:08,081 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x000002C75962A900>
+2025-11-26 10:52:19,220 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-11-26 10:52:19,220 - __main__ - INFO - Waiting for API server to be ready...
+2025-11-26 10:52:19,242 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-11-26 10:52:19,399 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-11-26 10:52:19,399 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-11-26 10:52:21,254 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000258736A7E00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-11-26 10:52:23,574 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-11-26 10:52:23,575 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-11-26 10:52:23,651 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-11-26 10:52:23,652 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-11-26 10:52:23,652 - src.api.main - INFO - All services initialized successfully
+2025-11-26 10:52:23,793 - __main__ - INFO - API server is ready and responding to requests
+2025-11-26 10:52:23,793 - __main__ - INFO - API server is running and ready to accept requests
+2025-11-26 10:53:26,940 - src.api.endpoints.chat - INFO - Streaming chat message (KB: True)
+2025-11-26 10:53:26,943 - src.services.chat_manager - INFO - Streaming response for user message: what is the monthly total charge for site JBY in t...
+2025-11-26 10:53:26,944 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-11-26 10:53:27,167 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-11-26 10:53:27,168 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is the monthly total charge for site JBY in the excel?
+
+
+2025-11-26 10:53:27,168 - src.services.chat_manager - INFO - Document 1: tmpf0_k3u9a.pdf, Similarity: -0.9179, Threshold: 0.7
+2025-11-26 10:53:27,168 - src.services.chat_manager - INFO - Document 2: tmpnh1a375w.pdf, Similarity: -0.9179, Threshold: 0.7
+2025-11-26 10:53:27,168 - src.services.chat_manager - INFO - Document 3: tmpobjzywrx.pdf, Similarity: -0.9742, Threshold: 0.7
+2025-11-26 10:53:27,168 - src.services.chat_manager - INFO - Excluded document from context: tmpf0_k3u9a.pdf (score: -0.9179 < threshold: 0.7)
+2025-11-26 10:53:27,168 - src.services.chat_manager - INFO - Excluded document from context: tmpnh1a375w.pdf (score: -0.9179 < threshold: 0.7)
+2025-11-26 10:53:27,168 - src.services.chat_manager - INFO - Excluded document from context: tmpobjzywrx.pdf (score: -0.9742 < threshold: 0.7)
+2025-11-26 10:53:27,168 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-11-26 10:53:33,717 - src.services.chat_manager - INFO - Successfully streamed response with intelligent routing
+2025-11-26 10:55:46,074 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-11-26 10:55:46,074 - __main__ - INFO - Waiting for API server to be ready...
+2025-11-26 10:55:46,077 - __main__ - INFO - API server is ready and responding to requests
+2025-11-26 10:55:46,077 - __main__ - INFO - API server is running and ready to accept requests
+2025-11-26 10:55:46,094 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-11-26 10:55:46,245 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-11-26 10:55:46,245 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-11-26 10:56:06,272 - huggingface_hub.utils._http - WARNING - '(MaxRetryError("HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x00000233038F2BA0>, 'Connection to huggingface.co timed out. (connect timeout=10)'))"), '(Request ID: d93362fd-f346-44ae-adef-e785e5fa9a6b)')' thrown while requesting HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/./modules.json
+2025-11-26 10:56:06,273 - huggingface_hub.utils._http - WARNING - Retrying in 1s [Retry 1/5].
+2025-11-26 10:56:27,293 - huggingface_hub.utils._http - WARNING - '(MaxRetryError("HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x00000233038E9310>, 'Connection to huggingface.co timed out. (connect timeout=10)'))"), '(Request ID: efb24e40-092c-452b-96ca-c8ab883ad29b)')' thrown while requesting HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/./modules.json
+2025-11-26 10:56:27,293 - huggingface_hub.utils._http - WARNING - Retrying in 2s [Retry 2/5].
+2025-11-26 10:56:36,237 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-26 10:56:36,511 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-26 10:56:36,745 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-26 10:56:37,088 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-26 10:56:37,091 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-11-26 10:56:37,091 - __main__ - INFO - API server shutdown complete
+2025-11-26 10:59:37,681 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-26 10:59:37,845 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-11-26 10:59:37,846 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x000002587B226BA0>
+2025-11-26 10:59:37,917 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-11-26 10:59:37,918 - __main__ - INFO - API server shutdown complete
+2025-11-26 10:59:44,437 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-11-26 10:59:44,437 - __main__ - INFO - Waiting for API server to be ready...
+2025-11-26 10:59:44,459 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-11-26 10:59:44,501 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-11-26 10:59:44,501 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-11-26 10:59:46,494 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020E44787CB0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-11-26 10:59:48,937 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-11-26 10:59:48,938 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-11-26 10:59:49,013 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-11-26 10:59:49,014 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-11-26 10:59:49,014 - src.api.main - INFO - All services initialized successfully
+2025-11-26 10:59:49,065 - __main__ - INFO - API server is ready and responding to requests
+2025-11-26 10:59:49,065 - __main__ - INFO - API server is running and ready to accept requests
+2025-11-26 11:00:30,959 - src.api.endpoints.excel_files - INFO - Listed 3 Excel files (skip=0, limit=100)
+2025-11-26 11:00:54,749 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-11-26 11:00:54,749 - src.services.chat_manager - INFO - Processing user message: what is the monthly total charge for site JBY in t...
+2025-11-26 11:00:54,750 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-11-26 11:00:54,750 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-11-26 11:00:54,750 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-11-26 11:00:54,953 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-11-26 11:00:54,953 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is the monthly total charge for site JBY in the excel?
+2025-11-26 11:00:54,953 - src.services.chat_manager - INFO - Document 1: tmpf0_k3u9a.pdf, Similarity: -0.9179, Threshold: 0.7
+2025-11-26 11:00:54,953 - src.services.chat_manager - INFO - Document 2: tmpnh1a375w.pdf, Similarity: -0.9179, Threshold: 0.7
+2025-11-26 11:00:54,953 - src.services.chat_manager - INFO - Document 3: tmp7cfmz89g.pdf, Similarity: -0.9742, Threshold: 0.7
+2025-11-26 11:00:54,953 - src.services.chat_manager - INFO - Excluded document from context: tmpf0_k3u9a.pdf (score: -0.9179 < threshold: 0.7)
+2025-11-26 11:00:54,953 - src.services.chat_manager - INFO - Excluded document from context: tmpnh1a375w.pdf (score: -0.9179 < threshold: 0.7)
+2025-11-26 11:00:54,953 - src.services.chat_manager - INFO - Excluded document from context: tmp7cfmz89g.pdf (score: -0.9742 < threshold: 0.7)
+2025-11-26 11:00:54,953 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-11-26 11:00:54,954 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-11-26 11:01:00,634 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-11-26 11:05:59,586 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-26 11:05:59,796 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-11-26 11:05:59,796 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x0000020E4B35D160>
+2025-11-26 11:06:00,172 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-11-26 11:06:00,173 - __main__ - INFO - API server shutdown complete
+2025-11-26 11:06:12,555 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-11-26 11:06:12,555 - __main__ - INFO - Waiting for API server to be ready...
+2025-11-26 11:06:12,575 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-11-26 11:06:12,728 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-11-26 11:06:12,729 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-11-26 11:06:14,596 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000028D85487A10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-11-26 11:06:17,028 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-11-26 11:06:17,029 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-11-26 11:06:17,105 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-11-26 11:06:17,106 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-11-26 11:06:17,106 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-11-26 11:06:17,106 - src.api.main - INFO - All services initialized successfully
+2025-11-26 11:06:17,123 - __main__ - INFO - API server is ready and responding to requests
+2025-11-26 11:06:17,123 - __main__ - INFO - API server is running and ready to accept requests
+2025-11-26 11:07:21,343 - src.api.endpoints.chat - INFO - Streaming chat message (KB: True)
+2025-11-26 11:07:21,347 - src.services.chat_manager - INFO - Streaming response for user message: what is the monthly total charge for site JBY in t...
+2025-11-26 11:07:21,348 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-11-26 11:07:21,348 - src.services.chat_manager - INFO - Processing Excel data query for streaming
+2025-11-26 11:07:21,348 - src.services.chat_manager - INFO - Processing Excel data query: what is the monthly total charge for site JBY in the excel?
+2025-11-26 11:08:11,290 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-11-26 11:08:11,290 - src.services.chat_manager - INFO - Processing user message: what is the monthly total charge for site JBY in t...
+2025-11-26 11:08:11,290 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-11-26 11:08:11,290 - src.services.chat_manager - INFO - Detected intent: excel_data (confidence: 1.00)
+2025-11-26 11:08:11,290 - src.services.chat_manager - INFO - Routing to Text-to-SQL service for Excel data query
+2025-11-26 11:08:11,290 - src.services.chat_manager - INFO - Processing Excel data query: what is the monthly total charge for site JBY in the excel?
+2025-11-26 11:08:11,291 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-11-26 11:08:47,989 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-11-26 11:08:48,015 - src.services.sqlite_database_service - INFO - Stored Excel file: tmph5876zpq.xlsx with ID: excel_ade35d67-9cdd-4ef4-bdde-3fb5fdbaeb23
+2025-11-26 11:08:48,015 - src.services.knowledge_base - INFO - Successfully processed Excel file: tmph5876zpq.xlsx
+2025-11-26 11:08:48,015 - src.services.knowledge_base - INFO - Processing complete: 1 Excel files, 0 documents, 0 errors
+2025-11-26 11:08:48,015 - src.api.endpoints.knowledge_base - INFO - Successfully processed: customer_profile.xlsx
+2025-11-26 11:09:01,546 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-11-26 11:09:01,546 - src.services.chat_manager - INFO - Processing user message: what is the monthly total charge for site JBY in t...
+2025-11-26 11:09:01,546 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-11-26 11:09:01,546 - src.services.chat_manager - INFO - Detected intent: excel_data (confidence: 1.00)
+2025-11-26 11:09:01,546 - src.services.chat_manager - INFO - Routing to Text-to-SQL service for Excel data query
+2025-11-26 11:09:01,547 - src.services.chat_manager - INFO - Processing Excel data query: what is the monthly total charge for site JBY in the excel?
+2025-11-26 11:09:01,547 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-11-26 14:29:27,347 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-11-26 14:29:27,465 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-11-26 14:29:27,750 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-11-26 14:29:27,750 - __main__ - INFO - API server shutdown complete
+2025-11-26 14:30:30,989 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-11-26 14:30:30,989 - __main__ - INFO - Waiting for API server to be ready...
+2025-11-26 14:30:31,079 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-11-26 14:30:31,239 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-11-26 14:30:31,239 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-11-26 14:30:33,024 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001F475D27CB0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-11-26 14:30:35,825 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-11-26 14:30:35,827 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-11-26 14:30:35,940 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-11-26 14:30:35,941 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-11-26 14:30:35,941 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-11-26 14:30:35,941 - src.api.main - INFO - All services initialized successfully
+2025-11-26 14:30:36,080 - __main__ - INFO - API server is ready and responding to requests
+2025-11-26 14:30:36,080 - __main__ - INFO - API server is running and ready to accept requests
+2025-11-26 14:35:54,447 - src.api.endpoints.chat - INFO - Streaming chat message (KB: True)
+2025-11-26 14:35:54,450 - src.services.chat_manager - INFO - Streaming response for user message: what is the monthly total charge for site JBY in t...
+2025-11-26 14:35:54,451 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-11-26 14:35:54,451 - src.services.chat_manager - INFO - Processing Excel data query for streaming
+2025-11-26 14:35:54,451 - src.services.chat_manager - INFO - Processing Excel data query: what is the monthly total charge for site JBY in the excel?
+2025-11-26 14:35:54,451 - src.services.chat_manager - INFO - Using most recent Excel file: tmph5876zpq.xlsx (ID: excel_ade35d67-9cdd-4ef4-bdde-3fb5fdbaeb23)
+2025-11-26 14:35:54,452 - src.services.text_to_sql_service - INFO - Converting natural language query to SQL: what is the monthly total charge for site JBY in the excel?
+2025-11-26 14:35:54,453 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-11-26 14:35:57,552 - src.services.text_to_sql_service - INFO - Generated SQL query: SELECT "Monthly_total_charge" FROM "excel_data_excel_ade35d67-9cdd-4ef4-bdde-3fb5fdbaeb23_Sheet1" WHERE "Site" = 'JBY';
+2025-11-26 14:35:57,553 - src.services.text_to_sql_service - ERROR - SQL execution failed: no such table: excel_data_excel_ade35d67-9cdd-4ef4-bdde-3fb5fdbaeb23_Sheet1
+2025-11-26 14:35:57,553 - src.services.text_to_sql_service - ERROR - Text-to-SQL conversion failed: SQL execution failed: no such table: excel_data_excel_ade35d67-9cdd-4ef4-bdde-3fb5fdbaeb23_Sheet1
+2025-11-26 14:35:57,553 - src.services.chat_manager - ERROR - Text-to-SQL query failed: Failed to convert query to SQL: SQL execution failed: no such table: excel_data_excel_ade35d67-9cdd-4ef4-bdde-3fb5fdbaeb23_Sheet1
+2025-11-27 10:20:21,688 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-11-27 10:20:21,688 - __main__ - INFO - Waiting for API server to be ready...
+2025-11-27 10:20:21,768 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-11-27 10:20:21,995 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-11-27 10:20:21,995 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-11-27 10:20:23,729 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E21B2C78C0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-11-27 10:20:26,175 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-11-27 10:20:26,179 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-11-27 10:20:26,353 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-11-27 10:20:26,354 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-11-27 10:20:26,354 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-11-27 10:20:26,354 - src.api.main - INFO - All services initialized successfully
+2025-11-27 10:20:26,774 - __main__ - INFO - API server is ready and responding to requests
+2025-11-27 10:20:26,774 - __main__ - INFO - API server is running and ready to accept requests
+2025-11-27 10:25:24,638 - src.api.endpoints.knowledge_base - INFO - Clearing knowledge base
+2025-11-27 10:25:24,706 - src.services.knowledge_base - ERROR - Failed to clear vector store: An instance of Chroma already exists for ./knowledge_base/chroma_db with different settings
+2025-11-27 10:25:24,706 - src.services.knowledge_base - WARNING - SQLite database clear requires manual table recreation
+2025-11-27 10:26:11,512 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-11-27 10:26:11,540 - src.services.sqlite_database_service - INFO - Stored Excel file: tmpi5y3g0tp.xlsx with ID: excel_90b0a109-18b3-4c90-9523-2ebfe252ba57
+2025-11-27 10:26:11,540 - src.services.knowledge_base - INFO - Successfully processed Excel file: tmpi5y3g0tp.xlsx
+2025-11-27 10:26:11,540 - src.services.knowledge_base - INFO - Processing complete: 1 Excel files, 0 documents, 0 errors
+2025-11-27 10:26:11,540 - src.api.endpoints.knowledge_base - INFO - Successfully processed: customer_profile.xlsx
+2025-11-27 10:27:09,358 - src.api.endpoints.chat - INFO - Streaming chat message (KB: True)
+2025-11-27 10:27:09,364 - src.services.chat_manager - INFO - Streaming response for user message: what is the monthly total charge at site JBY in th...
+2025-11-27 10:27:09,364 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-11-27 10:27:09,365 - src.services.chat_manager - INFO - Processing Excel data query for streaming
+2025-11-27 10:27:09,365 - src.services.chat_manager - INFO - Processing Excel data query: what is the monthly total charge at site JBY in the excel?
+2025-11-27 10:27:09,365 - src.services.chat_manager - INFO - Using most recent Excel file: tmpi5y3g0tp.xlsx (ID: excel_90b0a109-18b3-4c90-9523-2ebfe252ba57)
+2025-11-27 10:27:09,365 - src.services.text_to_sql_service - INFO - Converting natural language query to SQL: what is the monthly total charge at site JBY in the excel?
+2025-11-27 10:27:09,367 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-11-27 10:27:13,627 - src.services.text_to_sql_service - INFO - Generated SQL query: SELECT SUM("Monthly_total_charge") FROM "excel_data_excel_90b0a109-18b3-4c90-9523-2ebfe252ba57_Sheet1" WHERE "Site" = 'JBY';
+2025-11-27 10:27:13,631 - src.services.text_to_sql_service - WARNING - Failed to process SQL query with DataFrame: 'SITE'
+2025-11-27 10:27:13,631 - src.services.chat_manager - INFO - Successfully processed Excel data query, found 5 results
+2025-11-27 10:31:20,237 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-11-27 10:31:20,237 - src.services.chat_manager - INFO - Processing user message: what is the monthly total charge at site JBY in th...
+2025-11-27 10:31:20,237 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-11-27 10:31:20,237 - src.services.chat_manager - INFO - Detected intent: excel_data (confidence: 1.00)
+2025-11-27 10:31:20,237 - src.services.chat_manager - INFO - Routing to Text-to-SQL service for Excel data query
+2025-11-27 10:31:20,237 - src.services.chat_manager - INFO - Processing Excel data query: what is the monthly total charge at site JBY in the excel?
+2025-11-27 10:31:20,238 - src.services.chat_manager - INFO - Using most recent Excel file: tmpi5y3g0tp.xlsx (ID: excel_90b0a109-18b3-4c90-9523-2ebfe252ba57)
+2025-11-27 10:31:20,238 - src.services.text_to_sql_service - INFO - Converting natural language query to SQL: what is the monthly total charge at site JBY in the excel?
+2025-11-27 10:31:20,240 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-11-27 10:31:23,432 - src.services.text_to_sql_service - INFO - Generated SQL query: SELECT SUM(Monthly_total_charge) FROM excel_data_excel_90b0a109-18b3-4c90-9523-2ebfe252ba57_Sheet1 WHERE Site = 'JBY';
+2025-11-27 10:31:23,434 - src.services.text_to_sql_service - WARNING - Failed to process SQL query with DataFrame: 'SITE'
+2025-11-27 10:31:23,434 - src.services.chat_manager - INFO - Successfully processed Excel data query, found 5 results
+2025-11-27 10:31:23,434 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-01 16:14:32,525 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-01 16:14:32,525 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-01 16:14:32,606 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-01 16:14:32,806 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-01 16:14:32,807 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-01 16:14:34,550 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E54D50BCB0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-01 16:14:37,600 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E54D7D2D50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-01 16:14:37,789 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-01 16:14:37,794 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-01 16:14:37,966 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-01 16:14:37,966 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-01 16:14:37,966 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-01 16:14:37,967 - src.api.main - INFO - All services initialized successfully
+2025-12-01 16:14:38,604 - __main__ - INFO - API server is ready and responding to requests
+2025-12-01 16:14:38,604 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-01 16:21:07,781 - src.api.endpoints.excel_files - INFO - Listed 5 Excel files (skip=0, limit=100)
+2025-12-01 16:21:18,244 - src.api.endpoints.excel_files - INFO - Listed 5 Excel files (skip=0, limit=100)
+2025-12-01 16:21:42,593 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-01 16:21:42,619 - src.services.sqlite_database_service - INFO - Created dynamic table 'excel_b71121bbac834cc786ac92f187bb09d7_sheet1' for sheet 'Sheet1'
+2025-12-01 16:21:42,626 - src.services.sqlite_database_service - INFO - Inserted 6 rows into dynamic table 'excel_b71121bbac834cc786ac92f187bb09d7_sheet1'
+2025-12-01 16:21:42,627 - src.services.sqlite_database_service - ERROR - Unexpected error storing Excel file: 7 validation errors for ExcelSheetData
+data_types.Cust_ID
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Cust_Name
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='string', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Contract_start_date
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Contract_end_date
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Site
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='string', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Seg
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='string', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Monthly_total_charge
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+2025-12-01 16:21:42,627 - src.services.knowledge_base - ERROR - Failed to process Excel file C:\Users\123\AppData\Local\Temp\tmpfcoga0qb.xlsx: Unexpected error: 7 validation errors for ExcelSheetData
+data_types.Cust_ID
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Cust_Name
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='string', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Contract_start_date
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Contract_end_date
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Site
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='string', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Seg
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='string', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Monthly_total_charge
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+2025-12-01 16:21:42,628 - src.services.knowledge_base - ERROR - Failed to process file C:\Users\123\AppData\Local\Temp\tmpfcoga0qb.xlsx: Excel file processing failed: Unexpected error: 7 validation errors for ExcelSheetData
+data_types.Cust_ID
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Cust_Name
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='string', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Contract_start_date
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Contract_end_date
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Site
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='string', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Seg
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='string', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+data_types.Monthly_total_charge
+  Input should be 'INTEGER', 'REAL', 'TEXT', 'BLOB' or 'NULL' [type=enum, input_value='integer', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/enum
+2025-12-01 16:21:42,628 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 0 documents, 1 errors
+2025-12-01 16:41:18,715 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-01 16:41:18,886 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-01 16:41:19,267 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-01 16:41:19,267 - __main__ - INFO - API server shutdown complete
+2025-12-01 16:41:48,657 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-01 16:41:48,657 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-01 16:41:48,682 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-01 16:41:48,832 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-01 16:41:48,833 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-01 16:41:50,682 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000266A043BE00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-01 16:41:53,317 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-01 16:41:53,319 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-01 16:41:53,397 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-01 16:41:53,398 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-01 16:41:53,398 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-01 16:41:53,398 - src.api.main - INFO - All services initialized successfully
+2025-12-01 16:41:53,709 - __main__ - INFO - API server is ready and responding to requests
+2025-12-01 16:41:53,709 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-01 16:43:26,490 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-01 16:43:26,514 - src.services.sqlite_database_service - INFO - Created dynamic table 'excel_77e71b80a8dd450f80bee61ba1b1482d_sheet1' for sheet 'Sheet1'
+2025-12-01 16:43:26,521 - src.services.sqlite_database_service - INFO - Inserted 6 rows into dynamic table 'excel_77e71b80a8dd450f80bee61ba1b1482d_sheet1'
+2025-12-01 16:43:26,523 - src.services.sqlite_database_service - INFO - Successfully stored Excel file with dynamic tables: tmp_q6c21fb.xlsx
+2025-12-01 16:43:26,523 - src.services.knowledge_base - INFO - Successfully processed Excel file with dynamic tables: tmp_q6c21fb.xlsx
+2025-12-01 16:43:26,524 - src.services.knowledge_base - INFO - Processing complete: 1 Excel files, 0 documents, 0 errors
+2025-12-01 16:43:26,524 - src.api.endpoints.knowledge_base - INFO - Successfully processed: customer_profile.xlsx
+2025-12-01 16:45:10,998 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-01 16:45:10,999 - src.services.chat_manager - INFO - Processing user message: what is the monthly total charge for site JBY in t...
+2025-12-01 16:45:10,999 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-12-01 16:45:10,999 - src.services.chat_manager - INFO - Detected intent: excel_data (confidence: 1.00)
+2025-12-01 16:45:10,999 - src.services.chat_manager - INFO - Routing to Text-to-SQL service for Excel data query
+2025-12-01 16:45:10,999 - src.services.chat_manager - INFO - Processing Excel data query: what is the monthly total charge for site JBY in the excel?
+2025-12-01 16:45:11,000 - src.services.chat_manager - INFO - Using most recent Excel file: tmp_q6c21fb.xlsx (ID: excel_77e71b80-a8dd-450f-80be-e61ba1b1482d)
+2025-12-01 16:45:11,000 - src.services.text_to_sql_service - INFO - Converting natural language query to SQL: what is the monthly total charge for site JBY in the excel?
+2025-12-01 16:45:11,000 - src.services.text_to_sql_service - ERROR - Failed to get schema info: No dynamic tables found for file: excel_77e71b80-a8dd-450f-80be-e61ba1b1482d
+2025-12-01 16:45:11,000 - src.services.text_to_sql_service - ERROR - Text-to-SQL conversion failed: Schema discovery failed: No dynamic tables found for file: excel_77e71b80-a8dd-450f-80be-e61ba1b1482d
+2025-12-01 16:45:11,001 - src.services.chat_manager - ERROR - Text-to-SQL query failed: Failed to convert query to SQL: Schema discovery failed: No dynamic tables found for file: excel_77e71b80-a8dd-450f-80be-e61ba1b1482d
+2025-12-01 16:45:11,001 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-01 17:08:23,126 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-01 17:08:23,311 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-01 17:08:23,366 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-01 17:08:23,366 - __main__ - INFO - API server shutdown complete
+2025-12-01 17:08:30,087 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-01 17:08:30,088 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-01 17:08:30,112 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-01 17:08:30,261 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-01 17:08:30,262 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-01 17:08:32,111 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002074AEA3E00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-01 17:08:35,021 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-01 17:08:35,022 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-01 17:08:35,098 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-01 17:08:35,099 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-01 17:08:35,099 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-01 17:08:35,099 - src.api.main - INFO - All services initialized successfully
+2025-12-01 17:08:35,144 - __main__ - INFO - API server is ready and responding to requests
+2025-12-01 17:08:35,144 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-01 17:09:55,138 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-01 17:09:55,139 - src.services.chat_manager - INFO - Processing user message: what is the monthly total charge for site JBY in t...
+2025-12-01 17:09:55,139 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-12-01 17:09:55,139 - src.services.chat_manager - INFO - Detected intent: excel_data (confidence: 1.00)
+2025-12-01 17:09:55,139 - src.services.chat_manager - INFO - Routing to Text-to-SQL service for Excel data query
+2025-12-01 17:09:55,139 - src.services.chat_manager - INFO - Processing Excel data query: what is the monthly total charge for site JBY in the excel?
+2025-12-01 17:09:55,140 - src.services.chat_manager - INFO - Using most recent Excel file: tmp_q6c21fb.xlsx (ID: excel_77e71b80-a8dd-450f-80be-e61ba1b1482d)
+2025-12-01 17:09:55,140 - src.services.text_to_sql_service - INFO - Converting natural language query to SQL: what is the monthly total charge for site JBY in the excel?
+2025-12-01 17:09:55,141 - src.services.text_to_sql_service - INFO - Retrieved schema info for file excel_77e71b80-a8dd-450f-80be-e61ba1b1482d with 1 dynamic tables
+2025-12-01 17:09:55,142 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-01 17:09:57,732 - src.services.text_to_sql_service - INFO - Generated SQL query: SELECT "Monthly_total_charge" FROM "excel_77e71b80a8dd450f80bee61ba1b1482d_sheet1" WHERE "Site" = 'JBY';
+2025-12-01 17:09:57,734 - src.services.text_to_sql_service - INFO - Successfully executed SQL query on relational tables, returned 4 results
+2025-12-01 17:09:57,734 - src.services.chat_manager - INFO - Successfully processed Excel data query, found 4 results
+2025-12-01 17:09:57,734 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-01 17:42:02,315 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-01 17:42:02,526 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-01 17:42:02,526 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x0000020719DBDD30>
+2025-12-01 17:42:02,865 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-01 17:42:02,865 - __main__ - INFO - API server shutdown complete
+2025-12-01 17:42:09,239 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-01 17:42:09,240 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-01 17:42:09,261 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-01 17:42:09,413 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-01 17:42:09,414 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2

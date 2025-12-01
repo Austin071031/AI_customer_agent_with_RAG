@@ -24,7 +24,11 @@ from src.utils.logger import (
     log_system_health,
     log_startup,
     log_shutdown,
-    log_configuration_change
+    log_configuration_change,
+    log_text_to_sql_operation,
+    log_sql_execution,
+    log_excel_table_operation,
+    log_query_intent_detection
 )
 
 
@@ -494,6 +498,189 @@ class TestConvenienceLoggingFunctions:
         assert call_args[1]["extra"]["old_value"] == "30"
         assert call_args[1]["extra"]["new_value"] == "60"
         assert call_args[1]["extra"]["user"] == "admin"
+
+
+class TestTextToSQLLoggingFunctions:
+    """Test cases for Text-to-SQL specific logging functions."""
+    
+    @patch('src.utils.logger.get_logger')
+    def test_log_text_to_sql_operation_success(self, mock_get_logger):
+        """Test logging successful Text-to-SQL operation."""
+        mock_logger = MagicMock()
+        mock_get_logger.return_value = mock_logger
+        
+        log_text_to_sql_operation(
+            natural_language_query="Show me sales data for Q1",
+            generated_sql="SELECT * FROM sales WHERE quarter = 'Q1'",
+            execution_time=0.75,
+            result_count=150,
+            table_name="sales",
+            query_complexity="moderate"
+        )
+        
+        mock_logger.info.assert_called_once()
+        call_args = mock_logger.info.call_args
+        assert "Text-to-SQL completed:" in call_args[0][0]
+        assert "150 results" in call_args[0][0]
+        assert call_args[1]["extra"]["type"] == "text_to_sql"
+        assert call_args[1]["extra"]["natural_language_query_length"] == 28
+        assert call_args[1]["extra"]["generated_sql_length"] == 47
+        assert call_args[1]["extra"]["execution_time"] == 0.75
+        assert call_args[1]["extra"]["result_count"] == 150
+        assert call_args[1]["extra"]["table_name"] == "sales"
+        assert call_args[1]["extra"]["query_complexity"] == "moderate"
+    
+    @patch('src.utils.logger.get_logger')
+    def test_log_text_to_sql_operation_error(self, mock_get_logger):
+        """Test logging failed Text-to-SQL operation."""
+        mock_logger = MagicMock()
+        mock_get_logger.return_value = mock_logger
+        
+        log_text_to_sql_operation(
+            natural_language_query="Show me sales data for Q1",
+            generated_sql="SELECT * FROM non_existent_table",
+            execution_time=0.25,
+            table_name="non_existent_table",
+            error="Table not found",
+            query_complexity="simple"
+        )
+        
+        mock_logger.error.assert_called_once()
+        call_args = mock_logger.error.call_args
+        assert "Text-to-SQL failed for query:" in call_args[0][0]
+        assert call_args[1]["extra"]["type"] == "text_to_sql"
+        assert call_args[1]["extra"]["error"] == "Table not found"
+        assert call_args[1]["extra"]["table_name"] == "non_existent_table"
+    
+    @patch('src.utils.logger.get_logger')
+    def test_log_sql_execution_success(self, mock_get_logger):
+        """Test logging successful SQL execution."""
+        mock_logger = MagicMock()
+        mock_get_logger.return_value = mock_logger
+        
+        log_sql_execution(
+            sql_query="SELECT * FROM customers WHERE status = 'active'",
+            execution_time=0.15,
+            row_count=250,
+            table_name="customers",
+            operation_type="SELECT"
+        )
+        
+        mock_logger.info.assert_called_once()
+        call_args = mock_logger.info.call_args
+        assert "SQL execution completed: SELECT on customers -> 250 rows" in call_args[0][0]
+        assert call_args[1]["extra"]["type"] == "sql_execution"
+        assert call_args[1]["extra"]["sql_query_length"] == 48
+        assert call_args[1]["extra"]["execution_time"] == 0.15
+        assert call_args[1]["extra"]["row_count"] == 250
+        assert call_args[1]["extra"]["table_name"] == "customers"
+        assert call_args[1]["extra"]["operation_type"] == "SELECT"
+    
+    @patch('src.utils.logger.get_logger')
+    def test_log_sql_execution_error(self, mock_get_logger):
+        """Test logging failed SQL execution."""
+        mock_logger = MagicMock()
+        mock_get_logger.return_value = mock_logger
+        
+        log_sql_execution(
+            sql_query="SELECT * FROM non_existent_table",
+            execution_time=0.05,
+            table_name="non_existent_table",
+            error="no such table: non_existent_table",
+            operation_type="SELECT"
+        )
+        
+        mock_logger.error.assert_called_once()
+        call_args = mock_logger.error.call_args
+        assert "SQL execution failed:" in call_args[0][0]
+        assert call_args[1]["extra"]["type"] == "sql_execution"
+        assert call_args[1]["extra"]["error"] == "no such table: non_existent_table"
+        assert call_args[1]["extra"]["operation_type"] == "SELECT"
+    
+    @patch('src.utils.logger.get_logger')
+    def test_log_excel_table_operation_success(self, mock_get_logger):
+        """Test logging successful Excel table operation."""
+        mock_logger = MagicMock()
+        mock_get_logger.return_value = mock_logger
+        
+        log_excel_table_operation(
+            operation="create",
+            file_name="sales_data.xlsx",
+            table_name="sales_q1",
+            row_count=500,
+            column_count=10
+        )
+        
+        mock_logger.info.assert_called_once()
+        call_args = mock_logger.info.call_args
+        assert "Excel table operation completed: create on sales_q1 in sales_data.xlsx" in call_args[0][0]
+        assert call_args[1]["extra"]["type"] == "excel_table_operation"
+        assert call_args[1]["extra"]["operation"] == "create"
+        assert call_args[1]["extra"]["file_name"] == "sales_data.xlsx"
+        assert call_args[1]["extra"]["table_name"] == "sales_q1"
+        assert call_args[1]["extra"]["row_count"] == 500
+        assert call_args[1]["extra"]["column_count"] == 10
+    
+    @patch('src.utils.logger.get_logger')
+    def test_log_excel_table_operation_error(self, mock_get_logger):
+        """Test logging failed Excel table operation."""
+        mock_logger = MagicMock()
+        mock_get_logger.return_value = mock_logger
+        
+        log_excel_table_operation(
+            operation="search",
+            file_name="data.xlsx",
+            table_name="sheet1",
+            error="Table not found"
+        )
+        
+        mock_logger.error.assert_called_once()
+        call_args = mock_logger.error.call_args
+        assert "Excel table operation failed: search on sheet1 in data.xlsx" in call_args[0][0]
+        assert call_args[1]["extra"]["type"] == "excel_table_operation"
+        assert call_args[1]["extra"]["error"] == "Table not found"
+    
+    @patch('src.utils.logger.get_logger')
+    def test_log_query_intent_detection_success(self, mock_get_logger):
+        """Test logging successful query intent detection."""
+        mock_logger = MagicMock()
+        mock_get_logger.return_value = mock_logger
+        
+        log_query_intent_detection(
+            user_query="What were the sales figures for last quarter?",
+            detected_intent="excel_data",
+            confidence=0.85,
+            routed_service="text_to_sql"
+        )
+        
+        mock_logger.info.assert_called_once()
+        call_args = mock_logger.info.call_args
+        assert "Query routed to text_to_sql with 0.85 confidence:" in call_args[0][0]
+        assert call_args[1]["extra"]["type"] == "query_intent_detection"
+        assert call_args[1]["extra"]["user_query_length"] == 45
+        assert call_args[1]["extra"]["detected_intent"] == "excel_data"
+        assert call_args[1]["extra"]["confidence"] == 0.85
+        assert call_args[1]["extra"]["routed_service"] == "text_to_sql"
+    
+    @patch('src.utils.logger.get_logger')
+    def test_log_query_intent_detection_error(self, mock_get_logger):
+        """Test logging failed query intent detection."""
+        mock_logger = MagicMock()
+        mock_get_logger.return_value = mock_logger
+        
+        log_query_intent_detection(
+            user_query="What were the sales figures for last quarter?",
+            detected_intent="unknown",
+            confidence=0.3,
+            routed_service="chat",
+            error="Intent detection model failed"
+        )
+        
+        mock_logger.error.assert_called_once()
+        call_args = mock_logger.error.call_args
+        assert "Query intent detection failed for:" in call_args[0][0]
+        assert call_args[1]["extra"]["type"] == "query_intent_detection"
+        assert call_args[1]["extra"]["error"] == "Intent detection model failed"
 
 
 if __name__ == "__main__":

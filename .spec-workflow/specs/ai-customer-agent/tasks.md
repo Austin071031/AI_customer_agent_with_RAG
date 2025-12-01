@@ -38,7 +38,7 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 - [x] **Task 1**: Project Setup and Configuration
 
-### Task 2: Core Data Models
+### Task 2: Core Data Models with Dynamic Table Support
 **File**: `src/models/chat_models.py`, `src/models/config_models.py`, `src/models/excel_models.py`
 
 **Requirements**: US-001, US-002, US-007, US-009
@@ -48,35 +48,38 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 **Role**: Python Data Engineer
 
-**Task**: Create the core data models for chat messages, knowledge base documents, Excel file documents, and API configuration using Pydantic. These models will form the foundation for all data handling in the application, including SQLite storage for Excel files.
+**Task**: Create the core data models for chat messages, knowledge base documents, Excel file documents with dynamic table support, and API configuration using Pydantic. These models will form the foundation for all data handling in the application, including dynamic SQLite table creation for Excel sheets.
 
 **Restrictions**:
 - Use Pydantic for data validation
 - Include proper type hints and documentation
 - Follow Python naming conventions
 - No business logic in models
+- Support dynamic table schema for Excel sheets
 
 **_Leverage**:
 - Pydantic for data validation
 - Python typing for type hints
 - UUID for unique identifiers
-- SQLite database models for Excel file storage
+- SQLite database models for dynamic Excel table creation
+- Support for relational table schemas with proper column types
 
 **_Requirements**:
 - US-001: DeepSeek API Integration
 - US-002: Local Knowledge Base Integration
 - US-007: Python Implementation
-- US-009: Excel File Upload with SQLite Storage
+- US-009: Excel File Upload with Dynamic Table Creation
 
 **Success**:
 - ChatMessage model with role, content, timestamp, message_id
 - KBDocument model with content, metadata, file info
 - ExcelDocument model for SQLite storage with file_name, file_size, sheet_names, metadata
-- ExcelSheetData model for sheet-level data storage
+- ExcelSheetData model for dynamic table schema with headers, column types, and relational storage
 - APIConfig model for API settings
+- Support for dynamic table creation with proper column types (integer, real, text, etc.)
 - All models properly validated and documented
 
-- [-] **Task 2**: Core Data Models
+- [x] **Task 2**: Core Data Models with Dynamic Table Support
 
 ### Task 3: DeepSeek API Service
 **File**: `src/services/deepseek_service.py`
@@ -114,7 +117,7 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 - [x] **Task 3**: DeepSeek API Service
 
-### Task 4: Knowledge Base Manager
+### Task 4: Knowledge Base Manager with Dynamic Table Creation
 **File**: `src/services/knowledge_base.py`
 
 **Requirements**: US-002, US-004, US-006, US-009
@@ -124,40 +127,43 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 **Role**: Python AI/ML Engineer
 
-**Task**: Create the enhanced knowledge base manager that handles document processing with file type detection. Support multiple file formats with intelligent routing: Excel files to SQLite database, other documents to vector storage. Include embedding generation, vector search, and SQLite data management.
+**Task**: Create the enhanced knowledge base manager that handles document processing with file type detection and dynamic table creation for Excel files. Support multiple file formats with intelligent routing: Excel files to SQLite database with dynamic tables for each sheet, other documents to vector storage. Include embedding generation, vector search, and relational SQLite data management.
 
 **Restrictions**:
 - Use ChromaDB for vector storage of non-Excel files
-- Use SQLite for structured Excel file storage
+- Use SQLite for structured Excel file storage with dynamic table creation
 - Support common document formats (PDF, TXT, DOCX, XLSX)
 - Implement GPU acceleration for embeddings
 - No chat functionality
+- Create dynamic tables for each Excel sheet with proper column types
 
 **_Leverage**:
 - ChromaDB for vector database
-- SQLite for Excel file storage
+- SQLite for Excel file storage with dynamic table creation
 - sentence-transformers for embeddings
 - PyTorch with CUDA support
 - File processing libraries
 - openpyxl for Excel file processing
+- Dynamic table creation with proper column type inference
 
 **_Requirements**:
 - US-002: Local Knowledge Base Integration
 - US-004: GPU Acceleration
 - US-006: Knowledge Base Management
-- US-009: Excel File Upload with SQLite Storage
+- US-009: Excel File Upload with Dynamic Table Creation
 
 **Success**:
 - Enhanced KnowledgeBaseManager class with file type detection and routing
-- Excel file processing and storage in SQLite database
+- Excel file processing and dynamic table creation in SQLite database for each sheet
 - Document processing for multiple file formats (PDF, TXT, DOCX) in vector DB
 - Vector search functionality for non-Excel documents
-- Excel data search functionality in SQLite database
+- Excel data search functionality in SQLite database using relational tables
 - GPU-accelerated embedding generation
+- Dynamic table creation with proper column types (integer, real, text, etc.)
 
-- [x] **Task 4**: Knowledge Base Manager
+- [-] **Task 4**: Knowledge Base Manager with Dynamic Table Creation
 
-### Task 5: Text-to-SQL Service
+### Task 5: Text-to-SQL Service with Actual SQL Execution
 **File**: `src/services/text_to_sql_service.py`
 
 **Requirements**: US-010, US-001, US-009
@@ -167,32 +173,35 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 **Role**: Python AI/ML Engineer
 
-**Task**: Implement the Text-to-SQL service that converts natural language queries about Excel data into SQL queries. The service should use DeepSeek API for SQL generation and execute queries on the SQLite database containing Excel data.
+**Task**: Implement the Text-to-SQL service that converts natural language queries about Excel data into actual SQL queries executed on relational tables. The service should use DeepSeek API for SQL generation and execute queries on the SQLite database with dynamic Excel tables, supporting standard SQL operations.
 
 **Restrictions**:
 - Use DeepSeek API for SQL query generation
-- Execute SQL queries on SQLite database
-- Handle schema discovery for Excel tables
+- Execute actual SQL queries on relational tables in SQLite database
+- Handle dynamic table schema discovery for Excel sheets
+- Support standard SQL operations (SELECT, WHERE, JOIN, GROUP BY, etc.)
 - No UI components
 
 **_Leverage**:
 - DeepSeekService for SQL generation
-- SQLiteDatabaseService for query execution
-- Table schema discovery and validation
-- Natural language to SQL conversion
+- SQLiteDatabaseService for query execution on relational tables
+- Dynamic table schema discovery and validation
+- Natural language to SQL conversion with relational table support
+- Standard SQL query execution
 
 **_Requirements**:
-- US-010: Text-to-SQL Query Service
+- US-010: Text-to-SQL Query Service with Actual SQL Execution
 - US-001: DeepSeek API Integration
-- US-009: Excel File Upload with SQLite Storage
+- US-009: Excel File Upload with Dynamic Table Creation
 
 **Success**:
-- TextToSQLService class with convert_to_sql method
-- SQL query execution and result processing
-- Table schema discovery and validation
-- Natural language to SQL conversion using DeepSeek API
+- TextToSQLService class with convert_to_sql method for relational tables
+- Actual SQL query execution and result processing on relational data
+- Dynamic table schema discovery and validation for Excel sheets
+- Natural language to SQL conversion using DeepSeek API with relational context
+- Support for standard SQL operations on Excel data
 
-- [ ] **Task 5**: Text-to-SQL Service
+- [-] **Task 5**: Text-to-SQL Service with Actual SQL Execution
 
 ### Task 6: Enhanced Chat Manager with Text-to-SQL
 **File**: `src/services/chat_manager.py`
@@ -233,7 +242,7 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - Integration with all three service types
 - Proper error handling and fallback mechanisms
 
-- [ ] **Task 6**: Enhanced Chat Manager with Text-to-SQL
+- [x] **Task 6**: Enhanced Chat Manager with Text-to-SQL
 
 ### Task 7: Configuration Manager
 **File**: `src/services/config_manager.py`
@@ -271,7 +280,7 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 - [x] **Task 7**: Configuration Manager
 
-### Task 8: FastAPI Backend
+### Task 8: FastAPI Backend with Relational Storage
 **File**: `src/api/main.py`, `src/api/endpoints/chat.py`, `src/api/endpoints/knowledge_base.py`, `src/api/endpoints/config.py`, `src/api/endpoints/excel_files.py`
 
 **Requirements**: US-001, US-002, US-005, US-006, US-008, US-009, US-010, US-011
@@ -281,22 +290,23 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 **Role**: Python Backend API Developer
 
-**Task**: Create the FastAPI backend with REST endpoints for chat, knowledge base management, Excel file management, and configuration. Implement proper request validation, error handling, and API documentation with intelligent file type routing and Text-to-SQL integration.
+**Task**: Create the FastAPI backend with REST endpoints for chat, knowledge base management, Excel file management with relational storage, and configuration. Implement proper request validation, error handling, and API documentation with dynamic table creation and Text-to-SQL integration for relational data.
 
 **Restrictions**:
 - Use FastAPI framework
 - Implement proper HTTP status codes
 - Include API documentation
 - No frontend UI
-- Support file type detection and routing
-- Include Text-to-SQL service integration
+- Support dynamic table creation for Excel files
+- Include Text-to-SQL service integration with relational table support
 
 **_Leverage**:
 - FastAPI for web framework
 - Pydantic for request/response models
 - Service classes for business logic
-- File upload handling with type detection
-- Text-to-SQL service for Excel data queries
+- File upload handling with dynamic table creation
+- Text-to-SQL service for Excel data queries on relational tables
+- Relational database operations for Excel data
 
 **_Requirements**:
 - US-001: DeepSeek API Integration
@@ -304,19 +314,19 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - US-005: Chat Interface
 - US-006: Knowledge Base Management
 - US-008: Error Handling
-- US-009: Excel File Upload with SQLite Storage
-- US-010: Text-to-SQL Query Service
+- US-009: Excel File Upload with Dynamic Table Creation
+- US-010: Text-to-SQL Query Service with Actual SQL Execution
 - US-011: Intelligent Excel Data Query Routing
 
 **Success**:
 - FastAPI application with all endpoints
-- Chat endpoints with streaming support and Text-to-SQL integration
-- Knowledge base management endpoints with file type routing
-- Excel file management endpoints (list, get, delete, search)
+- Chat endpoints with streaming support and Text-to-SQL integration for relational data
+- Knowledge base management endpoints with file type routing and dynamic table creation
+- Excel file management endpoints (list, get, delete, search) with relational storage
 - Configuration endpoints
-- Proper API documentation with file upload examples and Text-to-SQL usage
+- Proper API documentation with dynamic table creation examples and Text-to-SQL usage on relational data
 
-- [x] **Task 8**: FastAPI Backend
+- [x] **Task 8**: FastAPI Backend with Relational Storage
 
 ### Task 9: Streamlit Web Interface
 **File**: `src/ui/streamlit_app.py`
@@ -434,7 +444,7 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - User-friendly error messages for Text-to-SQL queries
 - Comprehensive exception coverage
 
-- [-] **Task 11**: Error Handling and Logging
+- [x] **Task 11**: Error Handling and Logging
 
 ### Task 12: Main Application Entry Points
 **File**: `main.py`, `run_api.py`, `run_ui.py`

@@ -13,7 +13,8 @@ from pydantic import BaseModel, Field
 
 from ...models.chat_models import ChatMessage
 from ...services.chat_manager import ChatManager, ChatManagerError
-from ..dependencies import get_chat_manager
+from ...services.text_to_sql_service import TextToSQLService, TextToSQLError
+from ..dependencies import get_chat_manager, get_text_to_sql_service
 
 # Configure logging
 logger = logging.getLogger(__name__)

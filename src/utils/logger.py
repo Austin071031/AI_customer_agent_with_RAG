@@ -413,7 +413,7 @@ def log_configuration_change(
 ) -> None:
     """
     Log configuration changes.
-    
+
     Args:
         setting: Configuration setting name
         old_value: Previous value
@@ -421,7 +421,7 @@ def log_configuration_change(
         user: User who made the change (optional)
     """
     log = get_logger()
-    
+
     log_context = {
         "type": "configuration_change",
         "setting": setting,
@@ -429,5 +429,187 @@ def log_configuration_change(
         "new_value": str(new_value),
         "user": user
     }
-    
+
     log.info(f"Configuration changed: {setting}", **log_context)
+
+
+def log_text_to_sql_operation(
+    natural_language_query: str,
+    generated_sql: str,
+    execution_time: float,
+    result_count: Optional[int] = None,
+    table_name: Optional[str] = None,
+    error: Optional[str] = None,
+    query_complexity: Optional[str] = None
+) -> None:
+    """
+    Log Text-to-SQL operations with structured context.
+
+    Args:
+        natural_language_query: Original natural language query
+        generated_sql: Generated SQL query
+        execution_time: Query execution time in seconds
+        result_count: Number of results returned (optional)
+        table_name: Table involved in the query (optional)
+        error: Error message if any (optional)
+        query_complexity: Query complexity level (simple, moderate, complex)
+    """
+    log = get_logger()
+
+    # Truncate long queries for privacy and readability
+    truncated_nl_query = natural_language_query[:200] + "..." if len(natural_language_query) > 200 else natural_language_query
+    truncated_sql = generated_sql[:500] + "..." if len(generated_sql) > 500 else generated_sql
+
+    log_context = {
+        "type": "text_to_sql",
+        "natural_language_query_length": len(natural_language_query),
+        "generated_sql_length": len(generated_sql),
+        "execution_time": execution_time,
+        "result_count": result_count,
+        "table_name": table_name,
+        "error": error,
+        "query_complexity": query_complexity
+    }
+
+    if error:
+        log.error(
+            f"Text-to-SQL failed for query: {truncated_nl_query}",
+            **log_context
+        )
+    else:
+        log.info(
+            f"Text-to-SQL completed: {truncated_nl_query} -> {result_count} results",
+            **log_context
+        )
+
+
+def log_sql_execution(
+    sql_query: str,
+    execution_time: float,
+    row_count: Optional[int] = None,
+    table_name: Optional[str] = None,
+    error: Optional[str] = None,
+    operation_type: Optional[str] = None
+) -> None:
+    """
+    Log SQL execution operations with structured context.
+
+    Args:
+        sql_query: SQL query executed
+        execution_time: Query execution time in seconds
+        row_count: Number of rows affected/returned (optional)
+        table_name: Table involved in the query (optional)
+        error: Error message if any (optional)
+        operation_type: Type of SQL operation (SELECT, INSERT, UPDATE, DELETE)
+    """
+    log = get_logger()
+
+    # Truncate long SQL queries
+    truncated_sql = sql_query[:300] + "..." if len(sql_query) > 300 else sql_query
+
+    log_context = {
+        "type": "sql_execution",
+        "sql_query_length": len(sql_query),
+        "execution_time": execution_time,
+        "row_count": row_count,
+        "table_name": table_name,
+        "error": error,
+        "operation_type": operation_type
+    }
+
+    if error:
+        log.error(
+            f"SQL execution failed: {truncated_sql}",
+            **log_context
+        )
+    else:
+        log.info(
+            f"SQL execution completed: {operation_type} on {table_name} -> {row_count} rows",
+            **log_context
+        )
+
+
+def log_excel_table_operation(
+    operation: str,
+    file_name: str,
+    table_name: str,
+    row_count: Optional[int] = None,
+    column_count: Optional[int] = None,
+    error: Optional[str] = None
+) -> None:
+    """
+    Log Excel table operations with structured context.
+
+    Args:
+        operation: Operation type (create, read, update, delete, search)
+        file_name: Excel file name
+        table_name: Table/sheet name
+        row_count: Number of rows (optional)
+        column_count: Number of columns (optional)
+        error: Error message if any (optional)
+    """
+    log = get_logger()
+
+    log_context = {
+        "type": "excel_table_operation",
+        "operation": operation,
+        "file_name": file_name,
+        "table_name": table_name,
+        "row_count": row_count,
+        "column_count": column_count,
+        "error": error
+    }
+
+    if error:
+        log.error(
+            f"Excel table operation failed: {operation} on {table_name} in {file_name}",
+            **log_context
+        )
+    else:
+        log.info(
+            f"Excel table operation completed: {operation} on {table_name} in {file_name}",
+            **log_context
+        )
+
+
+def log_query_intent_detection(
+    user_query: str,
+    detected_intent: str,
+    confidence: float,
+    routed_service: str,
+    error: Optional[str] = None
+) -> None:
+    """
+    Log query intent detection and routing.
+
+    Args:
+        user_query: User's original query
+        detected_intent: Detected intent (excel_data, knowledge_base, general)
+        confidence: Confidence score (0.0 to 1.0)
+        routed_service: Service routed to (text_to_sql, knowledge_base, chat)
+        error: Error message if any (optional)
+    """
+    log = get_logger()
+
+    # Truncate user query for privacy
+    truncated_query = user_query[:150] + "..." if len(user_query) > 150 else user_query
+
+    log_context = {
+        "type": "query_intent_detection",
+        "user_query_length": len(user_query),
+        "detected_intent": detected_intent,
+        "confidence": confidence,
+        "routed_service": routed_service,
+        "error": error
+    }
+
+    if error:
+        log.error(
+            f"Query intent detection failed for: {truncated_query}",
+            **log_context
+        )
+    else:
+        log.info(
+            f"Query routed to {routed_service} with {confidence:.2f} confidence: {truncated_query}",
+            **log_context
+        )

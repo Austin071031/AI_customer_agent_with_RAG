@@ -8,12 +8,15 @@ history, context management, and response generation with knowledge base integra
 
 import logging
 import asyncio
-from typing import List, Dict, Optional, AsyncGenerator
+import re
+import json
+from typing import List, Dict, Optional, AsyncGenerator, Any
 from datetime import datetime
 
 from ..models.chat_models import ChatMessage
 from ..services.deepseek_service import DeepSeekService, DeepSeekAPIError
 from ..services.knowledge_base import KnowledgeBaseManager, KnowledgeBaseError
+from ..services.text_to_sql_service import TextToSQLService, TextToSQLError
 
 
 class ChatManagerError(Exception):
@@ -27,19 +30,22 @@ class ChatManagerError(Exception):
 
 class ChatManager:
     """
-    Manages chat conversations with AI agent and knowledge base integration.
+    Enhanced Chat Manager for AI Customer Agent with Text-to-SQL integration.
     
-    This class orchestrates between the DeepSeek API service and knowledge base
-    to provide intelligent responses with context from local documents.
+    This class orchestrates between the DeepSeek API service, knowledge base,
+    and Text-to-SQL service to provide intelligent responses with intelligent
+    query routing and mixed data source integration.
     """
     
-    def __init__(self, deepseek_service: DeepSeekService, kb_manager: KnowledgeBaseManager):
+    def __init__(self, deepseek_service: DeepSeekService, kb_manager: KnowledgeBaseManager,
+                 text_to_sql_service: Optional[TextToSQLService] = None):
         """
-        Initialize the chat manager with required services.
+        Initialize the enhanced chat manager with required services.
         
         Args:
             deepseek_service: DeepSeekService instance for AI responses
             kb_manager: KnowledgeBaseManager instance for knowledge base access
+            text_to_sql_service: Optional TextToSQLService for Excel data queries
             
         Raises:
             ChatManagerError: If services are not properly initialized
@@ -54,30 +60,282 @@ class ChatManager:
             
         self.deepseek_service = deepseek_service
         self.kb_manager = kb_manager
+        self.text_to_sql_service = text_to_sql_service
         
         # Initialize conversation history
         self.conversation_history: List[ChatMessage] = []
         
         # Configuration settings
         self.max_history_length = 20  # Maximum number of messages to keep in history
-        self.knowledge_base_threshold = -0.5  # Similarity threshold for KB results (adjusted for negative scores)
+        self.knowledge_base_threshold = 0.7  # Similarity threshold for KB results
         self.max_kb_context_length = 1500  # Maximum characters for KB context
         
-        self.logger.info("ChatManager initialized successfully")
+        # Query intent detection settings
+        self.excel_query_keywords = [
+            'excel', 'spreadsheet', 'sheet', 'table', 'data', 'column', 'row',
+            'sum', 'average', 'count', 'total', 'max', 'min', 'calculate',
+            'how many', 'what is the', 'list all', 'show me', 'find',
+            'records', 'entries', 'cells', 'worksheet', 'workbook', 'pivot',
+            'filter', 'sort', 'group', 'aggregate', 'statistics'
+        ]
         
-    async def process_message(self, user_message: str, use_knowledge_base: bool = True) -> str:
+        self.excel_query_patterns = [
+            r'how many.*(row|record|entry|customer|product|item)',
+            r'what is the.*(total|sum|average|count|maximum|minimum)',
+            r'list all.*(data|record|entry|customer|product|item)',
+            r'show me.*(data|table|sheet|information|details)',
+            r'find.*(in|from).*(table|sheet|data|excel|spreadsheet)',
+            r'count.*(row|record|entry|customer|product|item)',
+            r'calculate.*(average|sum|total|maximum|minimum)',
+            r'display.*(data|table|sheet|information)'
+        ]
+        
+        self.logger.info("Enhanced ChatManager initialized successfully")
+        
+    def _detect_query_intent(self, user_message: str) -> Dict[str, Any]:
         """
-        Process a user message and generate an AI response.
+        Detect the intent of a user query to determine the appropriate service.
         
-        This method orchestrates the entire response generation process:
-        1. Optionally searches knowledge base for relevant context
-        2. Builds the conversation context with history and KB context
-        3. Calls DeepSeek API for response generation
-        4. Updates conversation history
+        This method analyzes the user message to determine if it's:
+        - An Excel data query (should use Text-to-SQL)
+        - A knowledge base query (should use KB search)
+        - A general conversation (should use DeepSeek API directly)
+        
+        Args:
+            user_message: The user's input message
+            
+        Returns:
+            Dictionary with intent classification and confidence scores
+        """
+        user_message_lower = user_message.lower()
+        
+        # Check for Excel data query patterns
+        excel_keyword_matches = sum(1 for keyword in self.excel_query_keywords 
+                                  if keyword in user_message_lower)
+        excel_pattern_matches = sum(1 for pattern in self.excel_query_patterns 
+                                  if re.search(pattern, user_message_lower))
+        
+        # Enhanced Excel confidence calculation
+        excel_confidence = (excel_keyword_matches * 0.2) + (excel_pattern_matches * 0.4)
+        
+        # Boost confidence if explicit Excel/spreadsheet terms are present
+        if any(term in user_message_lower for term in ['excel', 'spreadsheet', 'sheet', 'workbook']):
+            excel_confidence += 0.3
+            
+        # Boost confidence for data analysis terms
+        if any(term in user_message_lower for term in ['total', 'sum', 'average', 'count', 'calculate']):
+            excel_confidence += 0.2
+            
+        # Cap at 1.0
+        excel_confidence = min(excel_confidence, 1.0)
+        
+        # Check for knowledge base query patterns
+        kb_keywords = ['what is', 'how to', 'help with', 'information about', 
+                      'policy', 'procedure', 'guide', 'manual', 'documentation',
+                      'refund', 'reset', 'account', 'setup', 'user']
+        kb_keyword_matches = sum(1 for keyword in kb_keywords 
+                               if keyword in user_message_lower)
+        
+        kb_confidence = kb_keyword_matches * 0.2
+        
+        # Determine primary intent (enhanced thresholds to improve detection)
+        if excel_confidence >= 0.3 and self.text_to_sql_service:
+            intent = "excel_data"
+            confidence = excel_confidence
+        elif kb_confidence >= 0.2:
+            intent = "knowledge_base"
+            confidence = min(kb_confidence, 1.0)
+        else:
+            intent = "general"
+            confidence = 0.8  # Default confidence for general queries
+            
+        self.logger.info(f"Query intent detected: {intent} (confidence: {confidence:.2f})")
+        
+        return {
+            "intent": intent,
+            "confidence": confidence,
+            "scores": {
+                "excel_data": excel_confidence,
+                "knowledge_base": kb_confidence,
+                "general": 1.0 - max(excel_confidence, kb_confidence)
+            }
+        }
+        
+    async def _generate_natural_language_answer(self, user_message: str, sql_results: Dict[str, Any]) -> str:
+        """
+        Generate a natural language answer from SQL query results.
+        
+        Args:
+            user_message: The original user query
+            sql_results: Dictionary containing SQL query results from Text-to-SQL service
+            
+        Returns:
+            Natural language answer based on the results
+        """
+        try:
+            # Extract relevant information from SQL results
+            result_count = sql_results.get("result_count", 0)
+            results = sql_results.get("results", [])
+            sql_query = sql_results.get("sql_query", "")
+            
+            # If no results, return a simple message
+            if result_count == 0:
+                return f"I searched the Excel data but didn't find any results for: {user_message}"
+            
+            # Prepare context for the LLM
+            results_preview = results[:10]  # Limit to first 10 rows for context
+            results_str = json.dumps(results_preview, indent=2, default=str)
+            
+            # Build messages for the LLM
+            messages = [
+                {
+                    "role": "system",
+                    "content": """You are a helpful data analyst. Your task is to provide a clear, concise natural language answer based on SQL query results.
+
+IMPORTANT GUIDELINES:
+1. Analyze the SQL query results and answer the user's original question directly.
+2. Provide specific numbers and data points from the results when relevant.
+3. Keep the answer focused and avoid unnecessary explanations.
+4. If the results contain multiple rows, summarize the key findings.
+5. Do not mention SQL queries, databases, or technical details unless specifically asked.
+6. Format numbers appropriately (e.g., use commas for thousands).
+7. If the user asked for a calculation (sum, average, count, etc.), provide the computed result."""
+                },
+                {
+                    "role": "user",
+                    "content": f"""Original question: {user_message}
+
+SQL Query Results (showing {result_count} total results):
+{results_str}
+
+Based on these results, please provide a direct answer to the user's question. Do not show raw data or SQL queries in your response."""
+                }
+            ]
+            
+            # Generate natural language answer using DeepSeek
+            answer = await self.deepseek_service.chat_completion(messages)
+            
+            # Clean up the answer
+            answer = answer.strip()
+            
+            # Add a brief note about the data source if not already mentioned
+            if "excel" not in answer.lower() and "data" not in answer.lower():
+                answer += "\n\n(This information is based on the Excel data you uploaded.)"
+            
+            self.logger.info(f"Generated natural language answer from {result_count} SQL results")
+            return answer
+            
+        except Exception as e:
+            self.logger.error(f"Failed to generate natural language answer: {str(e)}")
+            # Fall back to formatted results
+            return self._format_results_fallback(user_message, sql_results)
+    
+    def _format_results_fallback(self, user_message: str, sql_results: Dict[str, Any]) -> str:
+        """
+        Fallback method to format SQL results when natural language generation fails.
+        
+        Args:
+            user_message: The original user query
+            sql_results: Dictionary containing SQL query results
+            
+        Returns:
+            Formatted results string
+        """
+        result_count = sql_results.get("result_count", 0)
+        results = sql_results.get("results", [])
+        
+        if result_count == 0:
+            return f"I searched the Excel data but didn't find any results for: {user_message}"
+        
+        # Format results for display
+        results_summary = f"Here's what I found in the Excel data for your query '{user_message}':\n\n"
+        results_summary += f"Found {result_count} result(s):\n\n"
+        
+        # Show a preview of results (first 5 rows)
+        preview_rows = results[:5]
+        for i, row in enumerate(preview_rows, 1):
+            results_summary += f"Row {i}: {row}\n"
+        
+        if result_count > 5:
+            results_summary += f"\n... and {result_count - 5} more results"
+        
+        return results_summary
+
+    async def _handle_excel_data_query(self, user_message: str, file_id: Optional[str] = None) -> str:
+        """
+        Handle Excel data queries using Text-to-SQL service.
+        
+        Args:
+            user_message: The user's query about Excel data
+            file_id: Optional specific Excel file ID to query
+            
+        Returns:
+            Natural language answer based on Excel data results
+        """
+        if not self.text_to_sql_service:
+            raise ChatManagerError("Text-to-SQL service not available for Excel data queries")
+            
+        try:
+            self.logger.info(f"Processing Excel data query: {user_message}")
+            
+            # If no file_id provided, get the most recent Excel file
+            if not file_id:
+                # Get available Excel files from SQLite database
+                try:
+                    available_files = self.text_to_sql_service.sqlite_service.list_excel_files()
+                    if not available_files:
+                        return "I don't see any Excel files available for querying. Please upload an Excel file first."
+                    
+                    # Use the most recent file (first in the list since they're sorted by upload_time DESC)
+                    file_id = available_files[0].id
+                    self.logger.info(f"Using most recent Excel file: {available_files[0].file_name} (ID: {file_id})")
+                    
+                except Exception as e:
+                    self.logger.error(f"Failed to get available Excel files: {str(e)}")
+                    return "I encountered an error while trying to access the Excel files. Please try uploading the file again."
+            
+            # Convert conversation history to context format
+            conversation_context = []
+            for msg in self.conversation_history[-4:]:  # Last 2 exchanges
+                conversation_context.append({
+                    "role": msg.role,
+                    "content": msg.content
+                })
+            
+            # Use Text-to-SQL service to process the query
+            result = await self.text_to_sql_service.convert_to_sql(
+                natural_language_query=user_message,
+                file_id=file_id,
+                conversation_context=conversation_context
+            )
+            
+            # Generate natural language answer from the results
+            response = await self._generate_natural_language_answer(user_message, result)
+                
+            self.logger.info(f"Successfully processed Excel data query, found {result['result_count']} results")
+            return response
+            
+        except TextToSQLError as e:
+            self.logger.error(f"Text-to-SQL query failed: {str(e)}")
+            return f"I encountered an error while querying the Excel data: {str(e)}"
+        except Exception as e:
+            self.logger.error(f"Unexpected error in Excel data query: {str(e)}")
+            return f"Sorry, I couldn't process your Excel data query due to an unexpected error."
+            
+    async def process_message(self, user_message: str, use_knowledge_base: bool = True, 
+                           file_id: Optional[str] = None) -> str:
+        """
+        Process a user message with intelligent routing to appropriate services.
+        
+        This enhanced method detects query intent and routes to:
+        - Text-to-SQL service for Excel data queries
+        - Knowledge base for document-based queries
+        - DeepSeek API for general conversation
         
         Args:
             user_message: The user's input message
             use_knowledge_base: Whether to use knowledge base for context
+            file_id: Optional specific Excel file ID to query
             
         Returns:
             AI-generated response as string
@@ -92,49 +350,93 @@ class ChatManager:
         try:
             self.logger.info(f"Processing user message: {user_message[:50]}...")
             
-            # Step 1: Search knowledge base for relevant context if enabled
-            kb_context = ""
-            if use_knowledge_base:
-                kb_context = await self._get_knowledge_base_context(user_message)
-                self.logger.debug(f"Retrieved KB context: {len(kb_context)} characters")
+            # Step 1: Detect query intent for intelligent routing
+            intent_result = self._detect_query_intent(user_message)
+            intent = intent_result["intent"]
+            confidence = intent_result["confidence"]
             
-            # Step 2: Build conversation messages with context
-            messages = self._build_conversation_messages(user_message, kb_context)
+            self.logger.info(f"Detected intent: {intent} (confidence: {confidence:.2f})")
             
-            # Step 3: Get AI response from DeepSeek API
-            ai_response = await self.deepseek_service.chat_completion(messages)
+            # Step 2: Route to appropriate service based on intent
+            if intent == "excel_data" and self.text_to_sql_service:
+                self.logger.info("Routing to Text-to-SQL service for Excel data query")
+                response = await self._handle_excel_data_query(user_message, file_id)
+            elif intent == "knowledge_base" and use_knowledge_base:
+                self.logger.info("Routing to knowledge base enhanced response")
+                response = await self._process_with_knowledge_base(user_message)
+            else:
+                self.logger.info("Routing to general conversation")
+                response = await self._process_general_conversation(user_message, use_knowledge_base)
             
-            # Step 4: Update conversation history
-            self._update_conversation_history(user_message, ai_response)
+            # Step 3: Update conversation history
+            self._update_conversation_history(user_message, response)
             
-            self.logger.info("Successfully processed user message")
-            return ai_response
+            self.logger.info("Successfully processed user message with intelligent routing")
+            return response
             
         except DeepSeekAPIError as e:
             self.logger.error(f"DeepSeek API error in process_message: {str(e)}")
             raise
         except KnowledgeBaseError as e:
             self.logger.error(f"Knowledge base error in process_message: {str(e)}")
-            # Continue without KB context if KB fails
+            # Fall back to general conversation without KB
             if use_knowledge_base:
-                self.logger.warning("Falling back to response without knowledge base context")
-                return await self.process_message(user_message, use_knowledge_base=False)
+                self.logger.warning("Falling back to general conversation without knowledge base")
+                return await self.process_message(user_message, use_knowledge_base=False, file_id=file_id)
             else:
                 raise ChatManagerError(f"Knowledge base error: {str(e)}")
+        except TextToSQLError as e:
+            self.logger.error(f"Text-to-SQL error in process_message: {str(e)}")
+            # Fall back to general conversation for Excel data query failures
+            self.logger.warning("Falling back to general conversation for failed Excel query")
+            return await self._process_general_conversation(user_message, use_knowledge_base)
         except Exception as e:
             self.logger.error(f"Unexpected error in process_message: {str(e)}")
             raise ChatManagerError(f"Failed to process message: {str(e)}")
             
-    async def stream_message(self, user_message: str, use_knowledge_base: bool = True) -> AsyncGenerator[str, None]:
+    async def _process_with_knowledge_base(self, user_message: str) -> str:
         """
-        Process a user message and stream the AI response.
+        Process message with knowledge base context.
         
-        This method provides real-time streaming of AI responses while
-        maintaining the same context and knowledge base integration.
+        Args:
+            user_message: The user's input message
+            
+        Returns:
+            AI-generated response with KB context
+        """
+        kb_context = await self._get_knowledge_base_context(user_message)
+        messages = self._build_conversation_messages(user_message, kb_context)
+        return await self.deepseek_service.chat_completion(messages)
+        
+    async def _process_general_conversation(self, user_message: str, use_knowledge_base: bool = True) -> str:
+        """
+        Process general conversation message.
         
         Args:
             user_message: The user's input message
             use_knowledge_base: Whether to use knowledge base for context
+            
+        Returns:
+            AI-generated response
+        """
+        kb_context = ""
+        if use_knowledge_base:
+            kb_context = await self._get_knowledge_base_context(user_message)
+        messages = self._build_conversation_messages(user_message, kb_context)
+        return await self.deepseek_service.chat_completion(messages)
+            
+    async def stream_message(self, user_message: str, use_knowledge_base: bool = True,
+                           file_id: Optional[str] = None) -> AsyncGenerator[str, None]:
+        """
+        Process a user message and stream the AI response with intelligent routing.
+        
+        This enhanced method provides real-time streaming while routing to appropriate
+        services based on query intent detection.
+        
+        Args:
+            user_message: The user's input message
+            use_knowledge_base: Whether to use knowledge base for context
+            file_id: Optional specific Excel file ID to query
             
         Yields:
             String chunks from the streaming AI response
@@ -149,25 +451,39 @@ class ChatManager:
         try:
             self.logger.info(f"Streaming response for user message: {user_message[:50]}...")
             
-            # Step 1: Search knowledge base for relevant context if enabled
-            kb_context = ""
-            if use_knowledge_base:
-                kb_context = await self._get_knowledge_base_context(user_message)
-                self.logger.debug(f"Retrieved KB context: {len(kb_context)} characters")
+            # For Excel data queries, we can't stream Text-to-SQL results, so process normally
+            intent_result = self._detect_query_intent(user_message)
+            intent = intent_result["intent"]
             
-            # Step 2: Build conversation messages with context
-            messages = self._build_conversation_messages(user_message, kb_context)
-            
-            # Step 3: Stream AI response from DeepSeek API
-            full_response = ""
-            async for chunk in self.deepseek_service.stream_chat(messages):
-                full_response += chunk
-                yield chunk
+            if intent == "excel_data" and self.text_to_sql_service:
+                # For Excel data queries, process normally and stream the formatted result
+                self.logger.info("Processing Excel data query for streaming")
+                response = await self._handle_excel_data_query(user_message, file_id)
                 
-            # Step 4: Update conversation history with complete response
-            self._update_conversation_history(user_message, full_response)
+                # Stream the response in chunks to simulate streaming
+                for i in range(0, len(response), 50):
+                    yield response[i:i+50]
+                    
+                # Update conversation history
+                self._update_conversation_history(user_message, response)
+                return
+            else:
+                # For KB and general queries, use the original streaming approach
+                kb_context = ""
+                if use_knowledge_base:
+                    kb_context = await self._get_knowledge_base_context(user_message)
+                    self.logger.debug(f"Retrieved KB context: {len(kb_context)} characters")
+                
+                messages = self._build_conversation_messages(user_message, kb_context)
+                
+                full_response = ""
+                async for chunk in self.deepseek_service.stream_chat(messages):
+                    full_response += chunk
+                    yield chunk
+                    
+                self._update_conversation_history(user_message, full_response)
             
-            self.logger.info("Successfully streamed response")
+            self.logger.info("Successfully streamed response with intelligent routing")
             
         except DeepSeekAPIError as e:
             self.logger.error(f"DeepSeek API error in stream_message: {str(e)}")
@@ -177,10 +493,16 @@ class ChatManager:
             # Continue without KB context if KB fails
             if use_knowledge_base:
                 self.logger.warning("Falling back to streaming without knowledge base context")
-                async for chunk in self.stream_message(user_message, use_knowledge_base=False):
+                async for chunk in self.stream_message(user_message, use_knowledge_base=False, file_id=file_id):
                     yield chunk
             else:
                 raise ChatManagerError(f"Knowledge base error: {str(e)}")
+        except TextToSQLError as e:
+            self.logger.error(f"Text-to-SQL error in stream_message: {str(e)}")
+            # Fall back to general conversation for Excel data query failures
+            self.logger.warning("Falling back to general conversation for failed Excel query")
+            async for chunk in self.stream_message(user_message, use_knowledge_base, file_id=None):
+                yield chunk
         except Exception as e:
             self.logger.error(f"Unexpected error in stream_message: {str(e)}")
             raise ChatManagerError(f"Failed to stream message: {str(e)}")
@@ -396,6 +718,17 @@ class ChatManager:
             if not kb_healthy:
                 self.logger.warning("Knowledge base health check failed")
                 return False
+                
+            # Check Text-to-SQL service health if available
+            if self.text_to_sql_service:
+                try:
+                    tts_health = await self.text_to_sql_service.health_check()
+                    if not tts_health.get("status") == "healthy":
+                        self.logger.warning("Text-to-SQL service health check failed")
+                        return False
+                except Exception as e:
+                    self.logger.warning(f"Text-to-SQL service health check error: {str(e)}")
+                    return False
                 
             # Check internal state
             if (not isinstance(self.conversation_history, list) or 

@@ -67,25 +67,25 @@ Develop a Python-based AI customer service agent that uses DeepSeek API and can 
   - **Response**: New information available for queries
   - **State**: Knowledge base management interface functional
 
-**US-009: Excel File Upload with SQLite Storage**
+**US-009: Excel File Upload with Dynamic Table Creation**
 - **As a** user
-- **I want to** upload Excel files that are automatically stored in a SQLite database
-- **So that** structured data can be efficiently queried and retrieved
+- **I want to** upload Excel files that are automatically stored in SQLite database with dynamic tables created for each sheet
+- **So that** each Excel sheet is stored as a separate relational table with proper column types for efficient SQL queries
 - **EARS Criteria:**
   - **Event**: User uploads Excel file
-  - **Action**: System detects file type and stores in SQLite database
-  - **Response**: File metadata and content stored successfully
-  - **State**: Excel data available for structured queries
+  - **Action**: System detects file type, creates dynamic tables for each sheet with proper column types, and stores data relationally
+  - **Response**: File metadata stored and dynamic tables created successfully
+  - **State**: Excel data available in relational format for SQL queries
 
-**US-010: Text-to-SQL Query Service**
+**US-010: Text-to-SQL Query Service with Actual SQL Execution**
 - **As a** user
-- **I want to** ask natural language questions about Excel data and have them automatically converted to SQL queries
-- **So that** I can get accurate answers from Excel data without needing SQL knowledge
+- **I want to** ask natural language questions about Excel data and have them automatically converted to actual SQL queries executed on relational tables
+- **So that** I can get accurate answers from Excel data using standard SQL operations without needing SQL knowledge
 - **EARS Criteria:**
   - **Event**: User asks a question about Excel data
-  - **Action**: System converts natural language to SQL using Text-to-SQL service
-  - **Response**: SQL query executed and results combined with LLM for natural response
-  - **State**: Text-to-SQL service available and integrated with chat system
+  - **Action**: System converts natural language to SQL using Text-to-SQL service and executes actual SQL on relational tables
+  - **Response**: SQL query executed on relational data and results combined with LLM for natural response
+  - **State**: Text-to-SQL service available and integrated with relational database tables
 
 **US-011: Intelligent Excel Data Query Routing**
 - **As a** user
@@ -146,8 +146,10 @@ Develop a Python-based AI customer service agent that uses DeepSeek API and can 
 4. Chat interface is intuitive and responsive
 5. Error conditions are handled gracefully with user-friendly messages
 6. All user stories are implemented and tested
-7. Excel files are automatically detected and stored in SQLite database with proper metadata
-8. Excel data can be efficiently queried and retrieved from SQLite storage
+7. Excel files are automatically detected and stored in SQLite database with dynamic tables created for each sheet
+8. Each Excel sheet is stored as a separate relational table with proper column types (integer, real, text, etc.)
+9. Text-to-SQL service executes actual SQL queries on the relational tables and returns accurate results
+10. Excel data can be efficiently queried and retrieved from SQLite storage using standard SQL operations
 
 ## Open Questions
 1. What specific file formats should the local knowledge base support? (PDF, TXT, DOCX, etc.)

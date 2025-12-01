@@ -191,7 +191,7 @@ class ChatManager:
         """Clear conversation history"""
 ```
 
-### 4. SQLite Database Service
+### 4. SQLite Database Service with Dynamic Table Creation
 ```python
 class SQLiteDatabaseService:
     def __init__(self, db_path: str = "./excel_database.db"):
@@ -199,23 +199,39 @@ class SQLiteDatabaseService:
         self._init_database()
         
     def _init_database(self) -> None:
-        """Initialize SQLite database with required tables"""
+        """Initialize SQLite database with metadata tables"""
         
     def store_excel_file(self, file_path: str, file_name: str, file_size: int, 
                         sheet_names: List[str], metadata: Dict[str, Any]) -> str:
-        """Store Excel file metadata and content in SQLite database"""
+        """Store Excel file metadata and create dynamic tables for each sheet"""
+        
+    def _create_sheet_table(self, file_id: str, sheet_name: str, headers: List[str], 
+                           data_types: Dict[str, str]) -> bool:
+        """Create dynamic table for Excel sheet with proper column types"""
+        
+    def _insert_sheet_data(self, file_id: str, sheet_name: str, data: List[Dict[str, Any]]) -> bool:
+        """Insert data into the dynamic sheet table"""
+        
+    def _infer_column_types(self, headers: List[str], sample_data: List[Dict[str, Any]]) -> Dict[str, str]:
+        """Infer appropriate SQLite column types from Excel data"""
         
     def get_excel_file(self, file_id: str) -> Optional[Dict[str, Any]]:
-        """Retrieve Excel file data from database"""
+        """Retrieve Excel file metadata from database"""
         
     def list_excel_files(self) -> List[Dict[str, Any]]:
         """List all Excel files in database"""
         
     def delete_excel_file(self, file_id: str) -> bool:
-        """Delete Excel file from database"""
+        """Delete Excel file and associated sheet tables from database"""
+        
+    def get_table_schemas(self) -> Dict[str, Any]:
+        """Get schema information for all dynamic Excel tables"""
+        
+    def execute_sql_query(self, sql_query: str) -> List[Dict[str, Any]]:
+        """Execute SQL query on SQLite database and return results"""
         
     def search_excel_data(self, query: str, sheet_name: Optional[str] = None) -> List[Dict[str, Any]]:
-        """Search for data within Excel files"""
+        """Search for data within Excel files using SQL queries"""
 ```
 
 ### 5. Enhanced Knowledge Base Manager

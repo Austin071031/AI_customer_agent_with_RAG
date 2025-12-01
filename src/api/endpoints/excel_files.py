@@ -1,8 +1,10 @@
 """
 Excel File Management Endpoints for AI Customer Agent.
 
-This module provides REST API endpoints for managing Excel files stored in SQLite database,
-including listing, retrieving, deleting, and searching Excel file data.
+This module provides REST API endpoints for managing Excel files stored in SQLite database
+with dynamic table creation for relational data storage. Each Excel sheet is automatically
+converted to a relational table with proper column type inference (integer, real, text, etc.),
+enabling SQL queries and data analysis operations.
 """
 
 import logging

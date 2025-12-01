@@ -9,6 +9,7 @@ from fastapi import HTTPException, status
 from ..services.chat_manager import ChatManager
 from ..services.knowledge_base import KnowledgeBaseManager
 from ..services.config_manager import ConfigManager
+from ..services.text_to_sql_service import TextToSQLService
 
 # Import the global app_state from state module
 from .state import app_state
@@ -69,3 +70,22 @@ def get_config_manager() -> ConfigManager:
             detail="Configuration service not available"
         )
     return config_manager
+
+
+def get_text_to_sql_service() -> TextToSQLService:
+    """
+    Get the Text-to-SQL service instance from application state.
+    
+    Returns:
+        TextToSQLService instance
+        
+    Raises:
+        HTTPException: If Text-to-SQL service is not available
+    """
+    text_to_sql_service = app_state.get("text_to_sql_service")
+    if not text_to_sql_service:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Text-to-SQL service not available"
+        )
+    return text_to_sql_service

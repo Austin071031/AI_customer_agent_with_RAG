@@ -15,6 +15,7 @@ from ..services.config_manager import ConfigManager
 from ..services.deepseek_service import DeepSeekService
 from ..services.knowledge_base import KnowledgeBaseManager
 from ..services.chat_manager import ChatManager
+from ..services.text_to_sql_service import TextToSQLService
 from .endpoints import chat, knowledge_base, config, excel_files
 from .state import app_state
 
@@ -59,8 +60,14 @@ async def lifespan(app: FastAPI):
         )
         app_state["kb_manager"] = kb_manager
         
-        # Initialize chat manager
-        chat_manager = ChatManager(deepseek_service, kb_manager)
+        # Initialize Text-to-SQL service with relational database support
+        from ..services.sqlite_database_service import SQLiteDatabaseService
+        sqlite_service = SQLiteDatabaseService(db_path=settings.database.sqlite_db_path)
+        text_to_sql_service = TextToSQLService(deepseek_service, sqlite_service)
+        app_state["text_to_sql_service"] = text_to_sql_service
+        
+        # Initialize chat manager with Text-to-SQL integration for intelligent query routing
+        chat_manager = ChatManager(deepseek_service, kb_manager, text_to_sql_service)
         app_state["chat_manager"] = chat_manager
         
         logger.info("All services initialized successfully")
@@ -171,13 +178,15 @@ async def health_check():
         deepseek_service = app_state.get("deepseek_service")
         kb_manager = app_state.get("kb_manager")
         chat_manager = app_state.get("chat_manager")
+        text_to_sql_service = app_state.get("text_to_sql_service")
         
         health_status = {
             "api": "healthy",
             "config_manager": "healthy" if config_manager else "unhealthy",
             "deepseek_service": "healthy" if deepseek_service else "unhealthy",
             "knowledge_base": "healthy" if kb_manager else "unhealthy",
-            "chat_manager": "healthy" if chat_manager else "unhealthy"
+            "chat_manager": "healthy" if chat_manager else "unhealthy",
+            "text_to_sql_service": "healthy" if text_to_sql_service else "unhealthy"
         }
         
         
