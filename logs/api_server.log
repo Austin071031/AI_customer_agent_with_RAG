@@ -9003,3 +9003,59 @@ client_session: <aiohttp.client.ClientSession object at 0x0000020719DBDD30>
 2025-12-01 17:42:09,261 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
 2025-12-01 17:42:09,413 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
 2025-12-01 17:42:09,414 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-01 17:42:11,278 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021DAA7842F0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-01 17:42:14,302 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021DAA80F610>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-01 17:42:16,895 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-01 17:42:16,896 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-01 17:42:16,984 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-01 17:42:16,984 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-01 17:42:16,984 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-01 17:42:16,985 - src.api.main - INFO - All services initialized successfully
+2025-12-01 17:42:17,339 - __main__ - INFO - API server is ready and responding to requests
+2025-12-01 17:42:17,339 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-01 17:44:30,353 - src.api.endpoints.chat - INFO - Streaming chat message (KB: True)
+2025-12-01 17:44:30,357 - src.services.chat_manager - INFO - Streaming response for user message: what is the monthly total charge for site JBY in t...
+2025-12-01 17:44:30,357 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-12-01 17:44:30,357 - src.services.chat_manager - INFO - Processing Excel data query for streaming
+2025-12-01 17:44:30,357 - src.services.chat_manager - INFO - Processing Excel data query: what is the monthly total charge for site JBY in the excel?
+2025-12-01 17:44:30,358 - src.services.chat_manager - INFO - Using most recent Excel file: tmp_q6c21fb.xlsx (ID: excel_77e71b80-a8dd-450f-80be-e61ba1b1482d)
+2025-12-01 17:44:30,358 - src.services.text_to_sql_service - INFO - Converting natural language query to SQL: what is the monthly total charge for site JBY in the excel?
+2025-12-01 17:44:30,359 - src.services.text_to_sql_service - INFO - Retrieved schema info for file excel_77e71b80-a8dd-450f-80be-e61ba1b1482d with 1 dynamic tables
+2025-12-01 17:44:30,360 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-01 17:44:32,938 - src.services.text_to_sql_service - INFO - Generated SQL query: SELECT "Monthly_total_charge" FROM "excel_77e71b80a8dd450f80bee61ba1b1482d_sheet1" WHERE "Site" = 'JBY';
+2025-12-01 17:44:32,940 - src.services.text_to_sql_service - INFO - Successfully executed SQL query on relational tables, returned 4 results
+2025-12-01 17:44:32,941 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-01 17:44:34,779 - src.services.chat_manager - INFO - Generated natural language answer from 4 SQL results
+2025-12-01 17:44:34,779 - src.services.chat_manager - INFO - Successfully processed Excel data query, found 4 results
+2025-12-01 18:02:22,278 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-01 18:02:22,278 - src.services.chat_manager - INFO - Processing user message: which company's contract has expired in the excel ...
+2025-12-01 18:02:22,279 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 0.70)
+2025-12-01 18:02:22,279 - src.services.chat_manager - INFO - Detected intent: excel_data (confidence: 0.70)
+2025-12-01 18:02:22,279 - src.services.chat_manager - INFO - Routing to Text-to-SQL service for Excel data query
+2025-12-01 18:02:22,279 - src.services.chat_manager - INFO - Processing Excel data query: which company's contract has expired in the excel data?
+2025-12-01 18:02:22,280 - src.services.chat_manager - INFO - Using most recent Excel file: tmp_q6c21fb.xlsx (ID: excel_77e71b80-a8dd-450f-80be-e61ba1b1482d)
+2025-12-01 18:02:22,280 - src.services.text_to_sql_service - INFO - Converting natural language query to SQL: which company's contract has expired in the excel data?
+2025-12-01 18:02:22,281 - src.services.text_to_sql_service - INFO - Retrieved schema info for file excel_77e71b80-a8dd-450f-80be-e61ba1b1482d with 1 dynamic tables
+2025-12-01 18:02:22,282 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-01 18:02:24,743 - src.services.text_to_sql_service - INFO - Generated SQL query: SELECT "Cust_Name" FROM "excel_77e71b80a8dd450f80bee61ba1b1482d_sheet1" WHERE "Contract_end_date" < 45691
+2025-12-01 18:02:24,744 - src.services.text_to_sql_service - INFO - Successfully executed SQL query on relational tables, returned 1 results
+2025-12-01 18:02:24,745 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-01 18:02:25,907 - src.services.chat_manager - INFO - Generated natural language answer from 1 SQL results
+2025-12-01 18:02:25,907 - src.services.chat_manager - INFO - Successfully processed Excel data query, found 1 results
+2025-12-01 18:02:25,907 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-01 18:04:54,410 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-01 18:04:54,410 - src.services.chat_manager - INFO - Processing user message: what is the monthly total charge for seg CHN in th...
+2025-12-01 18:04:54,410 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-12-01 18:04:54,411 - src.services.chat_manager - INFO - Detected intent: excel_data (confidence: 1.00)
+2025-12-01 18:04:54,411 - src.services.chat_manager - INFO - Routing to Text-to-SQL service for Excel data query
+2025-12-01 18:04:54,411 - src.services.chat_manager - INFO - Processing Excel data query: what is the monthly total charge for seg CHN in the excel?
+2025-12-01 18:04:54,411 - src.services.chat_manager - INFO - Using most recent Excel file: tmp_q6c21fb.xlsx (ID: excel_77e71b80-a8dd-450f-80be-e61ba1b1482d)
+2025-12-01 18:04:54,411 - src.services.text_to_sql_service - INFO - Converting natural language query to SQL: what is the monthly total charge for seg CHN in the excel?
+2025-12-01 18:04:54,412 - src.services.text_to_sql_service - INFO - Retrieved schema info for file excel_77e71b80-a8dd-450f-80be-e61ba1b1482d with 1 dynamic tables
+2025-12-01 18:04:54,414 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-01 18:04:57,094 - src.services.text_to_sql_service - INFO - Generated SQL query: SELECT SUM("Monthly_total_charge") FROM "excel_77e71b80a8dd450f80bee61ba1b1482d_sheet1" WHERE "Seg" = 'CHN'
+2025-12-01 18:04:57,095 - src.services.text_to_sql_service - INFO - Successfully executed SQL query on relational tables, returned 1 results
+2025-12-01 18:04:57,096 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-01 18:04:58,596 - src.services.chat_manager - INFO - Generated natural language answer from 1 SQL results
+2025-12-01 18:04:58,596 - src.services.chat_manager - INFO - Successfully processed Excel data query, found 1 results
+2025-12-01 18:04:58,596 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
