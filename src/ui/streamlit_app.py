@@ -181,26 +181,6 @@ def upload_to_knowledge_base(file) -> bool:
         return False
 
 
-def search_knowledge_base(query: str, k: int = 3) -> List[Dict]:
-    """
-    Search the knowledge base for similar documents.
-    
-    Args:
-        query: The search query
-        k: Number of results to return
-        
-    Returns:
-        List[Dict]: List of similar documents
-        
-    Raises:
-        Exception: If the API request fails
-    """
-    response = requests.get(f"{KB_ENDPOINT}/search", params={"query": query, "k": k}, timeout=10)
-    
-    if response.status_code != 200:
-        raise Exception(f"API Error: {response.status_code} - {response.text}")
-    
-    return response.json()
 
 
 def clear_knowledge_base() -> bool:
@@ -294,57 +274,6 @@ def get_excel_sheets(file_id: str, sheet_name: Optional[str] = None) -> List[Dic
         return []
 
 
-def search_excel_data(query: str, file_id: Optional[str] = None, 
-                     sheet_name: Optional[str] = None, 
-                     column_name: Optional[str] = None,
-                     max_results: int = 50) -> List[Dict]:
-    """
-    Search for data within Excel files.
-    
-    Args:
-        query: Search query string
-        file_id: Optional specific file ID to search within
-        sheet_name: Optional specific sheet name
-        column_name: Optional specific column name
-        max_results: Maximum number of results to return
-        
-    Returns:
-        List of search result dictionaries
-    """
-    try:
-        if file_id:
-            # Search within specific file
-            params = {
-                "query": query,
-                "max_results": max_results
-            }
-            if sheet_name:
-                params["sheet_name"] = sheet_name
-            if column_name:
-                params["column_name"] = column_name
-                
-            response = requests.get(f"{EXCEL_FILES_ENDPOINT}/{file_id}/search", 
-                                  params=params, timeout=10)
-        else:
-            # Search across all files
-            payload = {
-                "query": query,
-                "max_results": max_results
-            }
-            if sheet_name:
-                payload["sheet_name"] = sheet_name
-            if column_name:
-                payload["column_name"] = column_name
-                
-            response = requests.post(f"{EXCEL_FILES_ENDPOINT}/search", 
-                                   json=payload, timeout=10)
-            
-        if response.status_code == 200:
-            data = response.json()
-            return data.get("results", [])
-        return []
-    except requests.exceptions.RequestException:
-        return []
 
 
 def get_configuration() -> Optional[Dict]:
@@ -531,29 +460,11 @@ def main():
                     st.error("Failed to upload documents")
         
         # Knowledge base actions
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("🔍 Search KB", use_container_width=True):
-                query = st.text_input("Enter search query:")
-                if query:
-                    try:
-                        results = search_knowledge_base(query)
-                        if results:
-                            st.write("Search Results:")
-                            for i, result in enumerate(results[:3]):
-                                with st.expander(f"Result {i+1}"):
-                                    st.write(result.get("content", "")[:200] + "...")
-                        else:
-                            st.info("No results found")
-                    except Exception as e:
-                        st.error(f"Search failed: {str(e)}")
-        
-        with col2:
-            if st.button("🗑️ Clear KB", use_container_width=True):
-                if clear_knowledge_base():
-                    st.success("Knowledge base cleared")
-                else:
-                    st.error("Failed to clear knowledge base")
+        if st.button("🗑️ Clear KB", use_container_width=True):
+            if clear_knowledge_base():
+                st.success("Knowledge base cleared")
+            else:
+                st.error("Failed to clear knowledge base")
         
         # Excel File Management Panel
         st.subheader("📊 Excel File Management")
@@ -599,22 +510,6 @@ def main():
             else:
                 st.info("No Excel files found in the database")
         
-        # Excel Search
-        if st.button("🔍 Search Excel Data", use_container_width=True):
-            search_query = st.text_input("Search query:", key="excel_search")
-            if search_query:
-                with st.spinner("Searching Excel data..."):
-                    results = search_excel_data(search_query, max_results=20)
-                    if results:
-                        st.write(f"Found {len(results)} matches:")
-                        for result in results:
-                            with st.expander(f"Match in {result.get('file_name', 'Unknown')}"):
-                                st.write(f"**File:** {result.get('file_name')}")
-                                st.write(f"**Sheet:** {result.get('sheet_name')}")
-                                st.write(f"**Location:** Row {result.get('row_number')}, Column {result.get('column_name')}")
-                                st.write(f"**Value:** {result.get('cell_value')}")
-                    else:
-                        st.info("No matches found")
         
         # Configuration
         st.subheader("⚙️ Configuration")

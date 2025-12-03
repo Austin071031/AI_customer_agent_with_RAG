@@ -9148,3 +9148,55 @@ client_session: <aiohttp.client.ClientSession object at 0x0000020719DBDD30>
 2025-12-03 10:00:11,206 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
 2025-12-03 10:00:11,271 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
 2025-12-03 10:00:11,271 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-03 10:00:13,155 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000018B0B3FBE00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 10:00:15,850 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-03 10:00:15,851 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 10:00:15,949 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 10:00:15,949 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 10:00:15,949 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-03 10:00:15,950 - src.api.main - INFO - All services initialized successfully
+2025-12-03 10:00:16,195 - __main__ - INFO - API server is ready and responding to requests
+2025-12-03 10:00:16,195 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-03 10:01:27,401 - src.api.endpoints.knowledge_base - INFO - Clearing knowledge base
+2025-12-03 10:01:27,491 - src.services.knowledge_base - INFO - Vector store collection deleted successfully
+2025-12-03 10:01:27,521 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 10:01:27,521 - src.services.knowledge_base - INFO - Vector store cleared and reinitialized successfully
+2025-12-03 10:01:27,537 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 10:01:27,537 - src.services.knowledge_base - INFO - SQLite database cleared successfully
+2025-12-03 10:01:27,538 - src.services.knowledge_base - INFO - Knowledge base cleared successfully (both vector store and SQLite database)
+2025-12-03 10:02:38,649 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-03 10:02:38,649 - src.services.chat_manager - INFO - Processing user message: what is GQE-Net?...
+2025-12-03 10:02:38,649 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-03 10:02:38,649 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-03 10:02:38,650 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-03 10:02:39,054 - src.services.knowledge_base - INFO - Found 0 similar documents for query
+2025-12-03 10:02:39,054 - src.services.chat_manager - INFO - Found 0 similar documents for query: what is GQE-Net?
+2025-12-03 10:02:39,055 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-03 10:02:58,165 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-03 10:03:41,481 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-03 10:03:41,481 - src.services.chat_manager - INFO - Processing user message: what is monthly total charge for site JBY in the e...
+2025-12-03 10:03:41,482 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 0.90)
+2025-12-03 10:03:41,482 - src.services.chat_manager - INFO - Detected intent: excel_data (confidence: 0.90)
+2025-12-03 10:03:41,482 - src.services.chat_manager - INFO - Routing to Text-to-SQL service for Excel data query
+2025-12-03 10:03:41,482 - src.services.chat_manager - INFO - Processing Excel data query: what is monthly total charge for site JBY in the excel?
+2025-12-03 10:03:41,483 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-03 10:31:22,475 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 10:31:22,609 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-03 10:31:22,609 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x0000018B0BAAD2B0>
+2025-12-03 10:31:23,056 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-03 10:31:23,056 - __main__ - INFO - API server shutdown complete
+2025-12-03 10:31:29,097 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-03 10:31:29,097 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-03 10:31:29,119 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-03 10:31:29,272 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-03 10:31:29,273 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-03 10:31:31,123 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000023273C8FCB0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 10:31:33,550 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-03 10:31:33,551 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 10:31:33,627 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 10:31:33,627 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 10:31:33,627 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-03 10:31:33,627 - src.api.main - INFO - All services initialized successfully
+2025-12-03 10:31:33,647 - __main__ - INFO - API server is ready and responding to requests
+2025-12-03 10:31:33,647 - __main__ - INFO - API server is running and ready to accept requests
