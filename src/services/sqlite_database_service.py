@@ -944,6 +944,70 @@ class SQLiteDatabaseService:
         except Exception:
             return None
             
+    def clear_database(self) -> Dict[str, Any]:
+        """
+        Clear all data from the SQLite database.
+        
+        Drops all tables and recreates the base tables.
+        
+        Returns:
+            Dictionary with operation results including success flag and tables dropped count.
+        """
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                # Disable foreign key constraints to allow dropping tables in any order
+                cursor.execute("PRAGMA foreign_keys = OFF")
+                
+                # Get all table names
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+                tables = [row[0] for row in cursor.fetchall()]
+                
+                # System tables that should not be dropped
+                system_tables = {'sqlite_sequence', 'sqlite_stat1', 'sqlite_stat2', 
+                                 'sqlite_stat3', 'sqlite_stat4', 'sqlite_master'}
+                # Also exclude any table starting with 'sqlite_'
+                user_tables = [t for t in tables if not t.startswith('sqlite_') and t not in system_tables]
+                
+                # Drop all user tables
+                tables_dropped = 0
+                for table_name in user_tables:
+                    try:
+                        cursor.execute(f'DROP TABLE IF EXISTS "{table_name}"')
+                        tables_dropped += 1
+                    except sqlite3.Error as e:
+                        self.logger.error(f"Failed to drop table {table_name}: {str(e)}")
+                
+                # Re-enable foreign key constraints
+                cursor.execute("PRAGMA foreign_keys = ON")
+                
+                # Clear data from system tables (sqlite_sequence) if it exists
+                if 'sqlite_sequence' in tables:
+                    try:
+                        cursor.execute("DELETE FROM sqlite_sequence")
+                    except sqlite3.Error as e:
+                        self.logger.warning(f"Failed to clear sqlite_sequence: {str(e)}")
+                
+                conn.commit()
+                
+            # Reinitialize the database (creates base tables if they don't exist)
+            self._init_database()
+            
+            return {
+                "success": True,
+                "tables_dropped": tables_dropped,
+                "message": f"Successfully dropped {tables_dropped} tables and reinitialized database"
+            }
+            
+        except sqlite3.Error as e:
+            self.logger.error(f"Failed to clear database: {str(e)}")
+            return {
+                "success": False,
+                "error": str(e),
+                "message": f"Failed to clear database: {str(e)}"
+            }
+
     def health_check(self) -> bool:
         """
         Perform a health check on the SQLite database.

@@ -9059,3 +9059,92 @@ client_session: <aiohttp.client.ClientSession object at 0x0000020719DBDD30>
 2025-12-01 18:04:58,596 - src.services.chat_manager - INFO - Generated natural language answer from 1 SQL results
 2025-12-01 18:04:58,596 - src.services.chat_manager - INFO - Successfully processed Excel data query, found 1 results
 2025-12-01 18:04:58,596 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-02 16:53:17,752 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-02 16:53:17,752 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-02 16:53:17,831 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-02 16:53:18,020 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-02 16:53:18,020 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-02 16:53:19,802 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000022109FB7CB0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-02 16:53:22,830 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002210A283610>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-02 16:53:24,118 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-02 16:53:24,123 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-02 16:53:24,304 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-02 16:53:24,304 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-02 16:53:24,304 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-02 16:53:24,304 - src.api.main - INFO - All services initialized successfully
+2025-12-02 16:53:24,343 - __main__ - INFO - API server is ready and responding to requests
+2025-12-02 16:53:24,343 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-02 17:00:35,603 - src.api.endpoints.knowledge_base - INFO - Clearing knowledge base
+2025-12-02 17:00:35,655 - src.services.knowledge_base - ERROR - Failed to clear vector store: An instance of Chroma already exists for ./knowledge_base/chroma_db with different settings
+2025-12-02 17:00:35,655 - src.services.knowledge_base - WARNING - SQLite database clear requires manual table recreation
+2025-12-02 17:04:53,899 - src.api.endpoints.knowledge_base - INFO - Clearing knowledge base
+2025-12-02 17:04:53,900 - src.services.knowledge_base - ERROR - Failed to clear vector store: An instance of Chroma already exists for ./knowledge_base/chroma_db with different settings
+2025-12-02 17:04:53,901 - src.services.knowledge_base - WARNING - SQLite database clear requires manual table recreation
+2025-12-02 17:40:17,410 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-02 17:40:17,571 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-02 17:40:18,166 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-02 17:40:18,166 - __main__ - INFO - API server shutdown complete
+2025-12-02 17:40:24,436 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-02 17:40:24,436 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-02 17:40:24,460 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-02 17:40:24,615 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-02 17:40:24,615 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-02 17:40:26,473 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000029B83F67E00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-02 17:40:29,505 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000029B84233610>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-02 17:40:32,010 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-02 17:40:32,011 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-02 17:40:32,210 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-02 17:40:32,211 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-02 17:40:32,211 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-02 17:40:32,211 - src.api.main - INFO - All services initialized successfully
+2025-12-02 17:40:32,537 - __main__ - INFO - API server is ready and responding to requests
+2025-12-02 17:40:32,537 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-02 17:41:13,979 - src.api.endpoints.knowledge_base - INFO - Clearing knowledge base
+2025-12-02 17:41:14,019 - src.services.knowledge_base - ERROR - Failed to clear vector store: An instance of Chroma already exists for ./knowledge_base/chroma_db with different settings
+2025-12-02 17:41:14,025 - src.services.sqlite_database_service - ERROR - Failed to drop table sqlite_sequence: table sqlite_sequence may not be dropped
+2025-12-02 17:41:14,038 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-02 17:41:14,038 - src.services.knowledge_base - INFO - SQLite database cleared successfully
+2025-12-02 17:41:14,038 - src.api.endpoints.knowledge_base - ERROR - Error clearing knowledge base: 500: Failed to clear knowledge base
+2025-12-02 17:42:07,884 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-02 17:42:07,913 - src.services.sqlite_database_service - INFO - Created dynamic table 'excel_787a48d1a4364aae88173efebf20d1b8_sheet1' for sheet 'Sheet1'
+2025-12-02 17:42:07,920 - src.services.sqlite_database_service - INFO - Inserted 6 rows into dynamic table 'excel_787a48d1a4364aae88173efebf20d1b8_sheet1'
+2025-12-02 17:42:07,923 - src.services.sqlite_database_service - INFO - Successfully stored Excel file with dynamic tables: tmp6_96y9sp.xlsx
+2025-12-02 17:42:07,923 - src.services.knowledge_base - INFO - Successfully processed Excel file with dynamic tables: tmp6_96y9sp.xlsx
+2025-12-02 17:42:07,923 - src.services.knowledge_base - INFO - Processing complete: 1 Excel files, 0 documents, 0 errors
+2025-12-02 17:42:07,923 - src.api.endpoints.knowledge_base - INFO - Successfully processed: customer_profile.xlsx
+2025-12-02 17:42:24,687 - src.api.endpoints.knowledge_base - INFO - Clearing knowledge base
+2025-12-02 17:42:24,688 - src.services.knowledge_base - ERROR - Failed to clear vector store: An instance of Chroma already exists for ./knowledge_base/chroma_db with different settings
+2025-12-02 17:42:24,689 - src.services.sqlite_database_service - ERROR - Failed to drop table sqlite_sequence: table sqlite_sequence may not be dropped
+2025-12-02 17:42:24,706 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-02 17:42:24,706 - src.services.knowledge_base - INFO - SQLite database cleared successfully
+2025-12-02 17:42:24,706 - src.api.endpoints.knowledge_base - ERROR - Error clearing knowledge base: 500: Failed to clear knowledge base
+2025-12-03 09:31:23,176 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-03 09:31:23,176 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-03 09:31:23,270 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-03 09:31:23,471 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-03 09:31:23,471 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-03 09:31:25,213 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000019BE208FE00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 09:31:28,132 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-03 09:31:28,136 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 09:31:28,267 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000019BE23539D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 09:31:28,311 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 09:31:28,311 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 09:31:28,312 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-03 09:31:28,312 - src.api.main - INFO - All services initialized successfully
+2025-12-03 09:31:29,270 - __main__ - INFO - API server is ready and responding to requests
+2025-12-03 09:31:29,270 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-03 09:41:08,892 - src.api.endpoints.knowledge_base - INFO - Clearing knowledge base
+2025-12-03 09:41:08,953 - src.services.knowledge_base - ERROR - Failed to clear vector store: An instance of Chroma already exists for ./knowledge_base/chroma_db with different settings
+2025-12-03 09:41:08,953 - src.services.sqlite_database_service - ERROR - Failed to drop table sqlite_sequence: table sqlite_sequence may not be dropped
+2025-12-03 09:41:08,970 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 09:41:08,970 - src.services.knowledge_base - INFO - SQLite database cleared successfully
+2025-12-03 09:41:08,970 - src.api.endpoints.knowledge_base - ERROR - Error clearing knowledge base: 500: Failed to clear knowledge base
+2025-12-03 09:59:38,358 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 09:59:38,562 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-03 09:59:38,813 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-03 09:59:38,813 - __main__ - INFO - API server shutdown complete
+2025-12-03 10:00:11,110 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-03 10:00:11,110 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-03 10:00:11,206 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-03 10:00:11,271 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-03 10:00:11,271 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2

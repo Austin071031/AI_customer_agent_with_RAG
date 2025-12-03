@@ -9,6 +9,7 @@ Supports multiple file formats and GPU-accelerated embeddings.
 import os
 import uuid
 import logging
+import shutil
 from typing import List, Dict, Any, Optional, Tuple, Union
 from pathlib import Path
 
@@ -637,39 +638,66 @@ class EnhancedKnowledgeBaseManager:
             self.logger.error(f"Failed to get sheet data: {str(e)}")
             raise KnowledgeBaseError(f"Failed to get sheet data: {str(e)}")
             
-    def clear_knowledge_base(self) -> Dict[str, bool]:
+    def clear_knowledge_base(self) -> bool:
         """
         Clear all documents from both storage systems.
         
         Returns:
-            Dictionary with clear operation results for both storage systems
+            True if both storage systems were cleared successfully, False otherwise
         """
-        results = {
-            'vector_store': False,
-            'sqlite_database': False
-        }
+        vector_cleared = False
+        sqlite_cleared = False
         
         try:
-            # Clear vector store
-            client = chromadb.PersistentClient(path=self.persist_directory)
-            client.delete_collection("knowledge_base")
+            # Clear vector store - try multiple methods
+            try:
+                # Method 1: Delete collection via client
+                client = chromadb.PersistentClient(
+                    path=self.persist_directory,
+                    settings=Settings(anonymized_telemetry=False)
+                )
+                client.delete_collection("knowledge_base")
+                self.logger.info("Vector store collection deleted successfully")
+            except Exception as e:
+                self.logger.warning(f"Failed to delete collection via client: {str(e)}")
+                
+                # Method 2: Delete the entire persistence directory and recreate
+                try:
+                    if os.path.exists(self.persist_directory):
+                        self.logger.info(f"Deleting entire vector store directory: {self.persist_directory}")
+                        shutil.rmtree(self.persist_directory)
+                        self.logger.info("Vector store directory deleted successfully")
+                except Exception as e2:
+                    self.logger.error(f"Failed to delete vector store directory: {str(e2)}")
+                    raise
+            
+            # Reinitialize vector store
             self.vector_store = self._initialize_vector_store()
-            results['vector_store'] = True
-            self.logger.info("Vector store cleared successfully")
+            vector_cleared = True
+            self.logger.info("Vector store cleared and reinitialized successfully")
             
         except Exception as e:
             self.logger.error(f"Failed to clear vector store: {str(e)}")
             
         try:
-            # Note: SQLite database clear would require recreating tables
-            # For now, we'll just log that SQLite clear is not implemented
-            self.logger.warning("SQLite database clear requires manual table recreation")
-            results['sqlite_database'] = False
+            # Clear SQLite database
+            clear_result = self.sqlite_service.clear_database()
+            sqlite_cleared = clear_result.get('success', False)
+            if sqlite_cleared:
+                self.logger.info("SQLite database cleared successfully")
+            else:
+                self.logger.error(f"Failed to clear SQLite database: {clear_result.get('error', 'Unknown error')}")
             
         except Exception as e:
             self.logger.error(f"Failed to clear SQLite database: {str(e)}")
             
-        return results
+        # Return success only if both were cleared
+        if vector_cleared and sqlite_cleared:
+            self.logger.info("Knowledge base cleared successfully (both vector store and SQLite database)")
+            return True
+        else:
+            self.logger.warning(f"Knowledge base partially cleared: vector_cleared={vector_cleared}, sqlite_cleared={sqlite_cleared}")
+            return False
             
     def get_knowledge_base_info(self) -> Dict[str, Any]:
         """

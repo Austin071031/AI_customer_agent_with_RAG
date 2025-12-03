@@ -240,3 +240,26 @@
 2025-12-01 17:43:09,957 - __main__ - INFO - UI server is running and ready to accept requests
 2025-12-01 17:43:09,957 - __main__ - INFO - Server monitoring started (auto-restart enabled)
 2025-12-01 17:51:02,048 - __main__ - INFO - API server is available and healthy
+2025-12-02 16:58:14,189 - __main__ - INFO - API server is available and healthy
+2025-12-02 16:58:14,190 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-02 16:58:16,707 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-02 16:58:16,707 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-02 16:58:16,707 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-02 17:40:35,029 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-02 17:40:35,029 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-02 17:40:35,064 - __main__ - INFO - Streamlit UI stopped
+2025-12-02 17:40:36,865 - __main__ - INFO - UI server shutdown complete
+2025-12-02 17:40:41,615 - __main__ - INFO - API server is available and healthy
+2025-12-02 17:40:41,615 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-02 17:40:43,622 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-02 17:40:43,622 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-02 17:40:43,622 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-03 09:35:04,791 - __main__ - INFO - API server is available and healthy
+2025-12-03 09:35:04,792 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-03 09:35:08,808 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-03 09:35:08,809 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-03 09:35:08,809 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-03 10:00:29,678 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 10:00:29,678 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-03 10:00:29,713 - __main__ - INFO - Streamlit UI stopped
+2025-12-03 10:00:33,958 - __main__ - INFO - UI server shutdown complete
