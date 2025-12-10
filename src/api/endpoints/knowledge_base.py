@@ -54,7 +54,7 @@ class SearchRequest(BaseModel):
     """
     
     query: str = Field(..., min_length=1, max_length=1000, description="Search query")
-    k: int = Field(default=3, ge=1, le=20, description="Number of similar documents to return")
+    k: int = Field(default=3, ge=1, le=1000, description="Number of similar documents to return")
     similarity_threshold: float = Field(default=0.5, ge=0.0, le=1.0, description="Minimum similarity score")
     
     model_config = {
@@ -375,7 +375,9 @@ async def search_knowledge_base(request: SearchRequest) -> SearchResponse:
 )
 async def upload_documents(
     files: List[UploadFile] = File(..., description="Files to upload to knowledge base"),
-    overwrite: bool = Form(default=False, description="Overwrite existing documents with same name")
+    overwrite: bool = Form(default=False, description="Overwrite existing documents with same name"),
+    chunk_size: int = Form(default=1000, description="Chunk size for document chunking (in characters)"),
+    chunk_overlap: int = Form(default=200, description="Overlap between chunks (in characters)")
 ) -> DocumentUploadResponse:
     """
     Upload documents to the knowledge base with intelligent file type routing.
@@ -431,8 +433,8 @@ async def upload_documents(
                     temp_file_path = temp_file.name
                 
                 try:
-                    # Add document to knowledge base
-                    result = kb_manager.add_documents([temp_file_path])
+                    # Add document to knowledge base with chunking parameters
+                    result = kb_manager.add_documents([temp_file_path], chunk_size, chunk_overlap)
                     
                     # Check if file was successfully processed (either as Excel or document)
                     if result.get('excel_files') or result.get('documents'):
@@ -451,7 +453,6 @@ async def upload_documents(
                                 "filename": file.filename,
                                 "reason": "Failed to process document content - no results returned"
                             })
-                        
                 finally:
                     # Clean up temporary file
                     if os.path.exists(temp_file_path):
@@ -503,7 +504,7 @@ async def upload_documents(
     response_model=ClearKBResponse,
     status_code=status.HTTP_200_OK,
     summary="Clear knowledge base",
-    description="Remove all documents from the knowledge base.",
+    description="Remove all documents from the knowledge base (both vector store and SQLite database).",
     responses={
         200: {"description": "Successfully cleared knowledge base"},
         503: {"model": ErrorResponse, "description": "Knowledge base service unavailable"},
@@ -524,7 +525,7 @@ async def clear_knowledge_base() -> ClearKBResponse:
         HTTPException: If service is unavailable or error occurs
     """
     try:
-        logger.info("Clearing knowledge base")
+        logger.info("Clearing knowledge base (both vector store and SQLite)")
         
         # Get knowledge base manager instance
         kb_manager = get_kb_manager()
@@ -532,7 +533,7 @@ async def clear_knowledge_base() -> ClearKBResponse:
         # Get current document count before clearing
         current_count = kb_manager.get_document_count()
         
-        # Clear the knowledge base
+        # Clear the knowledge base (both vector store and SQLite)
         success = kb_manager.clear_knowledge_base()
         
         if not success:
@@ -542,7 +543,7 @@ async def clear_knowledge_base() -> ClearKBResponse:
             )
         
         return ClearKBResponse(
-            message="Knowledge base cleared successfully",
+            message="Knowledge base cleared successfully (both vector store and SQLite database)",
             cleared_documents=current_count
         )
         
@@ -551,6 +552,120 @@ async def clear_knowledge_base() -> ClearKBResponse:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to clear knowledge base: {str(e)}"
+        )
+
+
+@router.delete(
+    "/vector-store",
+    response_model=ClearKBResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Clear vector store only",
+    description="Remove only non-Excel documents from the vector store (does not affect Excel files in SQLite).",
+    responses={
+        200: {"description": "Successfully cleared vector store"},
+        503: {"model": ErrorResponse, "description": "Knowledge base service unavailable"},
+        500: {"model": ErrorResponse, "description": "Internal server error"}
+    }
+)
+async def clear_vector_store() -> ClearKBResponse:
+    """
+    Clear only the vector store for non-Excel documents.
+    
+    This endpoint removes all documents from the vector store (PDF, TXT, DOCX, etc.)
+    but does not affect Excel files stored in SQLite database.
+    
+    Returns:
+        ClearKBResponse with confirmation and count of cleared documents
+        
+    Raises:
+        HTTPException: If service is unavailable or error occurs
+    """
+    try:
+        logger.info("Clearing vector store only (non-Excel documents)")
+        
+        # Get knowledge base manager instance
+        kb_manager = get_kb_manager()
+        
+        # Get current vector document count before clearing
+        stats = kb_manager.get_statistics()
+        vector_count = stats.get('vector_documents', 0)
+        
+        # Clear only the vector store
+        success = kb_manager.clear_vector_store()
+        
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to clear vector store"
+            )
+        
+        return ClearKBResponse(
+            message="Vector store cleared successfully (Excel files in SQLite are unaffected)",
+            cleared_documents=vector_count
+        )
+        
+    except Exception as e:
+        logger.error(f"Error clearing vector store: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to clear vector store: {str(e)}"
+        )
+
+
+@router.delete(
+    "/sqlite-database",
+    response_model=ClearKBResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Clear SQLite database only",
+    description="Remove only Excel files from SQLite database (does not affect non-Excel documents in vector store).",
+    responses={
+        200: {"description": "Successfully cleared SQLite database"},
+        503: {"model": ErrorResponse, "description": "Knowledge base service unavailable"},
+        500: {"model": ErrorResponse, "description": "Internal server error"}
+    }
+)
+async def clear_sqlite_database() -> ClearKBResponse:
+    """
+    Clear only the SQLite database for Excel files.
+    
+    This endpoint removes all Excel files from the SQLite database
+    but does not affect non-Excel documents stored in the vector store.
+    
+    Returns:
+        ClearKBResponse with confirmation and count of cleared documents
+        
+    Raises:
+        HTTPException: If service is unavailable or error occurs
+    """
+    try:
+        logger.info("Clearing SQLite database only (Excel files)")
+        
+        # Get knowledge base manager instance
+        kb_manager = get_kb_manager()
+        
+        # Get current Excel document count before clearing
+        stats = kb_manager.get_statistics()
+        excel_count = stats.get('excel_documents', 0)
+        
+        # Clear only the SQLite database
+        success = kb_manager.clear_sqlite_database()
+        
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to clear SQLite database"
+            )
+        
+        return ClearKBResponse(
+            message="SQLite database cleared successfully (non-Excel documents in vector store are unaffected)",
+            cleared_documents=excel_count
+        )
+        
+    except Exception as e:
+        logger.error(f"Error clearing SQLite database: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to clear SQLite database: {str(e)}"
         )
 
 

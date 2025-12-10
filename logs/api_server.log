@@ -9200,3 +9200,681 @@ client_session: <aiohttp.client.ClientSession object at 0x0000018B0BAAD2B0>
 2025-12-03 10:31:33,627 - src.api.main - INFO - All services initialized successfully
 2025-12-03 10:31:33,647 - __main__ - INFO - API server is ready and responding to requests
 2025-12-03 10:31:33,647 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-03 14:39:25,296 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-03 14:39:25,296 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-03 14:39:25,321 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-03 14:39:25,477 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-03 14:39:25,478 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-03 14:39:27,353 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001D9C515FE00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 14:39:30,380 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001D9C5422D50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 14:39:30,464 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-03 14:39:30,465 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 14:39:30,550 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 14:39:30,551 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 14:39:30,551 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-03 14:39:30,551 - src.api.main - INFO - All services initialized successfully
+2025-12-03 14:39:31,383 - __main__ - INFO - API server is ready and responding to requests
+2025-12-03 14:39:31,383 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-03 14:54:00,562 - src.api.endpoints.excel_files - INFO - Listed 0 Excel files (skip=0, limit=100)
+2025-12-03 15:05:18,681 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-03 15:05:20,327 - src.services.knowledge_base - INFO - Successfully processed document file: tmpe9ujb8fv.pdf
+2025-12-03 15:05:20,327 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-03 15:05:20,327 - src.api.endpoints.knowledge_base - INFO - Successfully processed: GQE-Net_A_Graph-Based_Quality_Enhancement_Network_for_Point_Cloud_Color_Attribute.pdf
+2025-12-03 15:05:45,473 - src.api.endpoints.knowledge_base - INFO - Clearing knowledge base
+2025-12-03 15:05:45,500 - src.services.knowledge_base - INFO - Vector store collection deleted successfully
+2025-12-03 15:05:45,530 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 15:05:45,530 - src.services.knowledge_base - INFO - Vector store cleared and reinitialized successfully
+2025-12-03 15:05:45,547 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 15:05:45,548 - src.services.knowledge_base - INFO - SQLite database cleared successfully
+2025-12-03 15:05:45,548 - src.services.knowledge_base - INFO - Knowledge base cleared successfully (both vector store and SQLite database)
+2025-12-03 15:06:34,548 - src.api.endpoints.excel_files - INFO - Listed 0 Excel files (skip=0, limit=100)
+2025-12-03 15:16:09,589 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 15:16:09,704 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-03 15:16:10,030 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-03 15:16:10,030 - __main__ - INFO - API server shutdown complete
+2025-12-03 15:16:16,123 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-03 15:16:16,123 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-03 15:16:16,143 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-03 15:16:16,295 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-03 15:16:16,296 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-03 15:16:18,173 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000219C5E8FCB0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 15:16:21,210 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000219C6153610>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 15:16:22,986 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-03 15:16:22,986 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 15:16:23,064 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 15:16:23,064 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 15:16:23,064 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-03 15:16:23,064 - src.api.main - INFO - All services initialized successfully
+2025-12-03 15:16:23,234 - __main__ - INFO - API server is ready and responding to requests
+2025-12-03 15:16:23,234 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-03 15:17:07,112 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-03 15:17:07,141 - src.services.sqlite_database_service - INFO - Created dynamic table 'excel_30b25608622543bfbb3d478c9b6bcb5c_sheet1' for sheet 'Sheet1'
+2025-12-03 15:17:07,148 - src.services.sqlite_database_service - INFO - Inserted 6 rows into dynamic table 'excel_30b25608622543bfbb3d478c9b6bcb5c_sheet1'
+2025-12-03 15:17:07,150 - src.services.sqlite_database_service - INFO - Successfully stored Excel file with dynamic tables: tmpvuqcc86k.xlsx
+2025-12-03 15:17:07,150 - src.services.knowledge_base - INFO - Successfully processed Excel file with dynamic tables: tmpvuqcc86k.xlsx
+2025-12-03 15:17:07,151 - src.services.knowledge_base - INFO - Processing complete: 1 Excel files, 0 documents, 0 errors
+2025-12-03 15:17:07,151 - src.api.endpoints.knowledge_base - INFO - Successfully processed: customer_profile.xlsx
+2025-12-03 15:17:27,113 - src.api.endpoints.excel_files - INFO - Listed 1 Excel files (skip=0, limit=100)
+2025-12-03 15:17:53,971 - src.api.endpoints.knowledge_base - INFO - Clearing knowledge base
+2025-12-03 15:17:53,998 - src.services.knowledge_base - INFO - Vector store collection deleted successfully
+2025-12-03 15:17:54,029 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 15:17:54,029 - src.services.knowledge_base - INFO - Vector store cleared and reinitialized successfully
+2025-12-03 15:17:54,045 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 15:17:54,046 - src.services.knowledge_base - INFO - SQLite database cleared successfully
+2025-12-03 15:17:54,046 - src.services.knowledge_base - INFO - Knowledge base cleared successfully (both vector store and SQLite database)
+2025-12-03 15:35:27,309 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 15:35:27,521 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-03 15:35:27,568 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-03 15:35:27,568 - __main__ - INFO - API server shutdown complete
+2025-12-03 15:35:38,348 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-03 15:35:38,348 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-03 15:35:38,387 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-03 15:35:38,548 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-03 15:35:38,549 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-03 15:35:40,400 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000236B59001A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 15:35:43,241 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-03 15:35:43,242 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 15:35:43,320 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 15:35:43,320 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 15:35:43,320 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-03 15:35:43,320 - src.api.main - INFO - All services initialized successfully
+2025-12-03 15:35:43,439 - __main__ - INFO - API server is ready and responding to requests
+2025-12-03 15:35:43,439 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-03 15:37:12,903 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-03 15:37:14,533 - src.services.knowledge_base - INFO - Successfully processed document file: tmpex4x5cis.pdf
+2025-12-03 15:37:14,533 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-03 15:37:14,533 - src.api.endpoints.knowledge_base - INFO - Successfully processed: GQE-Net_A_Graph-Based_Quality_Enhancement_Network_for_Point_Cloud_Color_Attribute.pdf
+2025-12-03 15:37:36,554 - src.api.endpoints.knowledge_base - INFO - Clearing vector store only (non-Excel documents)
+2025-12-03 15:37:36,577 - src.services.knowledge_base - INFO - Vector store collection deleted successfully
+2025-12-03 15:37:36,610 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 15:37:36,610 - src.services.knowledge_base - INFO - Vector store cleared and reinitialized successfully
+2025-12-03 15:38:09,855 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-03 15:38:09,884 - src.services.sqlite_database_service - INFO - Created dynamic table 'excel_3fac5ce31c9842a396eb54523bc818e0_sheet1' for sheet 'Sheet1'
+2025-12-03 15:38:09,894 - src.services.sqlite_database_service - INFO - Inserted 6 rows into dynamic table 'excel_3fac5ce31c9842a396eb54523bc818e0_sheet1'
+2025-12-03 15:38:09,896 - src.services.sqlite_database_service - INFO - Successfully stored Excel file with dynamic tables: tmpcsje9khq.xlsx
+2025-12-03 15:38:09,896 - src.services.knowledge_base - INFO - Successfully processed Excel file with dynamic tables: tmpcsje9khq.xlsx
+2025-12-03 15:38:09,896 - src.services.knowledge_base - INFO - Processing complete: 1 Excel files, 0 documents, 0 errors
+2025-12-03 15:38:09,896 - src.api.endpoints.knowledge_base - INFO - Successfully processed: customer_profile.xlsx
+2025-12-03 15:38:19,013 - src.api.endpoints.excel_files - INFO - Listed 1 Excel files (skip=0, limit=100)
+2025-12-03 15:38:27,864 - src.api.endpoints.knowledge_base - INFO - Clearing SQLite database only (Excel files)
+2025-12-03 15:38:27,882 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 15:38:27,882 - src.services.knowledge_base - INFO - SQLite database cleared successfully
+2025-12-03 15:50:31,845 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-03 15:50:33,464 - src.services.knowledge_base - INFO - Successfully processed document file: tmpy99qghr6.pdf
+2025-12-03 15:50:33,465 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-03 15:50:33,465 - src.api.endpoints.knowledge_base - INFO - Successfully processed: GQE-Net_A_Graph-Based_Quality_Enhancement_Network_for_Point_Cloud_Color_Attribute.pdf
+2025-12-03 16:43:46,963 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 16:43:47,126 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-03 16:43:47,653 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-03 16:43:47,653 - __main__ - INFO - API server shutdown complete
+2025-12-03 16:44:00,676 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-03 16:44:00,676 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-03 16:44:00,701 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-03 16:44:00,855 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-03 16:44:00,855 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-03 16:44:02,713 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000017F8D49BE00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 16:44:05,117 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-03 16:44:05,117 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 16:44:05,202 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 16:44:05,203 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 16:44:05,203 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-03 16:44:05,203 - src.api.main - INFO - All services initialized successfully
+2025-12-03 16:44:05,232 - __main__ - INFO - API server is ready and responding to requests
+2025-12-03 16:44:05,232 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-03 16:45:24,487 - src.api.endpoints.knowledge_base - INFO - Clearing vector store only (non-Excel documents)
+2025-12-03 16:45:24,549 - src.services.knowledge_base - INFO - Vector store collection deleted successfully
+2025-12-03 16:45:24,580 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 16:45:24,580 - src.services.knowledge_base - INFO - Vector store cleared and reinitialized successfully
+2025-12-03 16:45:41,103 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-03 16:45:42,707 - src.services.knowledge_base - INFO - Successfully processed document file: tmp1gwd9qw1.pdf
+2025-12-03 16:45:42,707 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-03 16:45:42,707 - src.api.endpoints.knowledge_base - INFO - Successfully processed: GQE-Net_A_Graph-Based_Quality_Enhancement_Network_for_Point_Cloud_Color_Attribute.pdf
+2025-12-03 16:59:14,079 - src.api.endpoints.knowledge_base - INFO - Searching knowledge base for: a...
+2025-12-03 16:59:14,134 - src.services.knowledge_base - INFO - Found 1 similar documents for query
+2025-12-03 16:59:14,134 - src.api.endpoints.knowledge_base - INFO - Found 0 relevant documents in 54.75ms
+2025-12-03 17:00:08,613 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 17:00:08,804 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-03 17:00:09,535 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-03 17:00:09,535 - __main__ - INFO - API server shutdown complete
+2025-12-03 17:00:15,580 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-03 17:00:15,580 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-03 17:00:15,604 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-03 17:00:15,756 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-03 17:00:15,757 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-03 17:00:17,615 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002A89A674050>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-03 17:00:20,216 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-03 17:00:20,217 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 17:00:20,294 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-03 17:00:20,294 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-03 17:00:20,294 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-03 17:00:20,294 - src.api.main - INFO - All services initialized successfully
+2025-12-03 17:00:20,653 - __main__ - INFO - API server is ready and responding to requests
+2025-12-03 17:00:20,653 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-03 17:01:05,224 - src.api.endpoints.knowledge_base - INFO - Searching knowledge base for: a...
+2025-12-03 17:01:05,431 - src.services.knowledge_base - INFO - Found 1 similar documents for query
+2025-12-03 17:01:05,431 - src.api.endpoints.knowledge_base - INFO - Found 0 relevant documents in 207.26ms
+2025-12-03 18:27:50,744 - src.api.endpoints.excel_files - INFO - Listed 0 Excel files (skip=0, limit=100)
+2025-12-04 12:05:28,090 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-04 12:05:28,091 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-04 12:05:28,195 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-04 12:05:28,397 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-04 12:05:28,397 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-04 12:05:30,136 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001B1E9933E00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 12:05:33,202 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001B1E9BEFB10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 12:05:33,599 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-04 12:05:33,603 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 12:05:33,782 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-04 12:05:33,783 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 12:05:33,783 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-04 12:05:33,783 - src.api.main - INFO - All services initialized successfully
+2025-12-04 12:05:34,205 - __main__ - INFO - API server is ready and responding to requests
+2025-12-04 12:05:34,205 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-04 14:36:02,788 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-04 14:36:02,788 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-04 14:36:02,813 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-04 14:36:02,966 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-04 14:36:02,967 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-04 14:36:04,838 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001D334893CB0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 14:36:07,403 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-04 14:36:07,404 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 14:36:07,484 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-04 14:36:07,484 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 14:36:07,484 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-04 14:36:07,484 - src.api.main - INFO - All services initialized successfully
+2025-12-04 14:36:07,862 - __main__ - INFO - API server is ready and responding to requests
+2025-12-04 14:36:07,862 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-04 14:48:25,723 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-04 14:48:27,613 - src.services.knowledge_base - INFO - Successfully processed document file: tmpf256qaxq.pdf
+2025-12-04 14:48:27,613 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-04 14:48:27,614 - src.api.endpoints.knowledge_base - INFO - Successfully processed: GQE-Net_A_Graph-Based_Quality_Enhancement_Network_for_Point_Cloud_Color_Attribute.pdf
+2025-12-04 14:49:39,715 - src.api.endpoints.knowledge_base - INFO - Searching knowledge base for: a...
+2025-12-04 14:49:39,794 - src.services.knowledge_base - INFO - Found 2 similar documents for query
+2025-12-04 14:49:39,795 - src.api.endpoints.knowledge_base - INFO - Found 0 relevant documents in 79.39ms
+2025-12-04 14:50:02,935 - src.api.endpoints.chat - INFO - Streaming chat message (KB: True)
+2025-12-04 14:50:02,935 - src.services.chat_manager - INFO - Streaming response for user message: what is GQE-Net?...
+2025-12-04 14:50:02,936 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-04 14:50:02,968 - src.services.knowledge_base - INFO - Found 2 similar documents for query
+2025-12-04 14:50:02,968 - src.services.chat_manager - INFO - Found 2 similar documents for query: what is GQE-Net?
+2025-12-04 14:50:02,968 - src.services.chat_manager - INFO - Document 1: tmp1gwd9qw1.pdf, Similarity: -0.3186, Threshold: 0.7
+2025-12-04 14:50:02,968 - src.services.chat_manager - INFO - Document 2: tmpf256qaxq.pdf, Similarity: -0.3186, Threshold: 0.7
+2025-12-04 14:50:02,968 - src.services.chat_manager - INFO - Excluded document from context: tmp1gwd9qw1.pdf (score: -0.3186 < threshold: 0.7)
+2025-12-04 14:50:02,969 - src.services.chat_manager - INFO - Excluded document from context: tmpf256qaxq.pdf (score: -0.3186 < threshold: 0.7)
+2025-12-04 14:50:02,969 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-12-04 14:50:03,182 - src.services.chat_manager - ERROR - DeepSeek API error in stream_message: DeepSeek API error (401): Authentication Fails, Your api key: ****XXXX is invalid
+2025-12-04 14:51:30,996 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 14:51:31,160 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-04 14:51:31,160 - __main__ - INFO - API server shutdown complete
+2025-12-04 14:51:31,177 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-04 14:51:31,178 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x000001D33B3F2E40>
+2025-12-04 14:51:38,796 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-04 14:51:38,796 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-04 14:51:38,820 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-04 14:51:38,973 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-04 14:51:38,974 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-04 14:51:40,821 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001DEF14301A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 14:51:43,847 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001DEF14AFB10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 14:51:44,644 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-04 14:51:44,646 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 14:51:44,723 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db
+2025-12-04 14:51:44,723 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 14:51:44,723 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-04 14:51:44,723 - src.api.main - INFO - All services initialized successfully
+2025-12-04 14:51:44,849 - __main__ - INFO - API server is ready and responding to requests
+2025-12-04 14:51:44,850 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-04 14:52:38,879 - src.api.endpoints.chat - INFO - Streaming chat message (KB: True)
+2025-12-04 14:52:38,882 - src.services.chat_manager - INFO - Streaming response for user message: what is GQE-Net?...
+2025-12-04 14:52:38,882 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-04 14:52:39,105 - src.services.knowledge_base - INFO - Found 2 similar documents for query
+2025-12-04 14:52:39,105 - src.services.chat_manager - INFO - Found 2 similar documents for query: what is GQE-Net?
+2025-12-04 14:52:39,105 - src.services.chat_manager - INFO - Document 1: tmp1gwd9qw1.pdf, Similarity: -0.3186, Threshold: 0.7
+2025-12-04 14:52:39,105 - src.services.chat_manager - INFO - Document 2: tmpf256qaxq.pdf, Similarity: -0.3186, Threshold: 0.7
+2025-12-04 14:52:39,105 - src.services.chat_manager - INFO - Excluded document from context: tmp1gwd9qw1.pdf (score: -0.3186 < threshold: 0.7)
+2025-12-04 14:52:39,105 - src.services.chat_manager - INFO - Excluded document from context: tmpf256qaxq.pdf (score: -0.3186 < threshold: 0.7)
+2025-12-04 14:52:39,105 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-12-04 14:52:57,652 - src.services.chat_manager - INFO - Successfully streamed response with intelligent routing
+2025-12-04 14:53:34,003 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-04 14:53:35,456 - src.services.knowledge_base - INFO - Successfully processed document file: tmp2kqytxw_.pdf
+2025-12-04 14:53:35,456 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-04 14:53:35,456 - src.api.endpoints.knowledge_base - INFO - Successfully processed: GQE-Net_A_Graph-Based_Quality_Enhancement_Network_for_Point_Cloud_Color_Attribute.pdf
+2025-12-04 14:54:01,329 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-04 14:54:01,330 - src.services.chat_manager - INFO - Processing user message: what is GQE-Net?...
+2025-12-04 14:54:01,330 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-04 14:54:01,330 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-04 14:54:01,330 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-04 14:54:01,336 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-04 14:54:01,336 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is GQE-Net?
+2025-12-04 14:54:01,337 - src.services.chat_manager - INFO - Document 1: tmp1gwd9qw1.pdf, Similarity: -0.3186, Threshold: 0.7
+2025-12-04 14:54:01,337 - src.services.chat_manager - INFO - Document 2: tmpf256qaxq.pdf, Similarity: -0.3186, Threshold: 0.7
+2025-12-04 14:54:01,337 - src.services.chat_manager - INFO - Document 3: tmp2kqytxw_.pdf, Similarity: -0.3186, Threshold: 0.7
+2025-12-04 14:54:01,337 - src.services.chat_manager - INFO - Excluded document from context: tmp1gwd9qw1.pdf (score: -0.3186 < threshold: 0.7)
+2025-12-04 14:54:01,337 - src.services.chat_manager - INFO - Excluded document from context: tmpf256qaxq.pdf (score: -0.3186 < threshold: 0.7)
+2025-12-04 14:54:01,337 - src.services.chat_manager - INFO - Excluded document from context: tmp2kqytxw_.pdf (score: -0.3186 < threshold: 0.7)
+2025-12-04 14:54:01,337 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-12-04 14:54:01,338 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-04 14:54:18,563 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-04 15:08:08,044 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:08:08,151 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-04 15:08:08,152 - __main__ - INFO - API server shutdown complete
+2025-12-04 15:08:08,246 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-04 15:08:08,246 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x000001DEF7CEAE40>
+2025-12-04 15:08:16,105 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-04 15:08:16,105 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-04 15:08:16,128 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-04 15:08:16,276 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-04 15:08:16,276 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-04 15:08:18,159 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000211AF363CB0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:08:20,525 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-04 15:08:20,525 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 15:08:20,605 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-04 15:08:20,606 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 15:08:20,606 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-04 15:08:20,606 - src.api.main - INFO - All services initialized successfully
+2025-12-04 15:08:20,682 - __main__ - INFO - API server is ready and responding to requests
+2025-12-04 15:08:20,682 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-04 15:11:08,478 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-04 15:11:08,478 - src.services.chat_manager - INFO - Processing user message: what is GQE-Net?...
+2025-12-04 15:11:08,479 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-04 15:11:08,479 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-04 15:11:08,479 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-04 15:11:08,697 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-04 15:11:08,697 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is GQE-Net?
+2025-12-04 15:11:08,697 - src.services.chat_manager - INFO - Document 1: tmp1gwd9qw1.pdf, Similarity: -0.3186, Threshold: 0.3
+2025-12-04 15:11:08,697 - src.services.chat_manager - INFO - Document 2: tmpf256qaxq.pdf, Similarity: -0.3186, Threshold: 0.3
+2025-12-04 15:11:08,698 - src.services.chat_manager - INFO - Document 3: tmp2kqytxw_.pdf, Similarity: -0.3186, Threshold: 0.3
+2025-12-04 15:11:08,698 - src.services.chat_manager - INFO - Excluded document from context: tmp1gwd9qw1.pdf (score: -0.3186 < threshold: 0.3)
+2025-12-04 15:11:08,698 - src.services.chat_manager - INFO - Excluded document from context: tmpf256qaxq.pdf (score: -0.3186 < threshold: 0.3)
+2025-12-04 15:11:08,698 - src.services.chat_manager - INFO - Excluded document from context: tmp2kqytxw_.pdf (score: -0.3186 < threshold: 0.3)
+2025-12-04 15:11:08,698 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-12-04 15:11:08,698 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-04 15:11:32,285 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-04 15:13:45,060 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-04 15:13:45,060 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-04 15:13:45,084 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-04 15:13:45,242 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-04 15:13:45,242 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-04 15:13:47,103 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8D741A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:13:50,168 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEFED0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:13:53,217 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8EA42D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:13:56,253 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8E26780>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:13:59,290 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8E269E0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:02,327 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DFA690>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:05,279 - huggingface_hub.utils._http - WARNING - '(MaxRetryError("HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000001FFF8D6C050>, 'Connection to huggingface.co timed out. (connect timeout=10)'))"), '(Request ID: cb04ce7d-396d-43b3-a9ee-202012fba427)')' thrown while requesting HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/./modules.json
+2025-12-04 15:14:05,280 - huggingface_hub.utils._http - WARNING - Retrying in 1s [Retry 1/5].
+2025-12-04 15:14:05,373 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEB680>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:08,410 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEB9B0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:11,465 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEBBD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:14,501 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEBDF0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:15,170 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:15,447 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:17,555 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:17,555 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8ED8050>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:20,610 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:20,611 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8ED8270>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:23,639 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8ED8490>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:26,312 - huggingface_hub.utils._http - WARNING - '(MaxRetryError("HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000001FFF8EA4B90>, 'Connection to huggingface.co timed out. (connect timeout=10)'))"), '(Request ID: affefd65-ae2f-4ad0-ae3f-b0360405d280)')' thrown while requesting HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/./modules.json
+2025-12-04 15:14:26,312 - huggingface_hub.utils._http - WARNING - Retrying in 2s [Retry 2/5].
+2025-12-04 15:14:26,687 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8D2EBE0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:29,727 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEBDF0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:32,769 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEBBD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:33,146 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:33,470 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:35,809 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:35,809 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEB8A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:36,157 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:36,398 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:36,598 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:36,793 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:38,858 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:38,858 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEBAC0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:39,543 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:41,916 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:14:41,917 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEB350>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:44,978 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FFF8DEB460>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:14:45,978 - __main__ - ERROR - API server failed to become ready within 60 seconds
+2025-12-04 15:14:45,978 - __main__ - ERROR - Server failed to start properly
+2025-12-04 15:14:45,978 - __main__ - INFO - API server shutdown complete
+2025-12-04 15:15:08,502 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-04 15:15:08,502 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-04 15:15:08,525 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-04 15:15:08,566 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-04 15:15:08,566 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-04 15:15:10,538 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020E1F9F7CB0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:15:13,581 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020E1FCAFB10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:15:15,405 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-04 15:15:15,406 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 15:15:15,497 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-04 15:15:15,498 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 15:15:15,498 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-04 15:15:15,498 - src.api.main - INFO - All services initialized successfully
+2025-12-04 15:15:15,600 - __main__ - INFO - API server is ready and responding to requests
+2025-12-04 15:15:15,601 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-04 15:15:52,769 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-04 15:15:52,770 - src.services.chat_manager - INFO - Processing user message: what is GQE-Net?...
+2025-12-04 15:15:52,770 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-04 15:15:52,770 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-04 15:15:52,770 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-04 15:15:52,987 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-04 15:15:52,987 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is GQE-Net?
+2025-12-04 15:15:52,987 - src.services.chat_manager - INFO - Document 1: tmp1gwd9qw1.pdf, Similarity: -0.3186, Threshold: -0.3
+2025-12-04 15:15:52,987 - src.services.chat_manager - INFO - Document 2: tmpf256qaxq.pdf, Similarity: -0.3186, Threshold: -0.3
+2025-12-04 15:15:52,987 - src.services.chat_manager - INFO - Document 3: tmp2kqytxw_.pdf, Similarity: -0.3186, Threshold: -0.3
+2025-12-04 15:15:52,987 - src.services.chat_manager - INFO - Excluded document from context: tmp1gwd9qw1.pdf (score: -0.3186 < threshold: -0.3)
+2025-12-04 15:15:52,987 - src.services.chat_manager - INFO - Excluded document from context: tmpf256qaxq.pdf (score: -0.3186 < threshold: -0.3)
+2025-12-04 15:15:52,988 - src.services.chat_manager - INFO - Excluded document from context: tmp2kqytxw_.pdf (score: -0.3186 < threshold: -0.3)
+2025-12-04 15:15:52,988 - src.services.chat_manager - INFO - No documents met similarity threshold after filtering
+2025-12-04 15:15:52,988 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-04 15:16:07,917 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-04 15:16:31,552 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:16:31,621 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-04 15:16:31,621 - __main__ - INFO - API server shutdown complete
+2025-12-04 15:16:31,761 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-04 15:16:31,761 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x0000020E200297F0>
+2025-12-04 15:16:38,849 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-04 15:16:38,849 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-04 15:16:38,875 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-04 15:16:39,027 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-04 15:16:39,027 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-04 15:16:40,883 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000195A85142F0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:16:43,201 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-04 15:16:43,201 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 15:16:43,283 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-04 15:16:43,284 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 15:16:43,284 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-04 15:16:43,284 - src.api.main - INFO - All services initialized successfully
+2025-12-04 15:16:43,416 - __main__ - INFO - API server is ready and responding to requests
+2025-12-04 15:16:43,416 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-04 15:17:36,275 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-04 15:17:36,275 - src.services.chat_manager - INFO - Processing user message: what is GQE-Net?...
+2025-12-04 15:17:36,276 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-04 15:17:36,276 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-04 15:17:36,276 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-04 15:17:36,488 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-04 15:17:36,488 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is GQE-Net?
+2025-12-04 15:17:36,488 - src.services.chat_manager - INFO - Document 1: tmp1gwd9qw1.pdf, Similarity: -0.3186, Threshold: -0.5
+2025-12-04 15:17:36,488 - src.services.chat_manager - INFO - Document 2: tmpf256qaxq.pdf, Similarity: -0.3186, Threshold: -0.5
+2025-12-04 15:17:36,488 - src.services.chat_manager - INFO - Document 3: tmp2kqytxw_.pdf, Similarity: -0.3186, Threshold: -0.5
+2025-12-04 15:17:36,488 - src.services.chat_manager - INFO - Included document in context: tmp1gwd9qw1.pdf (score: -0.3186)
+2025-12-04 15:17:36,489 - src.services.chat_manager - INFO - Included document in context: tmpf256qaxq.pdf (score: -0.3186)
+2025-12-04 15:17:36,489 - src.services.chat_manager - INFO - Included document in context: tmp2kqytxw_.pdf (score: -0.3186)
+2025-12-04 15:17:36,489 - src.services.chat_manager - INFO - Generated KB context with 3 documents, total length: 1503 characters
+2025-12-04 15:17:36,489 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-04 15:17:43,181 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-04 15:18:44,970 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-04 15:18:44,970 - src.services.chat_manager - INFO - Processing user message: what is the architecture of GQE-Net, briefly intro...
+2025-12-04 15:18:44,970 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-04 15:18:44,971 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-04 15:18:44,971 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-04 15:18:44,977 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-04 15:18:44,978 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is the architecture of GQE-Net, briefly introduce me more
+2025-12-04 15:18:44,978 - src.services.chat_manager - INFO - Document 1: tmp1gwd9qw1.pdf, Similarity: -0.2984, Threshold: -0.5
+2025-12-04 15:18:44,978 - src.services.chat_manager - INFO - Document 2: tmpf256qaxq.pdf, Similarity: -0.2984, Threshold: -0.5
+2025-12-04 15:18:44,978 - src.services.chat_manager - INFO - Document 3: tmp2kqytxw_.pdf, Similarity: -0.2984, Threshold: -0.5
+2025-12-04 15:18:44,978 - src.services.chat_manager - INFO - Included document in context: tmp1gwd9qw1.pdf (score: -0.2984)
+2025-12-04 15:18:44,978 - src.services.chat_manager - INFO - Included document in context: tmpf256qaxq.pdf (score: -0.2984)
+2025-12-04 15:18:44,978 - src.services.chat_manager - INFO - Included document in context: tmp2kqytxw_.pdf (score: -0.2984)
+2025-12-04 15:18:44,978 - src.services.chat_manager - INFO - Generated KB context with 3 documents, total length: 1503 characters
+2025-12-04 15:18:44,979 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-04 15:19:08,537 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-04 15:49:03,468 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:49:03,586 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-04 15:49:03,586 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x00000195F8176120>
+2025-12-04 15:49:03,998 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-04 15:49:03,998 - __main__ - INFO - API server shutdown complete
+2025-12-04 15:49:10,303 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-04 15:49:10,303 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-04 15:49:10,328 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-04 15:49:10,484 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-04 15:49:10,484 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-04 15:49:12,345 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002175B0F8050>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-04 15:49:14,653 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-04 15:49:14,653 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 15:49:14,738 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-04 15:49:14,738 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-04 15:49:14,738 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-04 15:49:14,738 - src.api.main - INFO - All services initialized successfully
+2025-12-04 15:49:14,883 - __main__ - INFO - API server is ready and responding to requests
+2025-12-04 15:49:14,884 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-04 15:49:48,591 - src.api.endpoints.knowledge_base - INFO - Clearing vector store only (non-Excel documents)
+2025-12-04 15:49:48,645 - src.services.knowledge_base - INFO - Vector store collection deleted successfully
+2025-12-04 15:49:48,674 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-04 15:49:48,674 - src.services.knowledge_base - INFO - Vector store cleared and reinitialized successfully
+2025-12-04 15:50:36,928 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-04 15:50:36,958 - src.services.knowledge_base - INFO - Attempting to extract PDF with pdfplumber: C:\Users\123\AppData\Local\Temp\tmpvh8a7sfw.pdf
+2025-12-04 15:50:40,224 - src.services.knowledge_base - INFO - Successfully extracted 15 pages with pdfplumber, total text length: 65572
+2025-12-04 15:50:40,440 - src.services.knowledge_base - INFO - Successfully processed document file: tmpvh8a7sfw.pdf
+2025-12-04 15:50:40,440 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-04 15:50:40,440 - src.api.endpoints.knowledge_base - INFO - Successfully processed: GQE-Net_A_Graph-Based_Quality_Enhancement_Network_for_Point_Cloud_Color_Attribute.pdf
+2025-12-04 15:51:00,304 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-04 15:51:00,304 - src.services.chat_manager - INFO - Processing user message: what is GQE-Net?...
+2025-12-04 15:51:00,305 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-04 15:51:00,305 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-04 15:51:00,305 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-04 15:51:00,357 - src.services.knowledge_base - INFO - Found 1 similar documents for query
+2025-12-04 15:51:00,357 - src.services.chat_manager - INFO - Found 1 similar documents for query: what is GQE-Net?
+2025-12-04 15:51:00,357 - src.services.chat_manager - INFO - Document 1: tmpvh8a7sfw.pdf, Similarity: 0.3334, Threshold: -0.5
+2025-12-04 15:51:00,358 - src.services.chat_manager - INFO - Included document in context: tmpvh8a7sfw.pdf (score: 0.3334)
+2025-12-04 15:51:00,358 - src.services.chat_manager - INFO - Generated KB context with 1 documents, total length: 621 characters
+2025-12-04 15:51:00,359 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-04 15:51:06,005 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-04 15:52:02,597 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-04 15:52:02,598 - src.services.chat_manager - INFO - Processing user message: what is the architecture of the GQE-Net? briefly i...
+2025-12-04 15:52:02,598 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-04 15:52:02,598 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-04 15:52:02,598 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-04 15:52:02,605 - src.services.knowledge_base - INFO - Found 1 similar documents for query
+2025-12-04 15:52:02,606 - src.services.chat_manager - INFO - Found 1 similar documents for query: what is the architecture of the GQE-Net? briefly introduce me more details
+2025-12-04 15:52:02,606 - src.services.chat_manager - INFO - Document 1: tmpvh8a7sfw.pdf, Similarity: 0.3252, Threshold: -0.5
+2025-12-04 15:52:02,606 - src.services.chat_manager - INFO - Included document in context: tmpvh8a7sfw.pdf (score: 0.3252)
+2025-12-04 15:52:02,606 - src.services.chat_manager - INFO - Generated KB context with 1 documents, total length: 621 characters
+2025-12-04 15:52:02,607 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-04 15:52:21,846 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-09 14:45:41,128 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-09 14:45:41,128 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-09 14:45:41,226 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-09 14:45:41,401 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-09 14:45:41,402 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-09 14:45:43,170 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021F91574050>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-09 14:45:46,008 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-09 14:45:46,014 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-09 14:45:46,193 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-09 14:45:46,193 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021F916CC050>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-09 14:45:46,193 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-09 14:45:46,193 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-09 14:45:46,194 - src.api.main - INFO - All services initialized successfully
+2025-12-09 14:45:47,195 - __main__ - INFO - API server is ready and responding to requests
+2025-12-09 14:45:47,196 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-09 14:53:54,683 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-09 14:53:54,686 - src.services.document_chunking_service - INFO - Updated chunking config: size=1000, overlap=200
+2025-12-09 14:53:58,023 - src.services.document_chunking_service - INFO - Created 83 chunks from C:\Users\123\AppData\Local\Temp\tmphcu_x2mn.pdf
+2025-12-09 14:53:59,045 - src.services.knowledge_base - ERROR - Failed to process document file C:\Users\123\AppData\Local\Temp\tmphcu_x2mn.pdf: Expected metadata value to be a str, int, float, bool, SparseVector, or None, got [] which is a list in add.
+2025-12-09 14:53:59,045 - src.services.knowledge_base - ERROR - Failed to process file C:\Users\123\AppData\Local\Temp\tmphcu_x2mn.pdf: Document file processing failed: Expected metadata value to be a str, int, float, bool, SparseVector, or None, got [] which is a list in add.
+2025-12-09 14:53:59,045 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 0 documents, 1 errors
+2025-12-09 15:41:56,545 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-09 15:41:56,686 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-09 15:41:57,164 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-09 15:41:57,164 - __main__ - INFO - API server shutdown complete
+2025-12-09 15:42:04,797 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-09 15:42:04,797 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-09 15:42:04,823 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-09 15:42:04,980 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-09 15:42:04,981 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-09 15:42:06,827 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000026C78D141A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-09 15:42:09,839 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000026C78D97C50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-09 15:42:10,168 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-09 15:42:10,170 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-09 15:42:10,250 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-09 15:42:10,250 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-09 15:42:10,250 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-09 15:42:10,250 - src.api.main - INFO - All services initialized successfully
+2025-12-09 15:42:10,841 - __main__ - INFO - API server is ready and responding to requests
+2025-12-09 15:42:10,841 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-09 15:43:12,925 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-09 15:43:12,928 - src.services.document_chunking_service - INFO - Updated chunking config: size=1000, overlap=200
+2025-12-09 15:43:16,316 - src.services.document_chunking_service - INFO - Created 83 chunks from C:\Users\123\AppData\Local\Temp\tmpa49dfb1c.pdf
+2025-12-09 15:43:17,142 - src.services.knowledge_base - ERROR - Failed to process document file C:\Users\123\AppData\Local\Temp\tmpa49dfb1c.pdf: argument 'metadatas': failed to extract enum MetadataValue ('Bool | Int | Float | Str | SparseVector')
+- variant Bool (Bool): TypeError: failed to extract field MetadataValue::Bool.0, caused by TypeError: 'NoneType' object cannot be converted to 'PyBool'
+- variant Int (Int): TypeError: failed to extract field MetadataValue::Int.0, caused by TypeError: 'NoneType' object cannot be interpreted as an integer
+- variant Float (Float): TypeError: failed to extract field MetadataValue::Float.0, caused by TypeError: must be real number, not NoneType
+- variant Str (Str): TypeError: failed to extract field MetadataValue::Str.0, caused by TypeError: 'NoneType' object cannot be converted to 'PyString'
+- variant SparseVector (SparseVector): TypeError: failed to extract field MetadataValue::SparseVector.0, caused by TypeError: 'NoneType' object cannot be converted to 'PyDict'
+2025-12-09 15:43:17,142 - src.services.knowledge_base - ERROR - Failed to process file C:\Users\123\AppData\Local\Temp\tmpa49dfb1c.pdf: Document file processing failed: argument 'metadatas': failed to extract enum MetadataValue ('Bool | Int | Float | Str | SparseVector')
+- variant Bool (Bool): TypeError: failed to extract field MetadataValue::Bool.0, caused by TypeError: 'NoneType' object cannot be converted to 'PyBool'
+- variant Int (Int): TypeError: failed to extract field MetadataValue::Int.0, caused by TypeError: 'NoneType' object cannot be interpreted as an integer
+- variant Float (Float): TypeError: failed to extract field MetadataValue::Float.0, caused by TypeError: must be real number, not NoneType
+- variant Str (Str): TypeError: failed to extract field MetadataValue::Str.0, caused by TypeError: 'NoneType' object cannot be converted to 'PyString'
+- variant SparseVector (SparseVector): TypeError: failed to extract field MetadataValue::SparseVector.0, caused by TypeError: 'NoneType' object cannot be converted to 'PyDict'
+2025-12-09 15:43:17,142 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 0 documents, 1 errors
+2025-12-09 16:16:15,908 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-09 16:16:16,117 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-09 16:16:16,461 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-09 16:16:16,461 - __main__ - INFO - API server shutdown complete
+2025-12-09 16:16:25,292 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-09 16:16:25,292 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-09 16:16:25,317 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-09 16:16:25,480 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-09 16:16:25,480 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-09 16:16:27,337 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001B8A05C41A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-09 16:16:29,559 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-09 16:16:29,560 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-09 16:16:29,897 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-09 16:16:29,898 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-09 16:16:29,898 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-09 16:16:29,898 - src.api.main - INFO - All services initialized successfully
+2025-12-09 16:16:30,369 - __main__ - INFO - API server is ready and responding to requests
+2025-12-09 16:16:30,370 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-09 16:17:24,213 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-09 16:17:24,216 - src.services.document_chunking_service - INFO - Updated chunking config: size=1000, overlap=200
+2025-12-09 16:17:27,553 - src.services.document_chunking_service - INFO - Created 83 chunks from C:\Users\123\AppData\Local\Temp\tmp8boozhrf.pdf
+2025-12-09 16:17:28,351 - src.services.knowledge_base - INFO - Successfully processed document file with 83 chunks: tmp8boozhrf.pdf
+2025-12-09 16:17:28,351 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-09 16:17:28,351 - src.api.endpoints.knowledge_base - INFO - Successfully processed: GQE-Net_A_Graph-Based_Quality_Enhancement_Network_for_Point_Cloud_Color_Attribute.pdf
+2025-12-09 16:17:59,306 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-09 16:17:59,306 - src.services.chat_manager - INFO - Processing user message: what is GQE-Net?...
+2025-12-09 16:17:59,307 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-09 16:17:59,307 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-09 16:17:59,307 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-09 16:17:59,385 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-09 16:17:59,385 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is GQE-Net?
+2025-12-09 16:17:59,385 - src.services.chat_manager - INFO - Document 1: tmp8boozhrf.pdf, Similarity: 0.5697, Threshold: -0.5
+2025-12-09 16:17:59,385 - src.services.chat_manager - INFO - Document 2: tmp8boozhrf.pdf, Similarity: 0.5327, Threshold: -0.5
+2025-12-09 16:17:59,386 - src.services.chat_manager - INFO - Document 3: tmp8boozhrf.pdf, Similarity: 0.5324, Threshold: -0.5
+2025-12-09 16:17:59,386 - src.services.chat_manager - INFO - Included document in context: tmp8boozhrf.pdf (score: 0.5697)
+2025-12-09 16:17:59,386 - src.services.chat_manager - INFO - Included document in context: tmp8boozhrf.pdf (score: 0.5327)
+2025-12-09 16:17:59,386 - src.services.chat_manager - INFO - Included document in context: tmp8boozhrf.pdf (score: 0.5324)
+2025-12-09 16:17:59,386 - src.services.chat_manager - INFO - Generated KB context with 3 documents, total length: 2708 characters
+2025-12-09 16:17:59,387 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-09 16:18:30,836 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-09 16:19:50,280 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-09 16:19:50,280 - src.services.chat_manager - INFO - Processing user message: what is the PSGA module in the GQE-Net? ...
+2025-12-09 16:19:50,280 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-09 16:19:50,280 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-09 16:19:50,280 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-09 16:19:50,287 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-09 16:19:50,287 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is the PSGA module in the GQE-Net? 
+2025-12-09 16:19:50,287 - src.services.chat_manager - INFO - Document 1: tmp8boozhrf.pdf, Similarity: 0.5843, Threshold: -0.5
+2025-12-09 16:19:50,287 - src.services.chat_manager - INFO - Document 2: tmp8boozhrf.pdf, Similarity: 0.5135, Threshold: -0.5
+2025-12-09 16:19:50,288 - src.services.chat_manager - INFO - Document 3: tmp8boozhrf.pdf, Similarity: 0.4802, Threshold: -0.5
+2025-12-09 16:19:50,288 - src.services.chat_manager - INFO - Included document in context: tmp8boozhrf.pdf (score: 0.5843)
+2025-12-09 16:19:50,288 - src.services.chat_manager - INFO - Included document in context: tmp8boozhrf.pdf (score: 0.5135)
+2025-12-09 16:19:50,288 - src.services.chat_manager - INFO - Included document in context: tmp8boozhrf.pdf (score: 0.4802)
+2025-12-09 16:19:50,288 - src.services.chat_manager - INFO - Generated KB context with 3 documents, total length: 2753 characters
+2025-12-09 16:19:50,289 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-09 16:20:30,936 - src.services.deepseek_service - ERROR - Network error communicating with DeepSeek API: Cannot connect to host api.deepseek.com:443 ssl:default [Connect call failed ('116.205.40.114', 443)]
+2025-12-09 16:20:30,937 - src.services.chat_manager - ERROR - DeepSeek API error in process_message: Network error: Cannot connect to host api.deepseek.com:443 ssl:default [Connect call failed ('116.205.40.114', 443)]
+2025-12-09 16:20:30,937 - src.api.endpoints.chat - ERROR - Unexpected error in process_chat_message: Network error: Cannot connect to host api.deepseek.com:443 ssl:default [Connect call failed ('116.205.40.114', 443)]
+2025-12-09 16:20:47,767 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-09 16:20:47,768 - src.services.chat_manager - INFO - Processing user message: what is the PSGA module in the GQE-Net?...
+2025-12-09 16:20:47,768 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-09 16:20:47,768 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-09 16:20:47,768 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-09 16:20:47,775 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-09 16:20:47,775 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is the PSGA module in the GQE-Net?
+2025-12-09 16:20:47,776 - src.services.chat_manager - INFO - Document 1: tmp8boozhrf.pdf, Similarity: 0.5843, Threshold: -0.5
+2025-12-09 16:20:47,776 - src.services.chat_manager - INFO - Document 2: tmp8boozhrf.pdf, Similarity: 0.5135, Threshold: -0.5
+2025-12-09 16:20:47,776 - src.services.chat_manager - INFO - Document 3: tmp8boozhrf.pdf, Similarity: 0.4802, Threshold: -0.5
+2025-12-09 16:20:47,776 - src.services.chat_manager - INFO - Included document in context: tmp8boozhrf.pdf (score: 0.5843)
+2025-12-09 16:20:47,776 - src.services.chat_manager - INFO - Included document in context: tmp8boozhrf.pdf (score: 0.5135)
+2025-12-09 16:20:47,776 - src.services.chat_manager - INFO - Included document in context: tmp8boozhrf.pdf (score: 0.4802)
+2025-12-09 16:20:47,776 - src.services.chat_manager - INFO - Generated KB context with 3 documents, total length: 2753 characters
+2025-12-09 16:20:47,778 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-09 16:21:10,632 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-10 09:38:21,038 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-10 09:38:21,038 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-10 09:38:21,125 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-10 09:38:21,346 - src.services.knowledge_base - INFO - Using GPU: NVIDIA GeForce RTX 4070 Ti
+2025-12-10 09:38:21,346 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-10 09:38:23,093 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000028B62228050>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-10 09:38:25,895 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-10 09:38:25,901 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-10 09:38:26,084 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-10 09:38:26,084 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-10 09:38:26,085 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-10 09:38:26,085 - src.api.main - INFO - All services initialized successfully
+2025-12-10 09:38:26,129 - __main__ - INFO - API server is ready and responding to requests
+2025-12-10 09:38:26,130 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-10 09:41:34,643 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-10 09:41:34,644 - src.services.document_chunking_service - INFO - Updated chunking config: size=1000, overlap=200
+2025-12-10 09:41:34,675 - src.services.sqlite_database_service - INFO - Created dynamic table 'excel_65a2a511d87f4203b32831316a4a348a_sheet1' for sheet 'Sheet1'
+2025-12-10 09:41:34,682 - src.services.sqlite_database_service - INFO - Inserted 6 rows into dynamic table 'excel_65a2a511d87f4203b32831316a4a348a_sheet1'
+2025-12-10 09:41:34,685 - src.services.sqlite_database_service - INFO - Successfully stored Excel file with dynamic tables: tmpcdg3paw9.xlsx
+2025-12-10 09:41:34,685 - src.services.knowledge_base - INFO - Successfully processed Excel file with dynamic tables: tmpcdg3paw9.xlsx
+2025-12-10 09:41:34,685 - src.services.knowledge_base - INFO - Processing complete: 1 Excel files, 0 documents, 0 errors
+2025-12-10 09:41:34,685 - src.api.endpoints.knowledge_base - INFO - Successfully processed: customer_profile.xlsx
+2025-12-10 09:42:43,537 - src.api.endpoints.knowledge_base - INFO - Clearing SQLite database only (Excel files)
+2025-12-10 09:42:43,616 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-10 09:42:43,616 - src.services.knowledge_base - INFO - SQLite database cleared successfully
+2025-12-10 09:43:00,351 - src.api.endpoints.knowledge_base - INFO - Clearing vector store only (non-Excel documents)
+2025-12-10 09:43:00,417 - src.services.knowledge_base - INFO - Vector store collection deleted successfully
+2025-12-10 09:43:00,450 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-10 09:43:00,450 - src.services.knowledge_base - INFO - Vector store cleared and reinitialized successfully
+2025-12-10 09:44:18,122 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-10 09:44:18,124 - src.services.document_chunking_service - INFO - Updated chunking config: size=1000, overlap=200
+2025-12-10 09:44:21,416 - src.services.document_chunking_service - INFO - Created 83 chunks from C:\Users\123\AppData\Local\Temp\tmp2llfhet3.pdf
+2025-12-10 09:44:22,578 - src.services.knowledge_base - INFO - Successfully processed document file with 83 chunks: tmp2llfhet3.pdf
+2025-12-10 09:44:22,578 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-10 09:44:22,578 - src.api.endpoints.knowledge_base - INFO - Successfully processed: GQE-Net_A_Graph-Based_Quality_Enhancement_Network_for_Point_Cloud_Color_Attribute.pdf
+2025-12-10 09:44:24,651 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-10 09:44:24,658 - src.services.document_chunking_service - INFO - Updated chunking config: size=1000, overlap=200
+2025-12-10 09:44:32,793 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa1' is an invalid float value
+2025-12-10 09:44:38,899 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa1' is an invalid float value
+2025-12-10 09:44:38,899 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa2' is an invalid float value
+2025-12-10 09:44:38,899 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa3' is an invalid float value
+2025-12-10 09:44:38,900 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa4' is an invalid float value
+2025-12-10 09:44:38,900 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa5' is an invalid float value
+2025-12-10 09:44:38,900 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa6' is an invalid float value
+2025-12-10 09:44:38,901 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa7' is an invalid float value
+2025-12-10 09:44:38,901 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa8' is an invalid float value
+2025-12-10 09:44:38,901 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa9' is an invalid float value
+2025-12-10 09:44:38,901 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa10' is an invalid float value
+2025-12-10 09:44:38,901 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa11' is an invalid float value
+2025-12-10 09:44:38,901 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa12' is an invalid float value
+2025-12-10 09:44:38,902 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa13' is an invalid float value
+2025-12-10 09:44:38,902 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa14' is an invalid float value
+2025-12-10 09:44:38,902 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa15' is an invalid float value
+2025-12-10 09:44:38,902 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa16' is an invalid float value
+2025-12-10 09:44:38,902 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa17' is an invalid float value
+2025-12-10 09:44:38,902 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa18' is an invalid float value
+2025-12-10 09:44:38,903 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa19' is an invalid float value
+2025-12-10 09:44:38,903 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa20' is an invalid float value
+2025-12-10 09:44:38,903 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa21' is an invalid float value
+2025-12-10 09:44:38,903 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa22' is an invalid float value
+2025-12-10 09:44:38,904 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa23' is an invalid float value
+2025-12-10 09:44:38,904 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa24' is an invalid float value
+2025-12-10 09:44:38,904 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa25' is an invalid float value
+2025-12-10 09:44:38,904 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa26' is an invalid float value
+2025-12-10 09:44:38,904 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa27' is an invalid float value
+2025-12-10 09:44:38,909 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa28' is an invalid float value
+2025-12-10 09:44:38,909 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa29' is an invalid float value
+2025-12-10 09:44:38,912 - pdfminer.pdfinterp - WARNING - Cannot set gray non-stroke color because /'Pa30' is an invalid float value
+2025-12-10 09:44:40,806 - src.services.document_chunking_service - INFO - Created 664 chunks from C:\Users\123\AppData\Local\Temp\tmpwpkd543a.pdf
+2025-12-10 09:44:44,116 - src.services.knowledge_base - INFO - Successfully processed document file with 664 chunks: tmpwpkd543a.pdf
+2025-12-10 09:44:44,118 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-10 09:44:44,118 - src.api.endpoints.knowledge_base - INFO - Successfully processed: point_cloud_compression.pdf
+2025-12-10 10:51:21,263 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-10 10:51:21,425 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-10 10:51:21,608 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-10 10:51:21,608 - __main__ - INFO - API server shutdown complete

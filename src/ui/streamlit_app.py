@@ -163,12 +163,39 @@ def clear_conversation_history() -> bool:
         return False
 
 
-def upload_to_knowledge_base(file) -> bool:
+def upload_to_knowledge_base(file, chunk_size: int = 1000, chunk_overlap: int = 200) -> bool:
     """
     Upload a file to the knowledge base.
     
     Args:
         file: The file object to upload
+        chunk_size: Size of document chunks (in characters)
+        chunk_overlap: Overlap between document chunks (in characters)
+        
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        files = {"files": (file.name, file.getvalue(), file.type)}
+        data = {
+            "chunk_size": chunk_size,
+            "chunk_overlap": chunk_overlap
+        }
+        response = requests.post(f"{KB_ENDPOINT}/documents", files=files, data=data, timeout=300)
+        return response.status_code == 200
+    except requests.exceptions.RequestException:
+        return False
+
+
+def upload_excel_to_sqlite(file) -> bool:
+    """
+    Upload an Excel file to SQLite database.
+    
+    Note: This uses the same endpoint as knowledge base upload since the backend
+    automatically detects Excel files and stores them in SQLite with dynamic tables.
+    
+    Args:
+        file: The Excel file object to upload
         
     Returns:
         bool: True if successful, False otherwise
@@ -176,7 +203,13 @@ def upload_to_knowledge_base(file) -> bool:
     try:
         files = {"files": (file.name, file.getvalue(), file.type)}
         response = requests.post(f"{KB_ENDPOINT}/documents", files=files, timeout=300)
-        return response.status_code == 200
+        
+        if response.status_code == 200:
+            # Check if the response indicates successful Excel processing
+            response_data = response.json()
+            # The backend returns processing results that include Excel file info
+            return True
+        return False
     except requests.exceptions.RequestException:
         return False
 
@@ -192,6 +225,34 @@ def clear_knowledge_base() -> bool:
     """
     try:
         response = requests.delete(f"{KB_ENDPOINT}/", timeout=10)
+        return response.status_code == 200
+    except requests.exceptions.RequestException:
+        return False
+
+
+def clear_vector_store() -> bool:
+    """
+    Clear only the vector store (non-Excel documents) from the knowledge base.
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        response = requests.delete(f"{KB_ENDPOINT}/vector-store", timeout=10)
+        return response.status_code == 200
+    except requests.exceptions.RequestException:
+        return False
+
+
+def clear_sqlite_database() -> bool:
+    """
+    Clear only the SQLite database (Excel files) from the knowledge base.
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        response = requests.delete(f"{KB_ENDPOINT}/sqlite-database", timeout=10)
         return response.status_code == 200
     except requests.exceptions.RequestException:
         return False
@@ -274,6 +335,64 @@ def get_excel_sheets(file_id: str, sheet_name: Optional[str] = None) -> List[Dic
         return []
 
 
+def list_knowledge_base_files() -> List[Dict]:
+    """
+    List all knowledge base files (non-Excel documents) from the API.
+    
+    Returns:
+        List of knowledge base file dictionaries
+    """
+    import os
+    try:
+        # Use search endpoint with a generic query to retrieve documents
+        # Using "a" as a generic query that should match any document
+        payload = {
+            "query": "a",
+            "k": 500,  # High number to get as many as possible
+            "similarity_threshold": 0.0  # Low threshold to include all
+        }
+        response = requests.post(f"{KB_ENDPOINT}/search", json=payload, timeout=10)
+        
+        if response.status_code == 200:
+            data = response.json()
+            # Extract documents from search results
+            documents = []
+            for result in data.get("results", []):
+                doc = result.get("document", {})
+                if doc:
+                    # Extract file name from file_path if available
+                    file_path = doc.get("file_path", "")
+                    file_name = "Unknown"
+                    if file_path:
+                        file_name = os.path.basename(file_path)
+                    elif doc.get("metadata", {}).get("file_name"):
+                        file_name = doc.get("metadata", {}).get("file_name")
+                    
+                    # Format the document info
+                    doc_info = {
+                        "id": doc.get("id", ""),
+                        "file_name": file_name,
+                        "file_type": doc.get("file_type", "Unknown"),
+                        "file_size": doc.get("metadata", {}).get("file_size", 0),
+                        "file_path": file_path,
+                        "content_preview": doc.get("content", "")[:150] + "..." if doc.get("content") and len(doc.get("content", "")) > 150 else doc.get("content", ""),
+                        "similarity_score": result.get("similarity_score", 0.0),
+                        "relevance_percentage": result.get("relevance_percentage", 0)
+                    }
+                    documents.append(doc_info)
+            return documents
+        else:
+            # Log error for debugging
+            print(f"API Error: {response.status_code} - {response.text}")
+            return []
+    except requests.exceptions.RequestException as e:
+        print(f"Request Exception: {e}")
+        return []
+    except Exception as e:
+        print(f"Unexpected error in list_knowledge_base_files: {e}")
+        return []
+
+
 
 
 def get_configuration() -> Optional[Dict]:
@@ -349,7 +468,7 @@ def init_session_state():
         st.session_state.use_knowledge_base = True
     
     if "stream_responses" not in st.session_state:
-        st.session_state.stream_responses = True
+        st.session_state.stream_responses = False
     
     if "system_info" not in st.session_state:
         st.session_state.system_info = None
@@ -436,79 +555,173 @@ def main():
             help="Stream responses in real-time for better user experience"
         )
         
-        # Knowledge Base Management
-        st.subheader("📚 Knowledge Base")
-        
-        # File upload - now includes Excel formats
-        uploaded_files = st.file_uploader(
-            "Add documents to knowledge base",
-            type=["pdf", "txt", "docx", "doc", "md", "xlsx", "xls", "xlsm", "xlsb"],
-            accept_multiple_files=True,
-            help="Supported formats: PDF, TXT, DOCX, DOC, MD, XLSX, XLS, XLSM, XLSB"
+        # Document Chunking Configuration
+        st.subheader("📄 Document Chunking Settings")
+        st.session_state.chunk_size = st.slider(
+            "Chunk Size (tokens)", 
+            min_value=500, 
+            max_value=2000, 
+            value=1000, 
+            help="Set the number of tokens per chunk (default: 1000)"
+        )
+        st.session_state.chunk_overlap = st.slider(
+            "Chunk Overlap (tokens)", 
+            min_value=0, 
+            max_value=500, 
+            value=200, 
+            help="Set the number of overlapping tokens between chunks (default: 200)"
         )
         
-        if uploaded_files and st.button("Upload Documents"):
-            with st.spinner("Uploading documents..."):
-                success_count = 0
-                for uploaded_file in uploaded_files:
-                    if upload_to_knowledge_base(uploaded_file):
-                        success_count += 1
-                
-                if success_count > 0:
-                    st.success(f"Successfully uploaded {success_count} document(s)")
-                else:
-                    st.error("Failed to upload documents")
+        # Knowledge Base Management System
+        with st.expander("📚 Knowledge Base Management", expanded=False):
+            # st.markdown("**Upload, list, and manage documents in the Knowledge Base (Vector Storage)**")
+            
+            # Upload section
+            st.subheader("📤 Upload Files to Knowledge Base")
+            kb_uploaded_files = st.file_uploader(
+                "Select documents to upload to Knowledge Base",
+                type=["pdf", "txt", "docx", "doc", "md"],
+                accept_multiple_files=True,
+                help="Supported formats: PDF, TXT, DOCX, DOC, MD. These files will be stored in the vector database.",
+                key="kb_uploader"
+            )
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("📤 Upload to Knowledge Base", use_container_width=True, key="kb_upload_btn"):
+                    if kb_uploaded_files:
+                        with st.spinner("Uploading to Knowledge Base..."):
+                            kb_success_count = 0
+                            for uploaded_file in kb_uploaded_files:
+                                if upload_to_knowledge_base(uploaded_file, st.session_state.chunk_size, st.session_state.chunk_overlap):
+                                    kb_success_count += 1
+                            if kb_success_count > 0:
+                                st.success(f"Successfully uploaded {kb_success_count} document(s) to Knowledge Base")
+                            else:
+                                st.error("Failed to upload documents to Knowledge Base")
+                    else:
+                        st.warning("Please select files to upload first")
+            
+            # List section
+            st.subheader("📋 List Existing Files in Knowledge Base")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("📋 List Knowledge Base Files", use_container_width=True, key="kb_list_btn"):
+                    kb_files = list_knowledge_base_files()
+                    if kb_files:
+                        st.write(f"Found {len(kb_files)} document(s) in Knowledge Base:")
+                        for file in kb_files:
+                            with st.expander(f"📄 {file.get('file_name', 'Unknown')}"):
+                                st.write(f"**ID:** {file.get('id', 'N/A')}")
+                                st.write(f"**File Type:** {file.get('file_type', 'Unknown')}")
+                                st.write(f"**Size:** {file.get('file_size', 0)} bytes")
+                                st.write(f"**File Path:** {file.get('file_path', 'N/A')}")
+                                st.write(f"**Relevance Score:** {file.get('relevance_percentage', 0)}%")
+                                st.write(f"**Content Preview:**")
+                                st.text(file.get('content_preview', 'No preview available'))
+                    else:
+                        st.info("No documents found in Knowledge Base. Upload PDF, TXT, DOCX, DOC, or MD files to add documents.")
+            
+            # Clear section
+            st.subheader("🗑️ Clear Knowledge Base")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("🗑️ Clear All Knowledge Base Files", use_container_width=True, key="kb_clear_btn"):
+                    if clear_vector_store():
+                        st.success("Knowledge Base (vector store) cleared successfully")
+                    else:
+                        st.error("Failed to clear Knowledge Base (vector store)")
+            
+            st.markdown("---")
+            st.caption("Knowledge Base stores: PDF, TXT, DOCX, DOC, MD files in vector database")
         
-        # Knowledge base actions
-        if st.button("🗑️ Clear KB", use_container_width=True):
-            if clear_knowledge_base():
-                st.success("Knowledge base cleared")
-            else:
-                st.error("Failed to clear knowledge base")
-        
-        # Excel File Management Panel
-        st.subheader("📊 Excel File Management")
-        
-        # List Excel files
-        if st.button("📋 List Excel Files", use_container_width=True):
-            excel_files = list_excel_files()
-            if excel_files:
-                st.write(f"Found {len(excel_files)} Excel files:")
-                for file in excel_files:
-                    with st.expander(f"📄 {file.get('file_name', 'Unknown')}"):
-                        st.write(f"**ID:** {file.get('id', 'N/A')}")
-                        st.write(f"**Size:** {file.get('file_size', 0)} bytes")
-                        st.write(f"**Sheets:** {', '.join(file.get('sheet_names', []))}")
-                        st.write(f"**Uploaded:** {file.get('uploaded_at', 'Unknown')}")
-                        
-                        # File actions
-                        col1, col2, col3 = st.columns(3)
-                        with col1:
-                            if st.button("View Details", key=f"view_{file.get('id')}"):
-                                file_details = get_excel_file(file.get('id'))
-                                if file_details:
-                                    st.json(file_details)
-                        with col2:
-                            if st.button("View Sheets", key=f"sheets_{file.get('id')}"):
-                                sheets = get_excel_sheets(file.get('id'))
-                                if sheets:
-                                    st.write(f"Found {len(sheets)} sheets:")
-                                    for sheet in sheets:
-                                        with st.expander(f"Sheet: {sheet.get('sheet_name', 'Unknown')}"):
-                                            st.write(f"**Rows:** {sheet.get('row_count', 0)}")
-                                            st.write(f"**Columns:** {sheet.get('column_count', 0)}")
-                                            st.write(f"**Sample Data:**")
-                                            if sheet.get('sample_data'):
-                                                st.dataframe(sheet['sample_data'])
-                        with col3:
-                            if st.button("Delete", key=f"delete_{file.get('id')}"):
-                                if delete_excel_file(file.get('id')):
-                                    st.success("File deleted successfully")
-                                    st.rerun()
-                                else:
-                                    st.error("Failed to delete file")
-            else:
-                st.info("No Excel files found in the database")
+        # SQLite Excel File Management System
+        with st.expander("📊 SQLite Excel File Management", expanded=False):
+            # st.markdown("**Upload, list, and manage Excel files in SQLite Database**")
+            
+            # Upload section
+            st.subheader("📤 Upload Excel Files to SQLite")
+            excel_uploaded_files = st.file_uploader(
+                "Select Excel files to upload to SQLite",
+                type=["xlsx", "xls", "xlsm", "xlsb"],
+                accept_multiple_files=True,
+                help="Supported formats: XLSX, XLS, XLSM, XLSB. These files will be stored in SQLite database with dynamic table creation.",
+                key="excel_uploader"
+            )
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("📤 Upload to SQLite", use_container_width=True, key="excel_upload_btn"):
+                    if excel_uploaded_files:
+                        with st.spinner("Uploading to SQLite..."):
+                            excel_success_count = 0
+                            for uploaded_file in excel_uploaded_files:
+                                if upload_excel_to_sqlite(uploaded_file):
+                                    excel_success_count += 1
+                            
+                            if excel_success_count > 0:
+                                st.success(f"Successfully uploaded {excel_success_count} Excel file(s) to SQLite")
+                            else:
+                                st.error("Failed to upload Excel files to SQLite")
+                    else:
+                        st.warning("Please select Excel files to upload first")
+            
+            # List section
+            st.subheader("📋 List Existing Excel Files in SQLite")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("📋 List Excel Files in SQLite", use_container_width=True, key="excel_list_btn"):
+                    excel_files = list_excel_files()
+                    if excel_files:
+                        st.write(f"Found {len(excel_files)} Excel files in SQLite database:")
+                        for file in excel_files:
+                            with st.expander(f"📄 {file.get('file_name', 'Unknown')}"):
+                                st.write(f"**ID:** {file.get('id', 'N/A')}")
+                                st.write(f"**Size:** {file.get('file_size', 0)} bytes")
+                                st.write(f"**Sheets:** {', '.join(file.get('sheet_names', []))}")
+                                st.write(f"**Uploaded:** {file.get('uploaded_at', 'Unknown')}")
+                                
+                                # File actions
+                                col1, col2, col3 = st.columns(3)
+                                with col1:
+                                    if st.button("View Details", key=f"view_{file.get('id')}"):
+                                        file_details = get_excel_file(file.get('id'))
+                                        if file_details:
+                                            st.json(file_details)
+                                with col2:
+                                    if st.button("View Sheets", key=f"sheets_{file.get('id')}"):
+                                        sheets = get_excel_sheets(file.get('id'))
+                                        if sheets:
+                                            st.write(f"Found {len(sheets)} sheets:")
+                                            for sheet in sheets:
+                                                with st.expander(f"Sheet: {sheet.get('sheet_name', 'Unknown')}"):
+                                                    st.write(f"**Rows:** {sheet.get('row_count', 0)}")
+                                                    st.write(f"**Columns:** {sheet.get('column_count', 0)}")
+                                                    st.write(f"**Sample Data:**")
+                                                    if sheet.get('sample_data'):
+                                                        st.dataframe(sheet['sample_data'])
+                                with col3:
+                                    if st.button("Delete", key=f"delete_{file.get('id')}"):
+                                        if delete_excel_file(file.get('id')):
+                                            st.success("File deleted successfully")
+                                            st.rerun()
+                                        else:
+                                            st.error("Failed to delete file")
+                    else:
+                        st.info("No Excel files found in the SQLite database")
+            
+            # Clear section
+            st.subheader("🗑️ Clear SQLite Excel Files")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("🗑️ Clear All Excel Files in SQLite", use_container_width=True, key="excel_clear_btn"):
+                    if clear_sqlite_database():
+                        st.success("SQLite database (Excel files) cleared successfully")
+                    else:
+                        st.error("Failed to clear SQLite database (Excel files)")
+            
+            st.markdown("---")
+            st.caption("SQLite stores: XLSX, XLS, XLSM, XLSB files with dynamic table creation for each sheet")
         
         
         # Configuration

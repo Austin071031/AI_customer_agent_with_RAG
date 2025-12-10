@@ -221,7 +221,7 @@ class TestKnowledgeBaseManager:
         mock_chromadb.PersistentClient.assert_called_once()
         mock_client.get_or_create_collection.assert_called_once_with(
             name="knowledge_base",
-            metadata={"description": "AI Customer Agent Knowledge Base"}
+            metadata={"description": "AI Customer Agent Knowledge Base", "hnsw:space": "cosine"}
         )
         assert manager.vector_store == mock_collection
         assert isinstance(manager.document_processor, DocumentProcessor)
@@ -292,7 +292,7 @@ class TestKnowledgeBaseManager:
             
             document_result = result['documents'][0]
             assert document_result['status'] == 'success'
-            assert document_result['file_name'] == 'test.txt'
+            assert document_result['file_name'] == Path(temp_file_path).name
             assert document_result['storage_type'] == 'vector'
 
             # Verify the vector store was called correctly

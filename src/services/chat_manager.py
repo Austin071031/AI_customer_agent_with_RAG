@@ -67,8 +67,8 @@ class ChatManager:
         
         # Configuration settings
         self.max_history_length = 20  # Maximum number of messages to keep in history
-        self.knowledge_base_threshold = 0.7  # Similarity threshold for KB results
-        self.max_kb_context_length = 1500  # Maximum characters for KB context
+        self.knowledge_base_threshold = -0.5  # Lower similarity threshold for KB results (was 0.7)
+        self.max_kb_context_length = 4000  # Maximum characters for KB context
         
         # Query intent detection settings
         self.excel_query_keywords = [
@@ -540,8 +540,8 @@ Based on these results, please provide a direct answer to the user's question. D
             # Format the context from similar documents
             context_parts = []
             for doc in similar_docs:
-                # Extract relevant portion of document content
-                content_preview = doc.content[:500] + "..." if len(doc.content) > 500 else doc.content
+                # Extract relevant portion of document content - increased for better context
+                content_preview = doc.content[:2000] + "..." if len(doc.content) > 2000 else doc.content
                 similarity_score = doc.metadata.get('similarity_score', 0)
                 
                 # Only include documents above similarity threshold

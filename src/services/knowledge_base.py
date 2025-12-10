@@ -21,6 +21,7 @@ from chromadb.config import Settings
 from ..models.chat_models import KBDocument
 from ..models.excel_models import ExcelDocument, ExcelSearchQuery, ExcelSheetData
 from .sqlite_database_service import SQLiteDatabaseService, SQLiteDatabaseError
+from .document_chunking_service import DocumentChunkingService, DocumentChunkingError
 
 
 class KnowledgeBaseError(Exception):
@@ -91,20 +92,68 @@ class DocumentProcessor:
             raise KnowledgeBaseError(f"Failed to process file {file_path}: {str(e)}")
             
     def _extract_pdf_text(self, file_path: Path) -> str:
-        """Extract text from PDF files using PyPDF2."""
+        """Extract text from PDF files using pdfplumber (primary) and PyPDF2 (fallback)."""
+        text = ""
+        
+        # Method 1: Try pdfplumber first (better for complex PDFs)
+        try:
+            import pdfplumber
+            self.logger.info(f"Attempting to extract PDF with pdfplumber: {file_path}")
+            
+            with pdfplumber.open(file_path) as pdf:
+                for i, page in enumerate(pdf.pages):
+                    try:
+                        page_text = page.extract_text()
+                        if page_text:
+                            text += page_text + "\n"
+                        else:
+                            self.logger.warning(f"Page {i+1} returned empty text with pdfplumber")
+                    except Exception as page_error:
+                        self.logger.warning(f"Error extracting text from page {i+1} with pdfplumber: {str(page_error)}")
+                
+            if text.strip():
+                self.logger.info(f"Successfully extracted {len(pdf.pages)} pages with pdfplumber, total text length: {len(text)}")
+                return text.strip()
+            else:
+                self.logger.warning(f"pdfplumber extracted empty text, trying PyPDF2 fallback")
+        except ImportError:
+            self.logger.warning("pdfplumber not installed, using PyPDF2")
+        except Exception as e:
+            self.logger.warning(f"pdfplumber extraction failed: {str(e)}, trying PyPDF2 fallback")
+        
+        # Method 2: Fallback to PyPDF2
         try:
             from PyPDF2 import PdfReader
             
             text = ""
+            self.logger.info(f"Attempting to extract PDF with PyPDF2: {file_path}")
+            
             with open(file_path, 'rb') as file:
                 pdf_reader = PdfReader(file)
-                for page in pdf_reader.pages:
-                    text += page.extract_text() + "\n"
-            return text.strip()
+                total_pages = len(pdf_reader.pages)
+                self.logger.info(f"PDF has {total_pages} pages")
+                
+                for i, page in enumerate(pdf_reader.pages):
+                    try:
+                        page_text = page.extract_text()
+                        if page_text:
+                            text += page_text + "\n"
+                            self.logger.debug(f"Extracted {len(page_text)} chars from page {i+1}")
+                        else:
+                            self.logger.warning(f"Page {i+1} returned empty text with PyPDF2")
+                    except Exception as page_error:
+                        self.logger.warning(f"Error extracting text from page {i+1} with PyPDF2: {str(page_error)}")
+                
+            if text.strip():
+                self.logger.info(f"Successfully extracted {total_pages} pages with PyPDF2, total text length: {len(text)}")
+                return text.strip()
+            else:
+                raise KnowledgeBaseError("Both pdfplumber and PyPDF2 extracted empty text")
+                
         except ImportError:
-            raise KnowledgeBaseError("PyPDF2 not installed for PDF processing")
+            raise KnowledgeBaseError("Neither pdfplumber nor PyPDF2 are installed for PDF processing")
         except Exception as e:
-            raise KnowledgeBaseError(f"PDF processing error: {str(e)}")
+            raise KnowledgeBaseError(f"PDF processing error with both methods: {str(e)}")
             
     def _extract_text_file(self, file_path: Path) -> str:
         """Extract text from plain text files."""
@@ -247,19 +296,26 @@ class EnhancedKnowledgeBaseManager:
     """
     
     def __init__(self, persist_directory: str = "./knowledge_base/chroma_db",
-                 sqlite_db_path: str = "./excel_database.db"):
+                 sqlite_db_path: str = "./excel_database.db",
+                 chunk_size: int = 1000, chunk_overlap: int = 200):
         """
         Initialize the enhanced knowledge base manager.
         
         Args:
             persist_directory: Directory to persist ChromaDB data
             sqlite_db_path: Path to SQLite database for Excel files
+            chunk_size: Size of document chunks (in characters)
+            chunk_overlap: Overlap between document chunks (in characters)
         """
         self.logger = logging.getLogger(__name__)
         self.persist_directory = persist_directory
         self.document_processor = DocumentProcessor()
         self.embedding_service = EmbeddingService()
         self.sqlite_service = SQLiteDatabaseService(sqlite_db_path)
+        self.document_chunking_service = DocumentChunkingService(
+            chunk_size=chunk_size, 
+            chunk_overlap=chunk_overlap
+        )
         self.vector_store = self._initialize_vector_store()
         
     def _initialize_vector_store(self) -> chromadb.Collection:
@@ -282,13 +338,16 @@ class EnhancedKnowledgeBaseManager:
                 settings=Settings(anonymized_telemetry=False)
             )
             
-            # Create or get collection
+            # Create or get collection with cosine distance metric for normalized embeddings
             collection = client.get_or_create_collection(
                 name="knowledge_base",
-                metadata={"description": "AI Customer Agent Knowledge Base"}
+                metadata={
+                    "description": "AI Customer Agent Knowledge Base",
+                    "hnsw:space": "cosine"  # Use cosine distance for normalized embeddings
+                }
             )
             
-            self.logger.info(f"Initialized vector store at: {self.persist_directory}")
+            self.logger.info(f"Initialized vector store at: {self.persist_directory} with cosine distance metric")
             return collection
             
         except Exception as e:
@@ -313,12 +372,14 @@ class EnhancedKnowledgeBaseManager:
         else:
             return 'document'
             
-    def add_documents(self, file_paths: List[str]) -> Dict[str, Any]:
+    def add_documents(self, file_paths: List[str], chunk_size: int = 1000, chunk_overlap: int = 200) -> Dict[str, Any]:
         """
         Process and add documents to appropriate storage based on file type.
         
         Args:
             file_paths: List of file paths to add to the knowledge base
+            chunk_size: Size of document chunks (in characters)
+            chunk_overlap: Overlap between document chunks (in characters)
             
         Returns:
             Dictionary with processing results for both Excel and document files
@@ -328,6 +389,9 @@ class EnhancedKnowledgeBaseManager:
         """
         if not file_paths:
             raise KnowledgeBaseError("No file paths provided")
+            
+        # Update document chunking service with new parameters
+        self.document_chunking_service.update_chunking_config(chunk_size, chunk_overlap)
             
         results = {
             'excel_files': [],
@@ -428,67 +492,136 @@ class EnhancedKnowledgeBaseManager:
             self.logger.error(f"Failed to process Excel file {file_path}: {str(e)}")
             raise KnowledgeBaseError(f"Excel file processing failed: {str(e)}")
             
+    def _clean_metadata(self, metadata: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Clean metadata by converting non-scalar values to strings and removing None values.
+        
+        Args:
+            metadata: Original metadata dictionary
+            
+        Returns:
+            Cleaned metadata dictionary with only scalar values, no None or empty lists
+        """
+        cleaned = {}
+        for key, value in metadata.items():
+            # Skip None values entirely
+            if value is None:
+                continue
+                
+            if isinstance(value, list):
+                # Skip empty lists
+                if not value:
+                    continue
+                # Convert non-empty list to string
+                cleaned[key] = str(value)
+            elif isinstance(value, dict):
+                # Recursively clean nested dictionaries
+                nested_cleaned = self._clean_metadata(value)
+                # Only add if the nested dict is not empty
+                if nested_cleaned:
+                    cleaned[key] = nested_cleaned
+            elif isinstance(value, (str, int, float, bool)):
+                # Keep scalar values
+                cleaned[key] = value
+            else:
+                # Convert any other type to string
+                cleaned[key] = str(value)
+        return cleaned
+
     def _process_document_file(self, file_path: str) -> Dict[str, Any]:
         """
-        Process document file and store in vector database.
+        Process document file with intelligent chunking and store in vector database.
         
         Args:
             file_path: Path to the document file
             
         Returns:
-            Dictionary with processing results
+            Dictionary with processing results including chunk information
         """
         try:
-            # Extract text and metadata
-            text, file_metadata = self.document_processor.extract_text_from_file(file_path)
+            file_type = Path(file_path).suffix.lower()
             
-            if not text.strip():
-                raise KnowledgeBaseError(f"Empty content in file: {file_path}")
-                
-            # Create document ID
-            doc_id = str(uuid.uuid4())
+            # Determine file type for chunking service
+            chunking_file_type = file_type[1:]  # Remove leading dot
+            if chunking_file_type == 'doc':
+                chunking_file_type = 'docx'  # Treat .doc as .docx for chunking
             
-            # Create KBDocument
-            kb_doc = KBDocument(
-                id=doc_id,
-                content=text,
-                metadata=file_metadata,
+            # Chunk the document using the document chunking service
+            chunks = self.document_chunking_service.chunk_document(
                 file_path=file_path,
-                file_type=Path(file_path).suffix.lower()
+                file_type=chunking_file_type
             )
             
-            # Generate embedding
-            embedding = self.embedding_service.generate_embeddings([text])[0]
-            kb_doc.embedding = embedding
+            if not chunks:
+                raise KnowledgeBaseError(f"No chunks generated for file: {file_path}")
             
-            # Prepare data for ChromaDB
-            document_metadata = {
-                "file_path": file_path,
-                "file_type": kb_doc.file_type,
-                "file_size": file_metadata.get('file_size', 0),
-                "document_id": doc_id
-            }
+            # Process each chunk
+            chunk_ids = []
+            embeddings = []
+            documents = []
+            metadatas = []
             
-            # Add to vector store
+            for chunk in chunks:
+                chunk_id = str(uuid.uuid4())
+                chunk_ids.append(chunk_id)
+                
+                # Get chunk text
+                chunk_text = chunk['text']
+                
+                # Generate embedding for the chunk
+                embedding = self.embedding_service.generate_embeddings([chunk_text])[0]
+                embeddings.append(embedding)
+                documents.append(chunk_text)
+                
+                # Prepare metadata for the chunk
+                chunk_metadata = {
+                    "file_path": file_path,
+                    "file_type": file_type,
+                    "file_name": Path(file_path).name,
+                    "file_size": Path(file_path).stat().st_size,
+                    "chunk_id": chunk_id,
+                    "original_file": file_path,
+                    "chunk_index": chunk.get('chunk_index', 0),
+                    "chunk_size": len(chunk_text),
+                    "start_position": chunk.get('start_position', 0),
+                    "end_position": chunk.get('end_position', len(chunk_text)),
+                    "chunking_strategy": chunk.get('metadata', {}).get('chunking_strategy', 'unknown'),
+                    "document_id": f"{Path(file_path).stem}_doc"
+                }
+                
+                # Merge additional chunk metadata
+                if 'metadata' in chunk:
+                    chunk_metadata.update(chunk['metadata'])
+                
+                # Clean the metadata to ensure all values are scalar types
+                cleaned_metadata = self._clean_metadata(chunk_metadata)
+                metadatas.append(cleaned_metadata)
+            
+            # Add all chunks to vector store in a single batch
             self.vector_store.add(
-                embeddings=[embedding],
-                documents=[text],
-                metadatas=[document_metadata],
-                ids=[doc_id]
+                embeddings=embeddings,
+                documents=documents,
+                metadatas=metadatas,
+                ids=chunk_ids
             )
             
             result = {
-                'document_id': doc_id,
-                'file_name': file_metadata['file_name'],
-                'file_size': file_metadata['file_size'],
-                'file_type': kb_doc.file_type,
+                'file_name': Path(file_path).name,
+                'file_size': Path(file_path).stat().st_size,
+                'file_type': file_type,
                 'storage_type': 'vector',
-                'status': 'success'
+                'chunks_created': len(chunks),
+                'chunk_ids': chunk_ids,
+                'status': 'success',
+                'chunking_strategy': chunks[0].get('metadata', {}).get('chunking_strategy', 'unknown') if chunks else 'unknown'
             }
             
-            self.logger.info(f"Successfully processed document file: {file_metadata['file_name']}")
+            self.logger.info(f"Successfully processed document file with {len(chunks)} chunks: {Path(file_path).name}")
             return result
             
+        except DocumentChunkingError as e:
+            self.logger.error(f"Document chunking failed for {file_path}: {str(e)}")
+            raise KnowledgeBaseError(f"Document chunking failed: {str(e)}")
         except Exception as e:
             self.logger.error(f"Failed to process document file {file_path}: {str(e)}")
             raise KnowledgeBaseError(f"Document file processing failed: {str(e)}")
@@ -514,7 +647,7 @@ class EnhancedKnowledgeBaseManager:
             # Generate embedding for the query
             query_embedding = self.embedding_service.generate_embeddings([query])[0]
             
-            # Search in vector store
+            # Search in vector store with cosine distance metric
             results = self.vector_store.query(
                 query_embeddings=[query_embedding],
                 n_results=k,
@@ -536,6 +669,8 @@ class EnhancedKnowledgeBaseManager:
                         embedding=None  # Not returning embeddings for search results
                     )
                     # Store similarity score in metadata
+                    # For cosine distance: similarity = 1 - distance (distance is 1 - cosine_similarity)
+                    # So similarity = cosine_similarity
                     kb_doc.metadata['similarity_score'] = 1 - distance
                     similar_documents.append(kb_doc)
                     
@@ -645,9 +780,24 @@ class EnhancedKnowledgeBaseManager:
         Returns:
             True if both storage systems were cleared successfully, False otherwise
         """
-        vector_cleared = False
-        sqlite_cleared = False
+        vector_cleared = self.clear_vector_store()
+        sqlite_cleared = self.clear_sqlite_database()
+            
+        # Return success only if both were cleared
+        if vector_cleared and sqlite_cleared:
+            self.logger.info("Knowledge base cleared successfully (both vector store and SQLite database)")
+            return True
+        else:
+            self.logger.warning(f"Knowledge base partially cleared: vector_cleared={vector_cleared}, sqlite_cleared={sqlite_cleared}")
+            return False
+            
+    def clear_vector_store(self) -> bool:
+        """
+        Clear only the vector store (ChromaDB) for non-Excel documents.
         
+        Returns:
+            True if vector store was cleared successfully, False otherwise
+        """
         try:
             # Clear vector store - try multiple methods
             try:
@@ -673,30 +823,33 @@ class EnhancedKnowledgeBaseManager:
             
             # Reinitialize vector store
             self.vector_store = self._initialize_vector_store()
-            vector_cleared = True
             self.logger.info("Vector store cleared and reinitialized successfully")
+            return True
             
         except Exception as e:
             self.logger.error(f"Failed to clear vector store: {str(e)}")
+            return False
             
+    def clear_sqlite_database(self) -> bool:
+        """
+        Clear only the SQLite database for Excel files.
+        
+        Returns:
+            True if SQLite database was cleared successfully, False otherwise
+        """
         try:
             # Clear SQLite database
             clear_result = self.sqlite_service.clear_database()
             sqlite_cleared = clear_result.get('success', False)
             if sqlite_cleared:
                 self.logger.info("SQLite database cleared successfully")
+                return True
             else:
                 self.logger.error(f"Failed to clear SQLite database: {clear_result.get('error', 'Unknown error')}")
+                return False
             
         except Exception as e:
             self.logger.error(f"Failed to clear SQLite database: {str(e)}")
-            
-        # Return success only if both were cleared
-        if vector_cleared and sqlite_cleared:
-            self.logger.info("Knowledge base cleared successfully (both vector store and SQLite database)")
-            return True
-        else:
-            self.logger.warning(f"Knowledge base partially cleared: vector_cleared={vector_cleared}, sqlite_cleared={sqlite_cleared}")
             return False
             
     def get_knowledge_base_info(self) -> Dict[str, Any]:

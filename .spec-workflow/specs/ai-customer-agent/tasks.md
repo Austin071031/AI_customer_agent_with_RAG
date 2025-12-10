@@ -117,8 +117,8 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 - [x] **Task 3**: DeepSeek API Service
 
-### Task 4: Knowledge Base Manager with Dynamic Table Creation
-**File**: `src/services/knowledge_base.py`
+### Task 4: Knowledge Base Manager with Dynamic Table Creation and Document Chunking
+**File**: `src/services/knowledge_base.py`, `src/services/document_chunking_service.py`
 
 **Requirements**: US-002, US-004, US-006, US-009
 
@@ -127,7 +127,7 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 **Role**: Python AI/ML Engineer
 
-**Task**: Create the enhanced knowledge base manager that handles document processing with file type detection and dynamic table creation for Excel files. Support multiple file formats with intelligent routing: Excel files to SQLite database with dynamic tables for each sheet, other documents to vector storage. Include embedding generation, vector search, and relational SQLite data management.
+**Task**: Create the enhanced knowledge base manager that handles document processing with file type detection, intelligent chunking for long documents, and dynamic table creation for Excel files. Support multiple file formats with intelligent routing: Excel files to SQLite database with dynamic tables for each sheet, other documents (PDF, TXT, DOCX) to vector storage with proper chunking to ensure all content is stored for RAG. Implement the Document Chunking Service to handle long documents with configurable chunk sizes and overlap.
 
 **Restrictions**:
 - Use ChromaDB for vector storage of non-Excel files
@@ -136,15 +136,18 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - Implement GPU acceleration for embeddings
 - No chat functionality
 - Create dynamic tables for each Excel sheet with proper column types
+- Implement document chunking for PDF, TXT, DOCX files with configurable chunk size and overlap
+- Validate no content loss during chunking
 
 **_Leverage**:
 - ChromaDB for vector database
 - SQLite for Excel file storage with dynamic table creation
 - sentence-transformers for embeddings
 - PyTorch with CUDA support
-- File processing libraries
+- File processing libraries (pypdf2, python-docx)
 - openpyxl for Excel file processing
 - Dynamic table creation with proper column type inference
+- Document chunking strategies with metadata preservation
 
 **_Requirements**:
 - US-002: Local Knowledge Base Integration
@@ -154,14 +157,16 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 **Success**:
 - Enhanced KnowledgeBaseManager class with file type detection and routing
+- DocumentChunkingService class with configurable chunk size and overlap, supporting PDF, TXT, DOCX
 - Excel file processing and dynamic table creation in SQLite database for each sheet
-- Document processing for multiple file formats (PDF, TXT, DOCX) in vector DB
-- Vector search functionality for non-Excel documents
+- Document chunking for long PDF, TXT, DOCX files with metadata preservation (page numbers, section headers)
+- Vector search functionality for non-Excel documents (including chunked documents)
 - Excel data search functionality in SQLite database using relational tables
-- GPU-accelerated embedding generation
+- GPU-accelerated embedding generation for chunked documents
 - Dynamic table creation with proper column types (integer, real, text, etc.)
+- Validation of no content loss during chunking process
 
-- [-] **Task 4**: Knowledge Base Manager with Dynamic Table Creation
+- [-] **Task 4**: Knowledge Base Manager with Dynamic Table Creation and Document Chunking
 
 ### Task 5: Text-to-SQL Service with Actual SQL Execution
 **File**: `src/services/text_to_sql_service.py`
@@ -280,7 +285,7 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 - [x] **Task 7**: Configuration Manager
 
-### Task 8: FastAPI Backend with Relational Storage
+### Task 8: FastAPI Backend with Relational Storage and Document Chunking
 **File**: `src/api/main.py`, `src/api/endpoints/chat.py`, `src/api/endpoints/knowledge_base.py`, `src/api/endpoints/config.py`, `src/api/endpoints/excel_files.py`
 
 **Requirements**: US-001, US-002, US-005, US-006, US-008, US-009, US-010, US-011
@@ -290,7 +295,7 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 **Role**: Python Backend API Developer
 
-**Task**: Create the FastAPI backend with REST endpoints for chat, knowledge base management, Excel file management with relational storage, and configuration. Implement proper request validation, error handling, and API documentation with dynamic table creation and Text-to-SQL integration for relational data.
+**Task**: Create the FastAPI backend with REST endpoints for chat, knowledge base management with document chunking for long files, Excel file management with relational storage, and configuration. Implement proper request validation, error handling, and API documentation with dynamic table creation, Text-to-SQL integration for relational data, and document chunking configuration.
 
 **Restrictions**:
 - Use FastAPI framework
@@ -299,14 +304,16 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - No frontend UI
 - Support dynamic table creation for Excel files
 - Include Text-to-SQL service integration with relational table support
+- Support document chunking configuration for PDF, TXT, DOCX files
 
 **_Leverage**:
 - FastAPI for web framework
 - Pydantic for request/response models
 - Service classes for business logic
-- File upload handling with dynamic table creation
+- File upload handling with dynamic table creation and document chunking
 - Text-to-SQL service for Excel data queries on relational tables
 - Relational database operations for Excel data
+- Document chunking service for long documents
 
 **_Requirements**:
 - US-001: DeepSeek API Integration
@@ -321,14 +328,14 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 **Success**:
 - FastAPI application with all endpoints
 - Chat endpoints with streaming support and Text-to-SQL integration for relational data
-- Knowledge base management endpoints with file type routing and dynamic table creation
+- Knowledge base management endpoints with file type routing, dynamic table creation for Excel, and document chunking for PDF/TXT/DOCX
 - Excel file management endpoints (list, get, delete, search) with relational storage
-- Configuration endpoints
-- Proper API documentation with dynamic table creation examples and Text-to-SQL usage on relational data
+- Configuration endpoints including chunking configuration (chunk size, overlap)
+- Proper API documentation with dynamic table creation examples, Text-to-SQL usage on relational data, and document chunking examples
 
-- [x] **Task 8**: FastAPI Backend with Relational Storage
+- [-] **Task 8**: FastAPI Backend with Relational Storage and Document Chunking
 
-### Task 9: Streamlit Web Interface
+### Task 9: Streamlit Web Interface with Document Chunking Configuration
 **File**: `src/ui/streamlit_app.py`
 
 **Requirements**: US-005, US-006, US-003, US-004, US-009, US-010, US-011
@@ -338,21 +345,23 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 **Role**: Python Frontend Developer
 
-**Task**: Create the Streamlit web interface for the AI customer service agent. Include chat interface, knowledge base management with Excel file upload, Excel file management panel, configuration panel, and GPU status monitoring.
+**Task**: Create the Streamlit web interface for the AI customer service agent. Include chat interface, knowledge base management with Excel file upload and document chunking configuration for PDF/TXT/DOCX files, Excel file management panel, configuration panel with chunking settings, and GPU status monitoring.
 
 **Restrictions**:
 - Use Streamlit for web interface
 - Implement real-time chat with streaming
-- Include file upload for knowledge base with Excel file support
+- Include file upload for knowledge base with Excel file support and chunking options for long documents
 - Include Excel file management interface
 - No backend API changes
+- Include chunking configuration (chunk size, overlap) in settings panel
 
 **_Leverage**:
 - Streamlit for web framework
 - FastAPI client for backend communication
 - Real-time updates for chat
-- File upload components with type detection
+- File upload components with type detection and chunking options
 - Data table display for Excel file management
+- Configuration sliders for chunking parameters
 
 **_Requirements**:
 - US-005: Chat Interface
@@ -364,12 +373,13 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 **Success**:
 - Streamlit application with chat interface
 - Real-time message streaming
-- Knowledge base file upload with Excel file support
+- Knowledge base file upload with Excel file support and chunking configuration for PDF/TXT/DOCX
 - Excel file management panel (list, view, delete, search)
-- Configuration management panel
+- Configuration management panel with chunking settings (chunk size, overlap)
 - GPU status display
+- Chunking progress and status display during file upload
 
-- [x] **Task 9**: Streamlit Web Interface
+- [-] **Task 9**: Streamlit Web Interface with Document Chunking Configuration
 
 ### Task 10: GPU Optimization and Performance
 **File**: `src/utils/gpu_utils.py`, `src/utils/cache.py`

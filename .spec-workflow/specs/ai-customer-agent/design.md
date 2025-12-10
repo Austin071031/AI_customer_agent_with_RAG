@@ -42,7 +42,7 @@
                                   └──────────────────┘
 ```
 
-### File Upload Processing Flow
+### File Upload Processing Flow with Document Chunking
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   File Upload   │───►│  File Type       │───►│   Excel File?   │
@@ -50,12 +50,44 @@
 └─────────────────┘    └──────────────────┘    └─────────────────┘
                                 │                         │
                                 ▼                         ▼
-                       ┌──────────────────┐    ┌──────────────────┐
-                       │  Store in        │    │  Store in        │
-                       │ Knowledge Base   │    │  SQLite Database │
-                       │ (Vector DB)      │    │                  │
-                       └──────────────────┘    └──────────────────┘
+                 ┌──────────────┴─────────────┐    ┌──────────────────┐
+                 ▼                            ▼    │  Store in        │
+        ┌──────────────────┐       ┌──────────────────┐ │  SQLite Database │
+        │  Document        │       │  Store in        │ │                  │
+        │  Chunking        │──────►│ Knowledge Base   │ └──────────────────┘
+        │  (PDF/TXT/DOCX)  │       │ (Vector DB)      │
+        └──────────────────┘       └──────────────────┘
+                │
+                ▼
+        ┌──────────────────┐
+        │  Chunk Storage   │
+        │  with Metadata   │
+        └──────────────────┘
 ```
+
+### Document Chunking Strategy
+For long documents (PDF, TXT, Word files), the system implements intelligent chunking to ensure all content is properly stored in the knowledge base for RAG:
+
+1. **Chunk Size Configuration**:
+   - Default chunk size: 1000 tokens
+   - Overlap between chunks: 200 tokens
+   - Configurable via settings.yaml
+
+2. **Chunking Methods**:
+   - **PDF Files**: Extract text preserving structure, chunk by paragraphs/sections
+   - **TXT Files**: Smart sentence-aware chunking with paragraph boundaries
+   - **Word Documents**: Preserve formatting and structure in chunk metadata
+
+3. **Metadata Preservation**:
+   - Source file information (filename, path, type)
+   - Page numbers (for PDFs)
+   - Section headers and document structure
+   - Timestamps and version information
+
+4. **Quality Assurance**:
+   - Validate no content loss during chunking
+   - Ensure chunk boundaries don't break meaningful context
+   - Maintain semantic coherence within chunks
 
 ### Component Architecture
 ```
@@ -83,6 +115,7 @@
 │  • Embedding Service                                       │
 │  • Vector Search Service                                   │
 │  • File Processing Service                                 │
+│  • Document Chunking Service                               │
 │  • SQLite Database Service                                 │
 │  • Text-to-SQL Service                                     │
 │  • Query Results Processor                                 │
@@ -287,7 +320,36 @@ class TextToSQLService:
         """Get schema information for all Excel tables in database"""
 ```
 
-### 7. Enhanced Chat Manager with Text-to-SQL
+### 7. Document Chunking Service
+```python
+class DocumentChunkingService:
+    def __init__(self, chunk_size: int = 1000, chunk_overlap: int = 200):
+        self.chunk_size = chunk_size
+        self.chunk_overlap = chunk_overlap
+        
+    def chunk_document(self, file_path: str, file_type: str) -> List[Dict[str, Any]]:
+        """
+        Chunk a document based on its type (PDF, TXT, DOCX)
+        Returns list of chunks with metadata
+        """
+        
+    def _chunk_pdf(self, file_path: str) -> List[Dict[str, Any]]:
+        """Chunk PDF file preserving structure and page numbers"""
+        
+    def _chunk_txt(self, file_path: str) -> List[Dict[str, Any]]:
+        """Chunk text file with sentence-aware boundaries"""
+        
+    def _chunk_docx(self, file_path: str) -> List[Dict[str, Any]]:
+        """Chunk Word document preserving formatting"""
+        
+    def _validate_chunks(self, original_text: str, chunks: List[Dict[str, Any]]) -> bool:
+        """Validate that no content is lost during chunking"""
+        
+    def update_chunking_config(self, chunk_size: int, chunk_overlap: int) -> None:
+        """Update chunking configuration parameters"""
+```
+
+### 8. Enhanced Chat Manager with Text-to-SQL
 ```python
 class ChatManager:
     def __init__(self, deepseek_service: DeepSeekService, kb_manager: KnowledgeBaseManager, 
@@ -319,7 +381,7 @@ class ChatManager:
         """Clear conversation history"""
 ```
 
-### 8. Configuration Manager
+### 9. Configuration Manager
 ```python
 class ConfigManager:
     def __init__(self, config_path: str = "./config"):

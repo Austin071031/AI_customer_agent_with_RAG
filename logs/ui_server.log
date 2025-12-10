@@ -277,3 +277,132 @@
 2025-12-03 10:32:02,999 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
 2025-12-03 10:32:02,999 - __main__ - INFO - UI server is running and ready to accept requests
 2025-12-03 10:32:02,999 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-03 14:39:44,827 - __main__ - INFO - API server is available and healthy
+2025-12-03 14:39:44,827 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-03 14:39:46,838 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-03 14:39:46,838 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-03 14:39:46,838 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-03 15:16:30,352 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 15:16:30,352 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-03 15:16:30,388 - __main__ - INFO - Streamlit UI stopped
+2025-12-03 15:16:31,971 - __main__ - INFO - UI server shutdown complete
+2025-12-03 15:16:36,665 - __main__ - INFO - API server is available and healthy
+2025-12-03 15:16:36,666 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-03 15:16:38,678 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-03 15:16:38,679 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-03 15:16:38,679 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-03 15:35:46,377 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 15:35:46,377 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-03 15:35:46,412 - __main__ - INFO - Streamlit UI stopped
+2025-12-03 15:35:48,750 - __main__ - INFO - UI server shutdown complete
+2025-12-03 15:35:53,515 - __main__ - INFO - API server is available and healthy
+2025-12-03 15:35:53,515 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-03 15:35:55,532 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-03 15:35:55,532 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-03 15:35:55,532 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-03 15:36:02,597 - __main__ - INFO - API server is available and healthy
+2025-12-03 16:44:13,896 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 16:44:13,896 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-03 16:44:13,934 - __main__ - INFO - Streamlit UI stopped
+2025-12-03 16:44:17,840 - __main__ - INFO - UI server shutdown complete
+2025-12-03 16:44:23,050 - __main__ - INFO - API server is available and healthy
+2025-12-03 16:44:23,051 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-03 16:44:25,059 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-03 16:44:25,059 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-03 16:44:25,059 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-03 16:44:32,097 - __main__ - INFO - API server is available and healthy
+2025-12-03 17:00:22,743 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-03 17:00:22,744 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-03 17:00:22,786 - __main__ - INFO - Streamlit UI stopped
+2025-12-03 17:00:27,154 - __main__ - INFO - UI server shutdown complete
+2025-12-03 17:00:31,677 - __main__ - INFO - API server is available and healthy
+2025-12-03 17:00:31,677 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-03 17:00:33,686 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-03 17:00:33,686 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-03 17:00:33,687 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-04 12:05:57,320 - __main__ - INFO - API server is available and healthy
+2025-12-04 12:05:57,320 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-04 12:06:01,340 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-04 12:06:01,341 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-04 12:06:01,341 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-04 14:36:31,516 - __main__ - INFO - API server is available and healthy
+2025-12-04 14:36:31,516 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-04 14:36:33,534 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-04 14:36:33,534 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-04 14:36:33,534 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-04 14:51:53,949 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 14:51:53,949 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-04 14:51:53,984 - __main__ - INFO - Streamlit UI stopped
+2025-12-04 14:51:58,593 - __main__ - INFO - UI server shutdown complete
+2025-12-04 14:52:03,685 - __main__ - INFO - API server is available and healthy
+2025-12-04 14:52:03,685 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-04 14:52:05,700 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-04 14:52:05,700 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-04 14:52:05,700 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-04 14:52:32,733 - __main__ - INFO - API server is available and healthy
+2025-12-04 15:08:46,911 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:08:46,911 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-04 15:08:46,947 - __main__ - INFO - Streamlit UI stopped
+2025-12-04 15:08:47,795 - __main__ - INFO - UI server shutdown complete
+2025-12-04 15:08:52,141 - __main__ - INFO - API server is available and healthy
+2025-12-04 15:08:52,141 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-04 15:08:54,150 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-04 15:08:54,150 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-04 15:08:54,150 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-04 15:15:26,803 - __main__ - INFO - API server is available and healthy
+2025-12-04 15:15:26,804 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-04 15:15:28,812 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-04 15:15:28,812 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-04 15:15:28,812 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-04 15:16:51,251 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:16:51,251 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-04 15:16:51,287 - __main__ - INFO - Streamlit UI stopped
+2025-12-04 15:16:53,817 - __main__ - INFO - UI server shutdown complete
+2025-12-04 15:16:59,486 - __main__ - INFO - API server is available and healthy
+2025-12-04 15:16:59,487 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-04 15:17:01,492 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-04 15:17:01,493 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-04 15:17:01,493 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-04 15:49:17,513 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-04 15:49:17,514 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-04 15:49:17,555 - __main__ - INFO - Streamlit UI stopped
+2025-12-04 15:49:21,615 - __main__ - INFO - UI server shutdown complete
+2025-12-04 15:49:26,319 - __main__ - INFO - API server is available and healthy
+2025-12-04 15:49:26,319 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-04 15:49:28,327 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-04 15:49:28,327 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-04 15:49:28,327 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-09 14:46:36,627 - __main__ - INFO - API server is available and healthy
+2025-12-09 14:46:36,627 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-09 14:46:40,655 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-09 14:46:40,655 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-09 14:46:40,656 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-09 14:47:02,691 - __main__ - INFO - API server is available and healthy
+2025-12-09 15:42:18,618 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-09 15:42:18,619 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-09 15:42:18,647 - __main__ - INFO - Streamlit UI stopped
+2025-12-09 15:42:22,888 - __main__ - INFO - UI server shutdown complete
+2025-12-09 15:42:30,451 - __main__ - INFO - API server is available and healthy
+2025-12-09 15:42:30,452 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-09 15:42:32,466 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-09 15:42:32,466 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-09 15:42:32,466 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-09 16:16:31,399 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-09 16:16:31,399 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-09 16:16:31,435 - __main__ - INFO - Streamlit UI stopped
+2025-12-09 16:16:32,587 - __main__ - INFO - UI server shutdown complete
+2025-12-09 16:16:38,235 - __main__ - INFO - API server is available and healthy
+2025-12-09 16:16:38,235 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-09 16:16:40,255 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-09 16:16:40,255 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-09 16:16:40,255 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-09 16:17:02,281 - __main__ - INFO - API server is available and healthy
+2025-12-10 09:39:04,641 - __main__ - INFO - API server is available and healthy
+2025-12-10 09:39:04,642 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-10 09:39:07,165 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-10 09:39:07,165 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-10 09:39:07,165 - __main__ - INFO - Server monitoring started (auto-restart enabled)
+2025-12-10 10:51:27,162 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-10 10:51:27,163 - __main__ - INFO - Stopping Streamlit UI...
+2025-12-10 10:51:27,218 - __main__ - INFO - Streamlit UI stopped
+2025-12-10 10:51:27,731 - __main__ - INFO - UI server shutdown complete
