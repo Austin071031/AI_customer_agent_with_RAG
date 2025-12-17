@@ -84,7 +84,7 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 ### Task 3: DeepSeek API Service
 **File**: `src/services/deepseek_service.py`
 
-**Requirements**: US-001, US-004, US-008
+**Requirements**: US-001, US-008
 
 **_Prompt**:
 Implement the task for spec ai-customer-agent, first run spec-workflow-guide to get the workflow guide then implement the task:
@@ -106,7 +106,6 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 **_Requirements**:
 - US-001: DeepSeek API Integration
-- US-004: GPU Acceleration
 - US-008: Error Handling
 
 **Success**:
@@ -115,12 +114,12 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - Proper error handling for API failures
 - Configuration-based API settings
 
-- [x] **Task 3**: DeepSeek API Service
+- [-] **Task 3**: DeepSeek API Service
 
 ### Task 4: Knowledge Base Manager with Dynamic Table Creation and Document Chunking
 **File**: `src/services/knowledge_base.py`, `src/services/document_chunking_service.py`
 
-**Requirements**: US-002, US-004, US-006, US-009
+**Requirements**: US-002, US-006, US-009
 
 **_Prompt**:
 Implement the task for spec ai-customer-agent, first run spec-workflow-guide to get the workflow guide then implement the task:
@@ -133,7 +132,6 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - Use ChromaDB for vector storage of non-Excel files
 - Use SQLite for structured Excel file storage with dynamic table creation
 - Support common document formats (PDF, TXT, DOCX, XLSX)
-- Implement GPU acceleration for embeddings
 - No chat functionality
 - Create dynamic tables for each Excel sheet with proper column types
 - Implement document chunking for PDF, TXT, DOCX files with configurable chunk size and overlap
@@ -143,7 +141,6 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - ChromaDB for vector database
 - SQLite for Excel file storage with dynamic table creation
 - sentence-transformers for embeddings
-- PyTorch with CUDA support
 - File processing libraries (pypdf2, python-docx)
 - openpyxl for Excel file processing
 - Dynamic table creation with proper column type inference
@@ -151,7 +148,6 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 
 **_Requirements**:
 - US-002: Local Knowledge Base Integration
-- US-004: GPU Acceleration
 - US-006: Knowledge Base Management
 - US-009: Excel File Upload with Dynamic Table Creation
 
@@ -162,7 +158,6 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - Document chunking for long PDF, TXT, DOCX files with metadata preservation (page numbers, section headers)
 - Vector search functionality for non-Excel documents (including chunked documents)
 - Excel data search functionality in SQLite database using relational tables
-- GPU-accelerated embedding generation for chunked documents
 - Dynamic table creation with proper column types (integer, real, text, etc.)
 - Validation of no content loss during chunking process
 
@@ -338,14 +333,14 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 ### Task 9: Streamlit Web Interface with Document Chunking Configuration
 **File**: `src/ui/streamlit_app.py`
 
-**Requirements**: US-005, US-006, US-003, US-004, US-009, US-010, US-011
+**Requirements**: US-005, US-006, US-003, US-009, US-010, US-011
 
 **_Prompt**:
 Implement the task for spec ai-customer-agent, first run spec-workflow-guide to get the workflow guide then implement the task:
 
 **Role**: Python Frontend Developer
 
-**Task**: Create the Streamlit web interface for the AI customer service agent. Include chat interface, knowledge base management with Excel file upload and document chunking configuration for PDF/TXT/DOCX files, Excel file management panel, configuration panel with chunking settings, and GPU status monitoring.
+**Task**: Create the Streamlit web interface for the AI customer service agent. Include chat interface, knowledge base management with Excel file upload and document chunking configuration for PDF/TXT/DOCX files, Excel file management panel, and configuration panel with chunking settings.
 
 **Restrictions**:
 - Use Streamlit for web interface
@@ -367,7 +362,6 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - US-005: Chat Interface
 - US-006: Knowledge Base Management
 - US-003: Windows Local Execution
-- US-004: GPU Acceleration
 - US-009: Excel File Upload with SQLite Storage
 
 **Success**:
@@ -376,50 +370,11 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - Knowledge base file upload with Excel file support and chunking configuration for PDF/TXT/DOCX
 - Excel file management panel (list, view, delete, search)
 - Configuration management panel with chunking settings (chunk size, overlap)
-- GPU status display
 - Chunking progress and status display during file upload
 
 - [-] **Task 9**: Streamlit Web Interface with Document Chunking Configuration
 
-### Task 10: GPU Optimization and Performance
-**File**: `src/utils/gpu_utils.py`, `src/utils/cache.py`
-
-**Requirements**: US-004, US-001, US-002, US-010
-
-**_Prompt**:
-Implement the task for spec ai-customer-agent, first run spec-workflow-guide to get the workflow guide then implement the task:
-
-**Role**: Python Performance Engineer
-
-**Task**: Implement GPU optimization utilities and caching strategies to improve performance. Include CUDA configuration, batch processing for embeddings, and response caching with Text-to-SQL query optimization.
-
-**Restrictions**:
-- Focus on performance optimization
-- Implement GPU detection and configuration
-- Add caching for frequent queries including Text-to-SQL
-- No new features
-
-**_Leverage**:
-- PyTorch CUDA utilities
-- LRU cache for response caching
-- Batch processing techniques
-- SQL query optimization
-
-**_Requirements**:
-- US-004: GPU Acceleration
-- US-001: DeepSeek API Integration
-- US-002: Local Knowledge Base Integration
-- US-010: Text-to-SQL Query Service
-
-**Success**:
-- GPU detection and configuration
-- Batch processing for embeddings
-- Response caching implementation including Text-to-SQL queries
-- Performance monitoring utilities
-
-- [x] **Task 10**: GPU Optimization and Performance
-
-### Task 11: Error Handling and Logging
+### Task 10: Error Handling and Logging
 **File**: `src/utils/error_handler.py`, `src/utils/logger.py`
 
 **Requirements**: US-008, US-003, US-007, US-010
@@ -454,9 +409,9 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - User-friendly error messages for Text-to-SQL queries
 - Comprehensive exception coverage
 
-- [x] **Task 11**: Error Handling and Logging
+- [x] **Task 10**: Error Handling and Logging
 
-### Task 12: Main Application Entry Points
+### Task 11: Main Application Entry Points
 **File**: `main.py`, `run_api.py`, `run_ui.py`
 
 **Requirements**: US-003, US-007, US-008, US-010
@@ -492,9 +447,9 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - Graceful startup and shutdown
 - Health check endpoints including Text-to-SQL service
 
-- [x] **Task 12**: Main Application Entry Points
+- [x] **Task 11**: Main Application Entry Points
 
-### Task 13: Documentation and Examples
+### Task 12: Documentation and Examples
 **File**: `README.md`, `examples/`, `docs/`
 
 **Requirements**: US-003, US-007, US-008, US-010, US-011
@@ -530,4 +485,4 @@ Implement the task for spec ai-customer-agent, first run spec-workflow-guide to 
 - API documentation with Text-to-SQL endpoints
 - Troubleshooting guide for Text-to-SQL queries
 
-- [x] **Task 13**: Documentation and Examples
+- [x] **Task 12**: Documentation and Examples

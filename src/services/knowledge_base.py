@@ -3,7 +3,7 @@ Enhanced Knowledge Base Manager for AI Customer Agent.
 
 This module provides enhanced knowledge base management with file type detection
 and intelligent routing: Excel files to SQLite database, other documents to vector storage.
-Supports multiple file formats and GPU-accelerated embeddings.
+Supports multiple file formats.
 """
 
 import os
@@ -13,7 +13,6 @@ import shutil
 from typing import List, Dict, Any, Optional, Tuple, Union
 from pathlib import Path
 
-import torch
 from sentence_transformers import SentenceTransformer
 import chromadb
 from chromadb.config import Settings
@@ -188,10 +187,9 @@ class DocumentProcessor:
 
 class EmbeddingService:
     """
-    Handles text embedding generation with GPU acceleration.
+    Handles text embedding generation using sentence-transformers.
     
-    This service uses sentence-transformers models to generate embeddings
-    and automatically utilizes GPU when available for faster processing.
+    This service uses sentence-transformers models to generate embeddings.
     """
     
     def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
@@ -203,24 +201,7 @@ class EmbeddingService:
         """
         self.logger = logging.getLogger(__name__)
         self.model_name = model_name
-        self.device = self._setup_device()
         self.model = self._load_model()
-        
-    def _setup_device(self) -> torch.device:
-        """
-        Configure PyTorch for GPU acceleration if available.
-        
-        Returns:
-            torch.device: The device to use for computations
-        """
-        if torch.cuda.is_available():
-            device = torch.device("cuda")
-            torch.backends.cudnn.benchmark = True
-            self.logger.info(f"Using GPU: {torch.cuda.get_device_name()}")
-        else:
-            device = torch.device("cpu")
-            self.logger.info("Using CPU for embeddings")
-        return device
         
     def _load_model(self) -> SentenceTransformer:
         """
@@ -233,7 +214,7 @@ class EmbeddingService:
             KnowledgeBaseError: If model loading fails
         """
         try:
-            model = SentenceTransformer(self.model_name, device=self.device)
+            model = SentenceTransformer(self.model_name)
             self.logger.info(f"Loaded embedding model: {self.model_name}")
             return model
         except Exception as e:
@@ -277,12 +258,10 @@ class EmbeddingService:
             raise KnowledgeBaseError(f"Embedding generation failed: {str(e)}")
             
     def get_model_info(self) -> Dict[str, Any]:
-        """Get information about the embedding model and device."""
+        """Get information about the embedding model."""
         return {
             "model_name": self.model_name,
-            "device": str(self.device),
-            "embedding_dimension": self.model.get_sentence_embedding_dimension(),
-            "gpu_available": torch.cuda.is_available()
+            "embedding_dimension": self.model.get_sentence_embedding_dimension()
         }
 
 
@@ -291,8 +270,7 @@ class EnhancedKnowledgeBaseManager:
     Enhanced Knowledge Base Manager with file type detection and routing.
     
     This class provides intelligent file routing: Excel files to SQLite database,
-    other documents to vector storage. Supports multiple file formats and
-    GPU-accelerated embeddings.
+    other documents to vector storage. Supports multiple file formats.
     """
     
     def __init__(self, persist_directory: str = "./knowledge_base/chroma_db",
@@ -917,7 +895,6 @@ class EnhancedKnowledgeBaseManager:
                 'total_sheets': sqlite_info.get('sheet_count', 0),
                 'total_size_bytes': sqlite_info.get('total_size_bytes', 0),
                 'embedding_model': self.embedding_service.model_name,
-                'gpu_available': torch.cuda.is_available(),
                 'last_updated': '2024-01-01T12:00:00Z'  # This would need to be tracked
             }
         except Exception as e:
@@ -929,7 +906,6 @@ class EnhancedKnowledgeBaseManager:
                 'total_sheets': 0,
                 'total_size_bytes': 0,
                 'embedding_model': self.embedding_service.model_name,
-                'gpu_available': False,
                 'last_updated': '2024-01-01T12:00:00Z'
             }
 

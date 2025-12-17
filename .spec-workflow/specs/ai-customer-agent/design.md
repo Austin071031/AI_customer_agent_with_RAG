@@ -138,7 +138,6 @@ For long documents (PDF, TXT, Word files), the system implements intelligent chu
 - **Web Framework**: FastAPI (for API) + Streamlit (for UI)
 - **Vector Database**: ChromaDB (local, lightweight)
 - **Embedding Model**: sentence-transformers (all-MiniLM-L6-v2)
-- **GPU Acceleration**: CUDA + PyTorch with GPU support
 
 ### Key Dependencies
 ```python
@@ -517,38 +516,19 @@ async def update_configuration(config: Dict) -> Dict:
 # Main components
 - Sidebar: Configuration and knowledge base management
 - Main area: Chat interface with message history
-- Header: Application status and GPU utilization
+- Header: Application status
 
 # Features
 - Real-time chat with streaming responses
 - File upload for knowledge base
 - Configuration settings panel
 - Conversation history management
-- GPU status monitoring
 ```
 
 ### Desktop GUI (Alternative)
 - **Framework**: Tkinter or PyQt
 - **Features**: Native Windows application with system tray integration
 - **Advantages**: Better performance, system integration
-
-## GPU Optimization
-
-### CUDA Configuration
-```python
-def setup_gpu():
-    """Configure PyTorch for NVIDIA 4070Ti GPU"""
-    if torch.cuda.is_available():
-        device = torch.device("cuda")
-        torch.backends.cudnn.benchmark = True
-        return device
-    return torch.device("cpu")
-```
-
-### Batch Processing
-- Use batch processing for document embeddings
-- Implement async operations for API calls
-- Optimize vector search with GPU acceleration
 
 ## Security Considerations
 
@@ -593,7 +573,6 @@ class ResponseCache:
 │  • FastAPI Server (localhost:8000)                         │
 │  • Streamlit UI (localhost:8501)                           │
 │  • ChromaDB Vector Store (local files)                     │
-│  • GPU Acceleration (NVIDIA 4070Ti)                        │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -647,7 +626,6 @@ logger.add(
 - Unit tests for individual components
 - Integration tests for API endpoints
 - End-to-end tests for user workflows
-- Performance tests for GPU utilization
 
 ### Test Framework
 - pytest for Python tests
@@ -658,7 +636,6 @@ logger.add(
 
 ### Health Checks
 - API endpoint health monitoring
-- GPU utilization tracking
 - Knowledge base integrity checks
 
 ### Maintenance Tasks

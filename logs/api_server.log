@@ -9878,3 +9878,56 @@ client_session: <aiohttp.client.ClientSession object at 0x00000195F8176120>
 2025-12-10 10:51:21,425 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
 2025-12-10 10:51:21,608 - __main__ - INFO - Shutdown signal received, stopping server...
 2025-12-10 10:51:21,608 - __main__ - INFO - API server shutdown complete
+2025-12-15 09:53:43,973 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-15 09:53:43,973 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-15 09:53:44,075 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-15 09:53:44,135 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cuda:0
+2025-12-15 09:53:44,135 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-15 09:53:46,026 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002481154C050>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-15 09:53:48,615 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-15 09:53:48,620 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-15 09:53:48,794 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-15 09:53:48,794 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-15 09:53:48,794 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-15 09:53:48,794 - src.api.main - INFO - All services initialized successfully
+2025-12-15 09:53:49,180 - __main__ - INFO - API server is ready and responding to requests
+2025-12-15 09:53:49,180 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-15 09:56:58,471 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-15 09:56:58,471 - src.services.chat_manager - INFO - Processing user message: hi, do you know the Qing dynasty of China?...
+2025-12-15 09:56:58,472 - src.services.chat_manager - INFO - Query intent detected: general (confidence: 0.80)
+2025-12-15 09:56:58,472 - src.services.chat_manager - INFO - Detected intent: general (confidence: 0.80)
+2025-12-15 09:56:58,472 - src.services.chat_manager - INFO - Routing to general conversation
+2025-12-15 09:56:58,955 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-15 09:56:58,955 - src.services.chat_manager - INFO - Found 3 similar documents for query: hi, do you know the Qing dynasty of China?
+2025-12-15 09:56:58,955 - src.services.chat_manager - INFO - Document 1: tmp2llfhet3.pdf, Similarity: 0.2620, Threshold: -0.5
+2025-12-15 09:56:58,955 - src.services.chat_manager - INFO - Document 2: tmp2llfhet3.pdf, Similarity: 0.2481, Threshold: -0.5
+2025-12-15 09:56:58,955 - src.services.chat_manager - INFO - Document 3: tmp2llfhet3.pdf, Similarity: 0.2142, Threshold: -0.5
+2025-12-15 09:56:58,955 - src.services.chat_manager - INFO - Included document in context: tmp2llfhet3.pdf (score: 0.2620)
+2025-12-15 09:56:58,955 - src.services.chat_manager - INFO - Included document in context: tmp2llfhet3.pdf (score: 0.2481)
+2025-12-15 09:56:58,955 - src.services.chat_manager - INFO - Included document in context: tmp2llfhet3.pdf (score: 0.2142)
+2025-12-15 09:56:58,955 - src.services.chat_manager - INFO - Generated KB context with 3 documents, total length: 2523 characters
+2025-12-15 09:56:58,956 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-15 09:56:59,505 - src.services.deepseek_service - ERROR - Unexpected error in DeepSeek API call: DeepSeek API error (402): Insufficient Balance
+2025-12-15 09:56:59,506 - src.services.chat_manager - ERROR - DeepSeek API error in process_message: Unexpected error: DeepSeek API error (402): Insufficient Balance
+2025-12-15 09:56:59,506 - src.api.endpoints.chat - ERROR - Unexpected error in process_chat_message: Unexpected error: DeepSeek API error (402): Insufficient Balance
+2025-12-15 10:50:18,552 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-15 10:50:18,552 - src.services.chat_manager - INFO - Processing user message: hi, do you know the Qing dynasty of China?...
+2025-12-15 10:50:18,552 - src.services.chat_manager - INFO - Query intent detected: general (confidence: 0.80)
+2025-12-15 10:50:18,552 - src.services.chat_manager - INFO - Detected intent: general (confidence: 0.80)
+2025-12-15 10:50:18,552 - src.services.chat_manager - INFO - Routing to general conversation
+2025-12-15 10:50:18,568 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-15 10:50:18,568 - src.services.chat_manager - INFO - Found 3 similar documents for query: hi, do you know the Qing dynasty of China?
+2025-12-15 10:50:18,568 - src.services.chat_manager - INFO - Document 1: tmp2llfhet3.pdf, Similarity: 0.2620, Threshold: -0.5
+2025-12-15 10:50:18,568 - src.services.chat_manager - INFO - Document 2: tmp2llfhet3.pdf, Similarity: 0.2481, Threshold: -0.5
+2025-12-15 10:50:18,568 - src.services.chat_manager - INFO - Document 3: tmp2llfhet3.pdf, Similarity: 0.2142, Threshold: -0.5
+2025-12-15 10:50:18,569 - src.services.chat_manager - INFO - Included document in context: tmp2llfhet3.pdf (score: 0.2620)
+2025-12-15 10:50:18,569 - src.services.chat_manager - INFO - Included document in context: tmp2llfhet3.pdf (score: 0.2481)
+2025-12-15 10:50:18,569 - src.services.chat_manager - INFO - Included document in context: tmp2llfhet3.pdf (score: 0.2142)
+2025-12-15 10:50:18,569 - src.services.chat_manager - INFO - Generated KB context with 3 documents, total length: 2523 characters
+2025-12-15 10:50:18,570 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-15 10:50:29,036 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-17 11:27:07,515 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-17 11:27:07,515 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-17 11:27:07,600 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-17 11:27:07,660 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cuda:0
+2025-12-17 11:27:07,660 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2

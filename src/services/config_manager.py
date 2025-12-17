@@ -156,11 +156,6 @@ class ChatConfig(BaseModel):
     system_prompt: str = Field(default="You are a helpful customer service assistant.")
 
 
-class GPUConfig(BaseModel):
-    """GPU configuration."""
-    enable_cuda: bool = Field(default=True)
-    device: str = Field(default="cuda")
-    max_memory_gb: int = Field(default=8, ge=1)
 
 
 class APIConfig(BaseModel):
@@ -198,7 +193,6 @@ class FullConfig(BaseModel):
     vector_search: VectorSearchConfig = Field(default_factory=VectorSearchConfig)
     file_processing: FileProcessingConfig = Field(default_factory=FileProcessingConfig)
     chat: ChatConfig = Field(default_factory=ChatConfig)
-    gpu: GPUConfig = Field(default_factory=GPUConfig)
     api: APIConfig = Field(default_factory=APIConfig)
     database: DatabaseConfig = Field(default_factory=DatabaseConfig)
     ui: UIConfig = Field(default_factory=UIConfig)
@@ -360,11 +354,6 @@ class ConfigManager:
                 "max_history_length": 20,
                 "enable_streaming": True,
                 "system_prompt": "You are a helpful customer service assistant. Provide accurate and friendly responses to customer queries."
-            },
-            "gpu": {
-                "enable_cuda": True,
-                "device": "cuda",
-                "max_memory_gb": 8
             },
             "api": {
                 "host": "localhost",
@@ -563,7 +552,6 @@ class ConfigManager:
             api_config=self.get_api_config(),
             db_config=self.get_db_config(),
             log_level=log_level,
-            enable_gpu=self.settings.gpu.enable_cuda,
             max_conversation_history=self.settings.chat.max_history_length
         )
 
@@ -658,8 +646,6 @@ class ConfigManager:
             app_updates = {}
             if "log_level" in update_data:
                 app_updates["log_level"] = update_data["log_level"]
-            if "enable_gpu" in update_data:
-                self.settings.gpu.enable_cuda = update_data["enable_gpu"]
             if "max_conversation_history" in update_data:
                 self.settings.chat.max_history_length = update_data["max_conversation_history"]
 

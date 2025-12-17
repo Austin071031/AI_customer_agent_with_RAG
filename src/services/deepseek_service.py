@@ -13,8 +13,8 @@ import logging
 from typing import Dict, List, Optional, AsyncGenerator
 from datetime import datetime
 
-from ..models.config_models import APIConfig
-from ..models.chat_models import ChatMessage
+from src.models.config_models import APIConfig
+from src.models.chat_models import ChatMessage
 
 
 class DeepSeekAPIError(Exception):

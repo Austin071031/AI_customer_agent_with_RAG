@@ -81,19 +81,16 @@ class UpdateAppConfigRequest(BaseModel):
     
     Attributes:
         log_level: Logging level (debug, info, warning, error, optional)
-        enable_gpu: Whether to enable GPU acceleration (optional)
         max_conversation_history: Maximum conversation history length (optional)
     """
     
     log_level: Optional[str] = Field(None, pattern="^(debug|info|warning|error)$", description="Logging level")
-    enable_gpu: Optional[bool] = Field(None, description="Enable GPU acceleration")
     max_conversation_history: Optional[int] = Field(None, ge=1, le=1000, description="Max conversation history length")
     
     model_config = {
         "json_schema_extra": {
             "example": {
                 "log_level": "info",
-                "enable_gpu": True,
                 "max_conversation_history": 50
             }
         }
@@ -132,7 +129,6 @@ class ConfigResponse(BaseModel):
                 },
                 "app_config": {
                     "log_level": "info",
-                    "enable_gpu": True,
                     "max_conversation_history": 50
                 },
                 "last_modified": "2024-01-01T12:00:00Z"
@@ -198,7 +194,6 @@ class ResetConfigResponse(BaseModel):
                     },
                     "app_config": {
                         "log_level": "info",
-                        "enable_gpu": True,
                         "max_conversation_history": 50
                     }
                 }
@@ -485,7 +480,7 @@ async def update_application_configuration(request: UpdateAppConfigRequest) -> U
     Update application configuration settings.
     
     This endpoint allows updating application-level settings including
-    logging level, GPU acceleration, and conversation history limits.
+    logging level and conversation history limits.
     
     Args:
         request: Application configuration update request
@@ -506,8 +501,6 @@ async def update_application_configuration(request: UpdateAppConfigRequest) -> U
         update_data = {}
         if request.log_level is not None:
             update_data["log_level"] = request.log_level
-        if request.enable_gpu is not None:
-            update_data["enable_gpu"] = request.enable_gpu
         if request.max_conversation_history is not None:
             update_data["max_conversation_history"] = request.max_conversation_history
         
@@ -608,7 +601,6 @@ async def reset_configuration() -> ResetConfigResponse:
                 },
                 "app_config": {
                     "log_level": default_app_config.log_level,
-                    "enable_gpu": default_app_config.enable_gpu,
                     "max_conversation_history": default_app_config.max_conversation_history
                 }
             }
@@ -765,23 +757,9 @@ async def get_environment_info():
         except ImportError:
             system_info["memory_info"] = "psutil not available"
         
-        # Get GPU information (if available)
-        try:
-            import torch
-            if torch.cuda.is_available():
-                system_info["gpu_available"] = True
-                system_info["gpu_count"] = torch.cuda.device_count()
-                system_info["gpu_devices"] = [
-                    {
-                        "name": torch.cuda.get_device_name(i),
-                        "memory_total_gb": round(torch.cuda.get_device_properties(i).total_memory / (1024**3), 2)
-                    }
-                    for i in range(torch.cuda.device_count())
-                ]
-            else:
-                system_info["gpu_available"] = False
-        except ImportError:
-            system_info["gpu_info"] = "torch not available"
+        # GPU acceleration is not used in this application
+        system_info["gpu_available"] = False
+        system_info["gpu_info"] = "GPU acceleration is not used in this application"
         
         return {
             "environment": system_info,

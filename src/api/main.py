@@ -250,7 +250,6 @@ async def get_system_info():
                 "knowledge_base_enabled": bool(app_state.get("kb_manager")),
                 "chat_enabled": bool(app_state.get("chat_manager")),
                 "log_level": settings.app.log_level,
-                "enable_gpu": settings.gpu.enable_cuda,
                 "max_conversation_history": settings.chat.max_history_length
             }
         }

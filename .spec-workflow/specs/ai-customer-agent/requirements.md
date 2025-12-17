@@ -1,7 +1,7 @@
 # AI Customer Agent - Requirements Specification
 
 ## Overview
-Develop a Python-based AI customer service agent that uses DeepSeek API and can connect to local knowledge bases, running locally on Windows with NVIDIA 4070Ti GPU support.
+Develop a Python-based AI customer service agent that uses DeepSeek API and can connect to local knowledge bases, running locally on Windows.
 
 ## User Stories
 
@@ -35,16 +35,6 @@ Develop a Python-based AI customer service agent that uses DeepSeek API and can 
   - **Action**: System starts and runs on Windows environment
   - **Response**: Application interface available and functional
   - **State**: Windows compatibility verified
-
-**US-004: GPU Acceleration**
-- **As a** user with NVIDIA 4070Ti GPU
-- **I want to** utilize GPU acceleration for faster processing
-- **So that** response times are optimized for better user experience
-- **EARS Criteria:**
-  - **Event**: Application detects NVIDIA GPU
-  - **Action**: System utilizes GPU for model inference
-  - **Response**: Improved processing speed
-  - **State**: GPU drivers installed and compatible
 
 ### User Interface
 **US-005: Chat Interface**
@@ -123,7 +113,6 @@ Develop a Python-based AI customer service agent that uses DeepSeek API and can 
 ### Performance
 - **Response Time**: AI responses should be generated within 2-5 seconds for typical queries
 - **Concurrency**: Support multiple simultaneous chat sessions
-- **GPU Utilization**: Efficiently use NVIDIA 4070Ti GPU for accelerated processing
 
 ### Security
 - **Data Privacy**: All customer data and knowledge base content stored locally
@@ -132,7 +121,6 @@ Develop a Python-based AI customer service agent that uses DeepSeek API and can 
 ### Compatibility
 - **Operating System**: Windows 10/11 compatibility
 - **Python Version**: Python 3.8+ support
-- **GPU Requirements**: NVIDIA CUDA compatibility for 4070Ti GPU
 
 ### Maintainability
 - **Code Quality**: Well-documented, modular Python code
@@ -142,7 +130,7 @@ Develop a Python-based AI customer service agent that uses DeepSeek API and can 
 ## Acceptance Criteria
 1. The AI agent successfully connects to DeepSeek API and returns responses
 2. Local knowledge bases can be added, indexed, and queried
-3. Application runs smoothly on Windows with GPU acceleration
+3. Application runs smoothly on Windows
 4. Chat interface is intuitive and responsive
 5. Error conditions are handled gracefully with user-friendly messages
 6. All user stories are implemented and tested

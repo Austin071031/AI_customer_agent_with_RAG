@@ -366,7 +366,8 @@ Based on these results, please provide a direct answer to the user's question. D
                 response = await self._process_with_knowledge_base(user_message)
             else:
                 self.logger.info("Routing to general conversation")
-                response = await self._process_general_conversation(user_message, use_knowledge_base)
+                # For general queries, we don't use the knowledge base even if the user requested it
+                response = await self._process_general_conversation(user_message, use_knowledge_base=False)
             
             # Step 3: Update conversation history
             self._update_conversation_history(user_message, response)
@@ -386,10 +387,10 @@ Based on these results, please provide a direct answer to the user's question. D
             else:
                 raise ChatManagerError(f"Knowledge base error: {str(e)}")
         except TextToSQLError as e:
-            self.logger.error(f"Text-to-SQL error in process_message: {str(e)}")
+            self.logger.error(f"Text-to-SQL query failed: {str(e)}")
             # Fall back to general conversation for Excel data query failures
             self.logger.warning("Falling back to general conversation for failed Excel query")
-            return await self._process_general_conversation(user_message, use_knowledge_base)
+            return await self._process_general_conversation(user_message, use_knowledge_base=False)
         except Exception as e:
             self.logger.error(f"Unexpected error in process_message: {str(e)}")
             raise ChatManagerError(f"Failed to process message: {str(e)}")
@@ -470,7 +471,8 @@ Based on these results, please provide a direct answer to the user's question. D
             else:
                 # For KB and general queries, use the original streaming approach
                 kb_context = ""
-                if use_knowledge_base:
+                # Only use knowledge base for knowledge_base intent and if use_knowledge_base is True
+                if use_knowledge_base and intent == "knowledge_base":
                     kb_context = await self._get_knowledge_base_context(user_message)
                     self.logger.debug(f"Retrieved KB context: {len(kb_context)} characters")
                 
@@ -501,7 +503,7 @@ Based on these results, please provide a direct answer to the user's question. D
             self.logger.error(f"Text-to-SQL error in stream_message: {str(e)}")
             # Fall back to general conversation for Excel data query failures
             self.logger.warning("Falling back to general conversation for failed Excel query")
-            async for chunk in self.stream_message(user_message, use_knowledge_base, file_id=None):
+            async for chunk in self.stream_message(user_message, use_knowledge_base=False, file_id=None):
                 yield chunk
         except Exception as e:
             self.logger.error(f"Unexpected error in stream_message: {str(e)}")

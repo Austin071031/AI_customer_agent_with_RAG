@@ -3,7 +3,7 @@ Streamlit Web Interface for AI Customer Agent.
 
 This module provides a web-based user interface for the AI Customer Agent
 using Streamlit. It includes chat interface, knowledge base management,
-configuration panel, and GPU status monitoring.
+and configuration panel.
 """
 
 import streamlit as st
@@ -428,30 +428,6 @@ def update_configuration(config: Dict) -> bool:
         return False
 
 
-def check_gpu_status() -> Dict:
-    """
-    Check GPU status and utilization.
-    
-    Returns:
-        Dict: GPU status information
-    """
-    try:
-        import torch
-        gpu_status = {
-            "available": torch.cuda.is_available(),
-            "device_count": torch.cuda.device_count() if torch.cuda.is_available() else 0,
-            "current_device": torch.cuda.current_device() if torch.cuda.is_available() else None,
-            "device_name": torch.cuda.get_device_name(0) if torch.cuda.is_available() else None,
-        }
-        
-        if gpu_status["available"]:
-            # Get GPU memory info
-            gpu_status["memory_allocated"] = torch.cuda.memory_allocated(0) / 1024**3  # Convert to GB
-            gpu_status["memory_reserved"] = torch.cuda.memory_reserved(0) / 1024**3  # Convert to GB
-            
-        return gpu_status
-    except ImportError:
-        return {"available": False, "error": "PyTorch not installed"}
 
 
 def init_session_state():
@@ -472,9 +448,6 @@ def init_session_state():
     
     if "system_info" not in st.session_state:
         st.session_state.system_info = None
-    
-    if "gpu_status" not in st.session_state:
-        st.session_state.gpu_status = {}
 
 
 def display_chat_message(role: str, content: str):
@@ -511,7 +484,6 @@ def main():
     # Check API health
     st.session_state.api_healthy = check_api_health()
     st.session_state.system_info = get_system_info()
-    st.session_state.gpu_status = check_gpu_status()
     
     # Sidebar
     with st.sidebar:
@@ -529,18 +501,6 @@ def main():
         else:
             st.error("FastAPI backend is not available")
             st.info("Please ensure the FastAPI server is running on http://localhost:8001")
-        
-        # GPU Status
-        st.subheader("🖥️ GPU Status")
-        if st.session_state.gpu_status.get("available"):
-            st.success("GPU acceleration available")
-            st.write(f"**Device:** {st.session_state.gpu_status.get('device_name', 'Unknown')}")
-            if "memory_allocated" in st.session_state.gpu_status:
-                st.write(f"**Memory Used:** {st.session_state.gpu_status['memory_allocated']:.2f} GB")
-        else:
-            st.warning("GPU acceleration not available")
-            if st.session_state.gpu_status.get("error"):
-                st.write(f"**Note:** {st.session_state.gpu_status['error']}")
         
         # Chat Settings
         st.subheader("💬 Chat Settings")

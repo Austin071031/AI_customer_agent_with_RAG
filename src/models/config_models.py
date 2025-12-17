@@ -106,7 +106,6 @@ class AppConfig(BaseModel):
         api_config: Configuration for DeepSeek API
         db_config: Configuration for the vector database
         log_level: Logging level (debug, info, warning, error)
-        enable_gpu: Whether to enable GPU acceleration
         max_conversation_history: Maximum number of messages to keep in conversation history
     """
     
@@ -124,7 +123,6 @@ class AppConfig(BaseModel):
                 "collection_name": "documents"
             },
             "log_level": "info",
-            "enable_gpu": True,
             "max_conversation_history": 50
         }
     })
@@ -132,7 +130,6 @@ class AppConfig(BaseModel):
     api_config: APIConfig
     db_config: DatabaseConfig = Field(default_factory=DatabaseConfig)
     log_level: str = Field(default="info", pattern="^(debug|info|warning|error)$")
-    enable_gpu: bool = True
     max_conversation_history: int = Field(default=50, ge=1, le=1000)
     
     @field_validator('log_level')
