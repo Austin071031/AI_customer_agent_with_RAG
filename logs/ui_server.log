@@ -413,3 +413,8 @@
 2025-12-15 09:55:19,048 - __main__ - INFO - Server monitoring started (auto-restart enabled)
 2025-12-17 11:27:26,654 - __main__ - ERROR - Port 8501 is already in use
 2025-12-17 11:27:26,654 - __main__ - ERROR - Configuration validation failed. Exiting.
+2025-12-17 11:28:07,330 - __main__ - INFO - API server is available and healthy
+2025-12-17 11:28:07,331 - __main__ - INFO - Starting Streamlit UI on localhost:8501...
+2025-12-17 11:28:09,349 - __main__ - INFO - Streamlit UI started successfully on http://localhost:8501
+2025-12-17 11:28:09,349 - __main__ - INFO - UI server is running and ready to accept requests
+2025-12-17 11:28:09,349 - __main__ - INFO - Server monitoring started (auto-restart enabled)

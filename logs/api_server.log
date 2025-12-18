@@ -9931,3 +9931,83 @@ client_session: <aiohttp.client.ClientSession object at 0x00000195F8176120>
 2025-12-17 11:27:07,600 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
 2025-12-17 11:27:07,660 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cuda:0
 2025-12-17 11:27:07,660 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-17 11:27:09,539 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000025ECD853CB0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-17 11:27:12,045 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-17 11:27:12,050 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-17 11:27:12,230 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-17 11:27:12,231 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-17 11:27:12,231 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-17 11:27:12,231 - src.api.main - INFO - All services initialized successfully
+2025-12-17 11:27:12,579 - __main__ - INFO - API server is ready and responding to requests
+2025-12-17 11:27:12,579 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-17 11:29:24,436 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-17 11:29:24,436 - src.services.chat_manager - INFO - Processing user message: what qualification should a data center contains f...
+2025-12-17 11:29:24,437 - src.services.chat_manager - INFO - Query intent detected: general (confidence: 0.80)
+2025-12-17 11:29:24,437 - src.services.chat_manager - INFO - Detected intent: general (confidence: 0.80)
+2025-12-17 11:29:24,437 - src.services.chat_manager - INFO - Routing to general conversation
+2025-12-17 11:29:24,437 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-17 11:29:59,748 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-17 11:34:31,704 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-17 11:34:31,706 - src.services.document_chunking_service - INFO - Updated chunking config: size=1000, overlap=200
+2025-12-17 11:34:32,681 - src.services.document_chunking_service - INFO - Created 43 chunks from C:\Users\123\AppData\Local\Temp\tmpsuypppny.pdf
+2025-12-17 11:34:33,516 - src.services.knowledge_base - INFO - Successfully processed document file with 43 chunks: tmpsuypppny.pdf
+2025-12-17 11:34:33,516 - src.services.knowledge_base - INFO - Processing complete: 0 Excel files, 1 documents, 0 errors
+2025-12-17 11:34:33,516 - src.api.endpoints.knowledge_base - INFO - Successfully processed: DCGNN_a single-stage 3D object detection network based on density clustering and graph neural network.pdf
+2025-12-17 11:35:05,318 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-17 11:35:05,318 - src.services.chat_manager - INFO - Processing user message: what is DCGNN, introduce me its key framework....
+2025-12-17 11:35:05,318 - src.services.chat_manager - INFO - Query intent detected: knowledge_base (confidence: 0.20)
+2025-12-17 11:35:05,318 - src.services.chat_manager - INFO - Detected intent: knowledge_base (confidence: 0.20)
+2025-12-17 11:35:05,318 - src.services.chat_manager - INFO - Routing to knowledge base enhanced response
+2025-12-17 11:35:05,391 - src.services.knowledge_base - INFO - Found 3 similar documents for query
+2025-12-17 11:35:05,391 - src.services.chat_manager - INFO - Found 3 similar documents for query: what is DCGNN, introduce me its key framework.
+2025-12-17 11:35:05,391 - src.services.chat_manager - INFO - Document 1: tmpwpkd543a.pdf, Similarity: 0.3324, Threshold: -0.5
+2025-12-17 11:35:05,391 - src.services.chat_manager - INFO - Document 2: tmpwpkd543a.pdf, Similarity: 0.3074, Threshold: -0.5
+2025-12-17 11:35:05,391 - src.services.chat_manager - INFO - Document 3: tmpsuypppny.pdf, Similarity: 0.2990, Threshold: -0.5
+2025-12-17 11:35:05,391 - src.services.chat_manager - INFO - Included document in context: tmpwpkd543a.pdf (score: 0.3324)
+2025-12-17 11:35:05,391 - src.services.chat_manager - INFO - Included document in context: tmpwpkd543a.pdf (score: 0.3074)
+2025-12-17 11:35:05,391 - src.services.chat_manager - INFO - Included document in context: tmpsuypppny.pdf (score: 0.2990)
+2025-12-17 11:35:05,392 - src.services.chat_manager - INFO - Generated KB context with 3 documents, total length: 2956 characters
+2025-12-17 11:35:05,393 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-17 11:35:33,985 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-17 11:39:13,884 - src.api.endpoints.knowledge_base - INFO - Processing 1 files for knowledge base upload
+2025-12-17 11:39:13,884 - src.services.document_chunking_service - INFO - Updated chunking config: size=1000, overlap=200
+2025-12-17 11:39:13,912 - src.services.sqlite_database_service - INFO - Created dynamic table 'excel_c3b35b1035114bc9bcec3c8ba2f72a5e_sheet1' for sheet 'Sheet1'
+2025-12-17 11:39:13,919 - src.services.sqlite_database_service - INFO - Inserted 6 rows into dynamic table 'excel_c3b35b1035114bc9bcec3c8ba2f72a5e_sheet1'
+2025-12-17 11:39:13,921 - src.services.sqlite_database_service - INFO - Successfully stored Excel file with dynamic tables: tmp5fa68qub.xlsx
+2025-12-17 11:39:13,921 - src.services.knowledge_base - INFO - Successfully processed Excel file with dynamic tables: tmp5fa68qub.xlsx
+2025-12-17 11:39:13,921 - src.services.knowledge_base - INFO - Processing complete: 1 Excel files, 0 documents, 0 errors
+2025-12-17 11:39:13,921 - src.api.endpoints.knowledge_base - INFO - Successfully processed: customer_profile.xlsx
+2025-12-17 11:40:20,585 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-17 11:40:20,585 - src.services.chat_manager - INFO - Processing user message: what is the Monthly total charge by site in the ex...
+2025-12-17 11:40:20,586 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-12-17 11:40:20,586 - src.services.chat_manager - INFO - Detected intent: excel_data (confidence: 1.00)
+2025-12-17 11:40:20,586 - src.services.chat_manager - INFO - Routing to Text-to-SQL service for Excel data query
+2025-12-17 11:40:20,586 - src.services.chat_manager - INFO - Processing Excel data query: what is the Monthly total charge by site in the excel data?
+2025-12-17 11:40:20,586 - src.services.chat_manager - INFO - Using most recent Excel file: tmp5fa68qub.xlsx (ID: excel_c3b35b10-3511-4bc9-bcec-3c8ba2f72a5e)
+2025-12-17 11:40:20,586 - src.services.text_to_sql_service - INFO - Converting natural language query to SQL: what is the Monthly total charge by site in the excel data?
+2025-12-17 11:40:20,587 - src.services.text_to_sql_service - INFO - Retrieved schema info for file excel_c3b35b10-3511-4bc9-bcec-3c8ba2f72a5e with 1 dynamic tables
+2025-12-17 11:40:20,589 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-17 11:40:23,671 - src.services.text_to_sql_service - INFO - Generated SQL query: SELECT "Site", SUM("Monthly_total_charge") AS "Total_Monthly_Charge" FROM "excel_c3b35b1035114bc9bcec3c8ba2f72a5e_sheet1" GROUP BY "Site"
+2025-12-17 11:40:23,672 - src.services.text_to_sql_service - INFO - Successfully executed SQL query on relational tables, returned 2 results
+2025-12-17 11:40:23,673 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-17 11:40:25,762 - src.services.chat_manager - INFO - Generated natural language answer from 2 SQL results
+2025-12-17 11:40:25,763 - src.services.chat_manager - INFO - Successfully processed Excel data query, found 2 results
+2025-12-17 11:40:25,763 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-18 15:15:28,783 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-18 15:15:28,783 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-18 15:15:28,786 - __main__ - INFO - API server is ready and responding to requests
+2025-12-18 15:15:28,787 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-18 15:15:28,805 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-18 15:15:28,844 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cuda:0
+2025-12-18 15:15:28,844 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-18 15:15:33,249 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-18 15:15:33,250 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-18 15:15:33,335 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-18 15:15:33,335 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-18 15:15:33,335 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-18 15:15:33,335 - src.api.main - INFO - All services initialized successfully
+2025-12-18 15:15:33,336 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-18 15:25:45,236 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-18 15:25:46,138 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-18 15:25:46,138 - __main__ - INFO - API server shutdown complete
+2025-12-18 15:25:46,486 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
