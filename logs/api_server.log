@@ -10011,3 +10011,70 @@ client_session: <aiohttp.client.ClientSession object at 0x00000195F8176120>
 2025-12-18 15:25:46,138 - __main__ - INFO - Shutdown signal received, stopping server...
 2025-12-18 15:25:46,138 - __main__ - INFO - API server shutdown complete
 2025-12-18 15:25:46,486 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-22 17:48:06,656 - __main__ - ERROR - Failed to import FastAPI application: No module named 'aiohttp'
+2025-12-22 17:48:06,657 - __main__ - ERROR - Configuration validation failed. Exiting.
+2025-12-22 17:48:31,586 - fastapi - ERROR - Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+2025-12-22 17:48:31,587 - __main__ - ERROR - Configuration validation failed: Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+2025-12-22 17:48:31,587 - __main__ - ERROR - Configuration validation failed. Exiting.
+2025-12-22 17:49:04,087 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-22 17:49:04,087 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-22 17:49:04,134 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-22 17:49:04,171 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-12-22 17:49:04,172 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-22 17:49:06,112 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000158092CE3C0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-22 17:49:06,720 - huggingface_hub.file_download - WARNING - Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+2025-12-22 17:49:09,130 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000015809468E10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-22 17:49:12,194 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000158095D0A50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-22 17:49:15,217 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000158095E1940>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-22 17:49:18,240 - __main__ - ERROR - Health check failed: HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000158095E2060>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-12-22 17:49:19,330 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-22 17:49:19,332 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-22 17:49:19,542 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-22 17:49:19,544 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-22 17:49:19,544 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-22 17:49:19,544 - src.api.main - INFO - All services initialized successfully
+2025-12-22 17:49:19,757 - __main__ - INFO - API server is ready and responding to requests
+2025-12-22 17:49:19,757 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-22 17:50:47,398 - src.api.endpoints.chat - INFO - Processing chat message (KB: True, Stream: False)
+2025-12-22 17:50:47,399 - src.services.chat_manager - INFO - Processing user message: calculate the monthly total charge by site in the ...
+2025-12-22 17:50:47,400 - src.services.chat_manager - INFO - Query intent detected: excel_data (confidence: 1.00)
+2025-12-22 17:50:47,400 - src.services.chat_manager - INFO - Detected intent: excel_data (confidence: 1.00)
+2025-12-22 17:50:47,401 - src.services.chat_manager - INFO - Routing to Text-to-SQL service for Excel data query
+2025-12-22 17:50:47,401 - src.services.chat_manager - INFO - Processing Excel data query: calculate the monthly total charge by site in the excel data
+2025-12-22 17:50:47,402 - src.services.chat_manager - INFO - Using most recent Excel file: tmp5fa68qub.xlsx (ID: excel_c3b35b10-3511-4bc9-bcec-3c8ba2f72a5e)
+2025-12-22 17:50:47,402 - src.services.text_to_sql_service - INFO - Converting natural language query to SQL: calculate the monthly total charge by site in the excel data
+2025-12-22 17:50:47,404 - src.services.text_to_sql_service - INFO - Retrieved schema info for file excel_c3b35b10-3511-4bc9-bcec-3c8ba2f72a5e with 1 dynamic tables
+2025-12-22 17:50:47,408 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-22 17:50:50,008 - src.services.text_to_sql_service - INFO - Generated SQL query: SELECT "Site", SUM("Monthly_total_charge") FROM "excel_c3b35b1035114bc9bcec3c8ba2f72a5e_sheet1" GROUP BY "Site";
+2025-12-22 17:50:50,011 - src.services.text_to_sql_service - INFO - Successfully executed SQL query on relational tables, returned 2 results
+2025-12-22 17:50:50,014 - src.services.deepseek_service - INFO - Sending request to DeepSeek API: https://api.deepseek.com/chat/completions
+2025-12-22 17:50:51,796 - src.services.chat_manager - INFO - Generated natural language answer from 2 SQL results
+2025-12-22 17:50:51,797 - src.services.chat_manager - INFO - Successfully processed Excel data query, found 2 results
+2025-12-22 17:50:51,797 - src.services.chat_manager - INFO - Successfully processed user message with intelligent routing
+2025-12-30 15:24:51,648 - __main__ - ERROR - Failed to import FastAPI application: No module named 'fastapi'
+2025-12-30 15:24:51,648 - __main__ - ERROR - Configuration validation failed. Exiting.
+2025-12-30 15:50:13,581 - __main__ - INFO - Starting FastAPI server on 0.0.0.0:8001
+2025-12-30 15:50:13,581 - __main__ - INFO - Waiting for API server to be ready...
+2025-12-30 15:50:13,589 - __main__ - INFO - API server is ready and responding to requests
+2025-12-30 15:50:13,590 - __main__ - INFO - API server is running and ready to accept requests
+2025-12-30 15:50:13,630 - src.api.main - INFO - Starting AI Customer Agent FastAPI backend...
+2025-12-30 15:50:13,671 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-12-30 15:50:13,672 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-12-30 15:50:17,154 - src.services.knowledge_base - INFO - Loaded embedding model: all-MiniLM-L6-v2
+2025-12-30 15:50:17,156 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-30 15:50:17,370 - src.services.knowledge_base - INFO - Initialized vector store at: ./knowledge_base/chroma_db with cosine distance metric
+2025-12-30 15:50:17,372 - src.services.sqlite_database_service - INFO - SQLite database initialized at: ./excel_database.db
+2025-12-30 15:50:17,372 - src.services.chat_manager - INFO - Enhanced ChatManager initialized successfully
+2025-12-30 15:50:17,373 - src.api.main - INFO - All services initialized successfully
+2025-12-30 15:50:17,374 - src.api.main - INFO - Shutting down AI Customer Agent FastAPI backend...
+2025-12-30 15:50:32,040 - __main__ - INFO - Received signal 2, initiating graceful shutdown...
+2025-12-30 15:50:32,599 - __main__ - INFO - Shutdown signal received, stopping server...
+2025-12-30 15:50:32,599 - __main__ - INFO - API server shutdown complete
