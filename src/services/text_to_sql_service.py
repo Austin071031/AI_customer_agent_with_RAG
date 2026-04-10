@@ -10,6 +10,8 @@ import re
 import logging
 import sqlite3
 import json
+import sqlglot
+from sqlglot import parse_one, exp
 from typing import Dict, List, Any, Optional, Tuple, Union
 from datetime import datetime
 
@@ -353,37 +355,78 @@ Now generate the SQL query for the user's question.
         
     def _clean_sql_query(self, sql_query: str) -> str:
         """
-        Clean and validate SQL query.
+        Clean and validate SQL query using sqlglot to prevent SQL injection
+        and ensure only safe SELECT queries are executed.
         
         Args:
             sql_query: Raw SQL query string
             
         Returns:
-            Cleaned SQL query
+            Cleaned and validated SQL query
+            
+        Raises:
+            TextToSQLError: If query is invalid or unsafe
         """
         # Remove trailing semicolons and whitespace
         sql_query = sql_query.rstrip(';').strip()
         
-        # Basic SQL injection prevention
-        dangerous_patterns = [
-            r'\bDROP\b',
-            r'\bDELETE\b.*\bFROM\b',
-            r'\bUPDATE\b.*\bSET\b',
-            r'\bINSERT\b.*\bINTO\b',
-            r'\bALTER\b',
-            r'\bCREATE\b',
-            r'\bTRUNCATE\b',
-            r';.*;',  # Multiple statements
-        ]
-        
-        for pattern in dangerous_patterns:
-            if re.search(pattern, sql_query, re.IGNORECASE):
+        try:
+            # Parse the query using sqlglot
+            parsed_query = parse_one(sql_query, read="sqlite")
+            
+            # Ensure it is a SELECT statement
+            if not isinstance(parsed_query, exp.Select):
                 raise TextToSQLError(
-                    "Query contains potentially dangerous operations",
+                    "Only SELECT queries are allowed for security reasons.",
                     error_type="security_error"
                 )
                 
-        return sql_query
+            # Walk through the parsed AST to check for unauthorized table access or nested destructive commands
+            for node in parsed_query.walk():
+                # Check for any mutation commands that might have been nested
+                if isinstance(node, (exp.Delete, exp.Update, exp.Insert, exp.Drop, exp.Create, exp.Alter)):
+                    raise TextToSQLError(
+                        "Query contains potentially dangerous operations.",
+                        error_type="security_error"
+                    )
+                
+                # Check table references
+                if isinstance(node, exp.Table):
+                    table_name = node.name.lower()
+                    # Determine if it's a CTE or an alias
+                    # SQLGlot AST puts CTE names in the Table node but we need to check if it's defined in the query
+                    is_cte = False
+                    if parsed_query.args.get("with"):
+                        for cte in parsed_query.args["with"].expressions:
+                            if cte.alias.lower() == table_name:
+                                is_cte = True
+                                break
+                    
+                    # Only allow querying from our specific excel dynamic tables
+                    # or standard sqlite system tables, or defined CTEs
+                    if not table_name.startswith("excel_") and table_name != "sqlite_master" and not is_cte:
+                        raise TextToSQLError(
+                            f"Access to table '{table_name}' is not authorized.",
+                            error_type="security_error"
+                        )
+                        
+            # Return the regenerated, sanitized SQL string
+            return parsed_query.sql(dialect="sqlite")
+            
+        except sqlglot.errors.ParseError as e:
+            self.logger.error(f"SQL parsing failed: {str(e)}")
+            raise TextToSQLError(
+                "Generated SQL query is invalid.",
+                error_type="parse_error"
+            )
+        except Exception as e:
+            if isinstance(e, TextToSQLError):
+                raise
+            self.logger.error(f"SQL validation failed: {str(e)}")
+            raise TextToSQLError(
+                "Failed to validate SQL query.",
+                error_type="security_error"
+            )
         
     def _execute_sql_query(self, sql_query: str, file_id: str, 
                           sheet_name: Optional[str] = None) -> List[Dict[str, Any]]:
