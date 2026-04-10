@@ -98,13 +98,15 @@ class DeepSeekService:
                 
         except aiohttp.ClientError as e:
             self.logger.error(f"Network error communicating with DeepSeek API: {str(e)}")
-            raise DeepSeekAPIError(f"Network error: {str(e)}")
+            raise DeepSeekAPIError(f"Network error: {str(e)}") from e
         except json.JSONDecodeError as e:
             self.logger.error(f"Invalid JSON response from DeepSeek API: {str(e)}")
-            raise DeepSeekAPIError("Invalid JSON response from API")
+            raise DeepSeekAPIError("Invalid JSON response from API") from e
         except Exception as e:
+            if isinstance(e, DeepSeekAPIError):
+                raise
             self.logger.error(f"Unexpected error in DeepSeek API call: {str(e)}")
-            raise DeepSeekAPIError(f"Unexpected error: {str(e)}")
+            raise DeepSeekAPIError(f"Unexpected error: {str(e)}") from e
             
     async def chat_completion(self, messages: List[Dict], model: Optional[str] = None) -> str:
         """
@@ -139,7 +141,7 @@ class DeepSeekService:
             
         except KeyError as e:
             self.logger.error(f"Unexpected response format from DeepSeek API: {e}")
-            raise DeepSeekAPIError("Unexpected response format from API")
+            raise DeepSeekAPIError("Unexpected response format from API") from e
             
     def _log_prompt_to_terminal(self, messages: List[Dict], model: str) -> None:
         """
@@ -228,7 +230,12 @@ class DeepSeekService:
                             
         except aiohttp.ClientError as e:
             self.logger.error(f"Network error during streaming: {str(e)}")
-            raise DeepSeekAPIError(f"Network error during streaming: {str(e)}")
+            raise DeepSeekAPIError(f"Network error during streaming: {str(e)}") from e
+        except Exception as e:
+            if isinstance(e, DeepSeekAPIError):
+                raise
+            self.logger.error(f"Unexpected error during streaming: {str(e)}")
+            raise DeepSeekAPIError(f"Unexpected error during streaming: {str(e)}") from e
             
     async def process_chat_message(self, user_message: str, conversation_history: List[ChatMessage] = None) -> str:
         """
