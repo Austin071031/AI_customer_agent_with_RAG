@@ -8,8 +8,10 @@ document upload, search, and management operations.
 import logging
 import os
 import tempfile
+import asyncio
 from typing import List, Optional
 from fastapi import APIRouter, HTTPException, status, UploadFile, File, Query, Form
+from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
@@ -310,8 +312,9 @@ async def search_knowledge_base(request: SearchRequest) -> SearchResponse:
         # Get knowledge base manager instance
         kb_manager = get_kb_manager()
         
-        # Search for similar documents
-        similar_docs = kb_manager.search_similar(
+        # Search for similar documents using threadpool to prevent event loop blocking
+        similar_docs = await run_in_threadpool(
+            kb_manager.search_similar,
             query=request.query,
             k=request.k
         )
@@ -433,16 +436,22 @@ async def upload_documents(
                     temp_file_path = temp_file.name
                 
                 try:
-                    # Add document to knowledge base with chunking parameters
-                    result = kb_manager.add_documents([temp_file_path], chunk_size, chunk_overlap)
+                    # Add document to knowledge base using threadpool to prevent event loop blocking
+                    # since this performs CPU-intensive chunking, embedding, and DB IO
+                    result = await run_in_threadpool(
+                        kb_manager.add_documents,
+                        [temp_file_path],
+                        chunk_size,
+                        chunk_overlap
+                    )
                     
                     # Check if file was successfully processed (either as Excel or document)
-                    if result.get('excel_files') or result.get('documents'):
+                    if isinstance(result, dict) and (result.get('excel_files') or result.get('documents')):
                         uploaded_files.append(file.filename)
                         logger.info(f"Successfully processed: {file.filename}")
                     else:
                         # Check for specific errors
-                        if result.get('errors'):
+                        if isinstance(result, dict) and result.get('errors'):
                             error_msg = result['errors'][0] if result['errors'] else "Unknown processing error"
                             failed_files.append({
                                 "filename": file.filename,

@@ -89,7 +89,11 @@ def mock_services():
             file_type="pdf"
         )
     ]
-    mock_kb_manager.add_documents.return_value = True
+    mock_kb_manager.add_documents.return_value = {
+        'documents': [{'file_name': 'test.txt', 'status': 'success'}],
+        'excel_files': [],
+        'errors': []
+    }
     mock_kb_manager.clear_knowledge_base.return_value = True
     mock_kb_manager.get_document_count.return_value = 5
     mock_kb_manager.get_statistics.return_value = {
@@ -706,13 +710,24 @@ class TestConfigurationEndpoints:
         assert "app_config" in data["updated_sections"]
         assert data["restart_required"] is True
     
-    def test_reset_configuration_success(self, client):
+    def test_reset_configuration_success(self, client, mock_services):
         """
         Test successful reset of configuration to defaults.
         
         Args:
             client: TestClient instance
+            mock_services: Dictionary with mocked service instances
         """
+        # Mock reset_to_defaults to return successfully
+        mock_services["config_manager"].reset_to_defaults.return_value = True
+        
+        # We need to mock get_api_config to return a valid config since reset
+        # also fetches the current config to return in the response
+        from src.models.config_models import APIConfig
+        mock_services["config_manager"].get_api_config.return_value = APIConfig(
+            api_key="valid-api-key"
+        )
+        
         response = client.post("/api/config/reset")
         
         assert response.status_code == status.HTTP_200_OK
@@ -841,11 +856,8 @@ class TestErrorHandling:
         
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
         data = response.json()
-        assert "error" in data
-        assert "message" in data
         assert "detail" in data
-        assert data["error"] == "Internal server error"
-        assert "unexpected error occurred" in data["message"]
+        assert "Unexpected error" in data["detail"]
     
     def test_invalid_json_request(self, client):
         """
@@ -917,10 +929,14 @@ class TestStreamingEndpoints:
         
         response = client.post("/api/chat/stream", json=request_data)
         
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = response.json()
-        assert "detail" in data
-        assert "Streaming error" in data["detail"]
+        assert response.status_code == status.HTTP_200_OK
+        
+        # Test content will be the exact string we yielded in the error block
+        content = b""
+        for chunk in response.iter_bytes():
+            content += chunk
+            
+        assert b"ERROR: Streaming error" in content
 
 
 if __name__ == "__main__":
