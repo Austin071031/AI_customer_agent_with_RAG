@@ -59,7 +59,24 @@ async def lifespan(app: FastAPI):
             temperature=settings.deepseek.temperature,
             max_tokens=settings.deepseek.max_tokens
         )
-        llm_provider = DeepSeekService(api_config)
+        
+        # --- STRATEGY PATTERN IN ACTION ---
+        # To use DeepSeek:
+        # from ..services.deepseek_service import DeepSeekService
+        # llm_provider = DeepSeekService(api_config)
+        
+        # To use Google Gemini:
+        from ..services.gemini_service import GeminiService
+        import os
+        # Note: You would typically add this to your config/settings
+        gemini_api_key = os.environ.get("GEMINI_API_KEY", "your-google-api-key")
+        llm_provider = GeminiService(
+            api_key=gemini_api_key,
+            model="gemini-2.5-flash",
+            temperature=0.7
+        )
+        # ----------------------------------
+        
         app_state["llm_provider"] = llm_provider
         
         # Initialize knowledge base manager
