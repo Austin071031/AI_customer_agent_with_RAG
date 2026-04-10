@@ -6,6 +6,15 @@ for chat, knowledge base management, and configuration.
 """
 
 import logging
+
+# Workaround for ChromaDB requiring newer sqlite3
+try:
+    import sqlean
+    import sys
+    sys.modules['sqlite3'] = sqlean
+except ImportError:
+    pass
+
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse

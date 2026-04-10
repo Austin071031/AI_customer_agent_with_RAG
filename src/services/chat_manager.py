@@ -67,7 +67,7 @@ class ChatManager:
         
         # Configuration settings
         self.max_history_length = 20  # Maximum number of messages to keep in history
-        self.knowledge_base_threshold = -0.5  # Lower similarity threshold for KB results (was 0.7)
+        self.knowledge_base_threshold = 0.7  # Similarity threshold for KB results
         self.max_kb_context_length = 4000  # Maximum characters for KB context
         
         # Query intent detection settings

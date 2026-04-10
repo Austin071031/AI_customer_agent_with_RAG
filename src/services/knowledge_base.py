@@ -14,6 +14,15 @@ from typing import List, Dict, Any, Optional, Tuple, Union
 from pathlib import Path
 
 from sentence_transformers import SentenceTransformer
+
+# Workaround for ChromaDB requiring newer sqlite3
+try:
+    import sqlean
+    import sys
+    sys.modules['sqlite3'] = sqlean
+except ImportError:
+    pass
+
 import chromadb
 from chromadb.config import Settings
 
@@ -647,9 +656,11 @@ class EnhancedKnowledgeBaseManager:
                         embedding=None  # Not returning embeddings for search results
                     )
                     # Store similarity score in metadata
-                    # For cosine distance: similarity = 1 - distance (distance is 1 - cosine_similarity)
-                    # So similarity = cosine_similarity
-                    kb_doc.metadata['similarity_score'] = 1 - distance
+                    # ChromaDB returns cosine distance.
+                    # cosine_similarity = 1 - cosine_distance
+                    # We ensure it stays within [0.0, 1.0] to handle any floating point inaccuracies.
+                    similarity = 1.0 - distance
+                    kb_doc.metadata['similarity_score'] = max(0.0, min(1.0, similarity))
                     similar_documents.append(kb_doc)
                     
             self.logger.info(f"Found {len(similar_documents)} similar documents for query")

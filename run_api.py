@@ -24,6 +24,14 @@ import uvicorn
 from contextlib import asynccontextmanager
 import os
 
+# Workaround for ChromaDB requiring newer sqlite3
+try:
+    import sqlean
+    import sys
+    sys.modules['sqlite3'] = sqlean
+except ImportError:
+    pass
+
 # Add the project root to Python path to ensure imports work
 project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, project_root)
