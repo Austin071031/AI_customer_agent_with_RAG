@@ -12,6 +12,7 @@ import re
 import json
 from typing import List, Dict, Optional, AsyncGenerator, Any
 from datetime import datetime
+import tiktoken
 
 from ..models.chat_models import ChatMessage
 from ..services.deepseek_service import DeepSeekService, DeepSeekAPIError
@@ -69,6 +70,15 @@ class ChatManager:
         self.max_history_length = 20  # Maximum number of messages to keep in history
         self.knowledge_base_threshold = 0.7  # Similarity threshold for KB results
         self.max_kb_context_length = 4000  # Maximum characters for KB context
+        
+        # Token window settings
+        self.max_history_tokens = 4000 # Reserve around 4k tokens for history (leaves 4k for prompt/context in an 8k window)
+        try:
+            # Use cl100k_base which is standard for modern LLMs like GPT-4 and DeepSeek
+            self.tokenizer = tiktoken.get_encoding("cl100k_base")
+        except Exception as e:
+            self.logger.warning(f"Failed to initialize tiktoken: {e}. Falling back to character counting.")
+            self.tokenizer = None
         
         # Query intent detection settings
         self.excel_query_keywords = [
@@ -495,16 +505,24 @@ Based on these results, please provide a direct answer to the user's question. D
             # Continue without KB context if KB fails
             if use_knowledge_base:
                 self.logger.warning("Falling back to streaming without knowledge base context")
-                async for chunk in self.stream_message(user_message, use_knowledge_base=False, file_id=file_id):
+                messages = self._build_conversation_messages(user_message, "")
+                full_response = ""
+                async for chunk in self.deepseek_service.stream_chat(messages):
+                    full_response += chunk
                     yield chunk
+                self._update_conversation_history(user_message, full_response)
             else:
                 raise ChatManagerError(f"Knowledge base error: {str(e)}")
         except TextToSQLError as e:
             self.logger.error(f"Text-to-SQL error in stream_message: {str(e)}")
             # Fall back to general conversation for Excel data query failures
             self.logger.warning("Falling back to general conversation for failed Excel query")
-            async for chunk in self.stream_message(user_message, use_knowledge_base=False, file_id=None):
+            messages = self._build_conversation_messages(user_message, "")
+            full_response = ""
+            async for chunk in self.deepseek_service.stream_chat(messages):
+                full_response += chunk
                 yield chunk
+            self._update_conversation_history(user_message, full_response)
         except Exception as e:
             self.logger.error(f"Unexpected error in stream_message: {str(e)}")
             raise ChatManagerError(f"Failed to stream message: {str(e)}")
@@ -639,10 +657,11 @@ Based on these results, please provide a direct answer to the user's question. D
         
     def _update_conversation_history(self, user_message: str, ai_response: str) -> None:
         """
-        Update the conversation history with new messages.
+        Update the conversation history with new messages and enforce token limits.
         
         This method adds the user message and AI response to the conversation
-        history and ensures the history doesn't exceed the maximum length.
+        history and ensures the history doesn't exceed the maximum token budget
+        or the maximum message count fallback.
         
         Args:
             user_message: The user's message to add
@@ -662,11 +681,39 @@ Based on these results, please provide a direct answer to the user's question. D
         )
         self.conversation_history.append(ai_chat_message)
         
-        # Trim history if it exceeds maximum length
+        # Token-based truncation
+        if self.tokenizer:
+            total_tokens = 0
+            messages_to_keep = 0
+            
+            # Count backwards from most recent message
+            for msg in reversed(self.conversation_history):
+                # Calculate tokens for this message
+                # Add 4 tokens overhead per message (role, padding, etc.)
+                msg_tokens = len(self.tokenizer.encode(msg.content)) + 4 
+                
+                if total_tokens + msg_tokens > self.max_history_tokens:
+                    break
+                    
+                total_tokens += msg_tokens
+                messages_to_keep += 1
+                
+            # If we need to truncate based on tokens
+            if messages_to_keep < len(self.conversation_history):
+                # Ensure we keep pairs if possible
+                if messages_to_keep % 2 != 0 and messages_to_keep > 1:
+                    messages_to_keep -= 1
+                    
+                removed_count = len(self.conversation_history) - messages_to_keep
+                self.conversation_history = self.conversation_history[-messages_to_keep:]
+                self.logger.debug(f"Trimmed {removed_count} messages to stay within {self.max_history_tokens} token budget")
+        
+        # Fallback length-based truncation (or secondary safeguard)
         if len(self.conversation_history) > self.max_history_length * 2:  # *2 for user+assistant pairs
             # Keep only the most recent messages
+            removed_count = len(self.conversation_history) - (self.max_history_length * 2)
             self.conversation_history = self.conversation_history[-(self.max_history_length * 2):]
-            self.logger.debug(f"Trimmed conversation history to {len(self.conversation_history)} messages")
+            self.logger.debug(f"Trimmed {removed_count} messages to stay within {self.max_history_length} pair limit")
             
     def get_conversation_history(self) -> List[ChatMessage]:
         """
