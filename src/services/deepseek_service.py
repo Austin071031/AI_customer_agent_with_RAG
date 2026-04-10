@@ -10,24 +10,20 @@ import asyncio
 import aiohttp
 import json
 import logging
-from typing import Dict, List, Optional, AsyncGenerator
-from datetime import datetime
+from typing import List, Dict, Any, Optional, AsyncGenerator
+import aiohttp
 
 from src.models.config_models import APIConfig
 from src.models.chat_models import ChatMessage
+from src.interfaces.llm_provider import LLMProvider, LLMProviderError
 
 
-class DeepSeekAPIError(Exception):
-    """Custom exception for DeepSeek API related errors."""
-    
-    def __init__(self, message: str, status_code: Optional[int] = None, error_type: Optional[str] = None):
-        self.message = message
-        self.status_code = status_code
-        self.error_type = error_type
-        super().__init__(self.message)
+class DeepSeekAPIError(LLMProviderError):
+    """Exception raised for errors in the DeepSeek API."""
+    pass
 
 
-class DeepSeekService:
+class DeepSeekService(LLMProvider):
     """
     Service for interacting with the DeepSeek API.
     

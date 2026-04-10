@@ -59,8 +59,8 @@ async def lifespan(app: FastAPI):
             temperature=settings.deepseek.temperature,
             max_tokens=settings.deepseek.max_tokens
         )
-        deepseek_service = DeepSeekService(api_config)
-        app_state["deepseek_service"] = deepseek_service
+        llm_provider = DeepSeekService(api_config)
+        app_state["llm_provider"] = llm_provider
         
         # Initialize knowledge base manager
         kb_manager = KnowledgeBaseManager(
@@ -72,11 +72,11 @@ async def lifespan(app: FastAPI):
         # Initialize Text-to-SQL service with relational database support
         from ..services.sqlite_database_service import SQLiteDatabaseService
         sqlite_service = SQLiteDatabaseService(db_path=settings.database.sqlite_db_path)
-        text_to_sql_service = TextToSQLService(deepseek_service, sqlite_service)
+        text_to_sql_service = TextToSQLService(llm_provider, sqlite_service)
         app_state["text_to_sql_service"] = text_to_sql_service
         
         # Initialize chat manager with Text-to-SQL integration for intelligent query routing
-        chat_manager = ChatManager(deepseek_service, kb_manager, text_to_sql_service)
+        chat_manager = ChatManager(llm_provider, kb_manager, text_to_sql_service)
         app_state["chat_manager"] = chat_manager
         
         logger.info("All services initialized successfully")
@@ -184,7 +184,7 @@ async def health_check():
     try:
         # Check if services are initialized
         config_manager = app_state.get("config_manager")
-        deepseek_service = app_state.get("deepseek_service")
+        llm_provider = app_state.get("llm_provider")
         kb_manager = app_state.get("kb_manager")
         chat_manager = app_state.get("chat_manager")
         text_to_sql_service = app_state.get("text_to_sql_service")
@@ -192,7 +192,7 @@ async def health_check():
         health_status = {
             "api": "healthy",
             "config_manager": "healthy" if config_manager else "unhealthy",
-            "deepseek_service": "healthy" if deepseek_service else "unhealthy",
+            "llm_provider": "healthy" if llm_provider else "unhealthy",
             "knowledge_base": "healthy" if kb_manager else "unhealthy",
             "chat_manager": "healthy" if chat_manager else "unhealthy",
             "text_to_sql_service": "healthy" if text_to_sql_service else "unhealthy"

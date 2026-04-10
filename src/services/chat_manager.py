@@ -15,7 +15,7 @@ from datetime import datetime
 import tiktoken
 
 from ..models.chat_models import ChatMessage
-from ..services.deepseek_service import DeepSeekService, DeepSeekAPIError
+from ..interfaces.llm_provider import LLMProvider, LLMProviderError
 from ..services.knowledge_base import KnowledgeBaseManager, KnowledgeBaseError
 from ..services.text_to_sql_service import TextToSQLService, TextToSQLError
 
@@ -33,18 +33,18 @@ class ChatManager:
     """
     Enhanced Chat Manager for AI Customer Agent with Text-to-SQL integration.
     
-    This class orchestrates between the DeepSeek API service, knowledge base,
+    This class orchestrates between the LLM provider, knowledge base,
     and Text-to-SQL service to provide intelligent responses with intelligent
     query routing and mixed data source integration.
     """
     
-    def __init__(self, deepseek_service: DeepSeekService, kb_manager: KnowledgeBaseManager,
+    def __init__(self, llm_provider: LLMProvider, kb_manager: KnowledgeBaseManager,
                  text_to_sql_service: Optional[TextToSQLService] = None):
         """
         Initialize the enhanced chat manager with required services.
         
         Args:
-            deepseek_service: DeepSeekService instance for AI responses
+            llm_provider: LLMProvider instance for AI responses
             kb_manager: KnowledgeBaseManager instance for knowledge base access
             text_to_sql_service: Optional TextToSQLService for Excel data queries
             
@@ -54,12 +54,12 @@ class ChatManager:
         self.logger = logging.getLogger(__name__)
         
         # Validate and store service dependencies
-        if not isinstance(deepseek_service, DeepSeekService):
-            raise ChatManagerError("DeepSeekService instance required")
+        if not isinstance(llm_provider, LLMProvider):
+            raise ChatManagerError("LLMProvider instance required")
         if not isinstance(kb_manager, KnowledgeBaseManager):
             raise ChatManagerError("KnowledgeBaseManager instance required")
             
-        self.deepseek_service = deepseek_service
+        self.llm_provider = llm_provider
         self.kb_manager = kb_manager
         self.text_to_sql_service = text_to_sql_service
         
@@ -222,8 +222,8 @@ Based on these results, please provide a direct answer to the user's question. D
                 }
             ]
             
-            # Generate natural language answer using DeepSeek
-            answer = await self.deepseek_service.chat_completion(messages)
+            # Generate natural language answer using LLM provider
+            answer = await self.llm_provider.chat_completion(messages)
             
             # Clean up the answer
             answer = answer.strip()
@@ -385,9 +385,9 @@ Based on these results, please provide a direct answer to the user's question. D
             self.logger.info("Successfully processed user message with intelligent routing")
             return response
             
-        except DeepSeekAPIError as e:
-            self.logger.error(f"DeepSeek API error in process_message: {str(e)}")
-            raise
+        except LLMProviderError as e:
+            self.logger.error(f"LLM Provider API error in process_message: {str(e)}")
+            raise ChatManagerError(f"LLM API error: {str(e)}")
         except KnowledgeBaseError as e:
             self.logger.error(f"Knowledge base error in process_message: {str(e)}")
             # Fall back to general conversation without KB
@@ -417,7 +417,7 @@ Based on these results, please provide a direct answer to the user's question. D
         """
         kb_context = await self._get_knowledge_base_context(user_message)
         messages = self._build_conversation_messages(user_message, kb_context)
-        return await self.deepseek_service.chat_completion(messages)
+        return await self.llm_provider.chat_completion(messages)
         
     async def _process_general_conversation(self, user_message: str, use_knowledge_base: bool = True) -> str:
         """
@@ -434,7 +434,7 @@ Based on these results, please provide a direct answer to the user's question. D
         if use_knowledge_base:
             kb_context = await self._get_knowledge_base_context(user_message)
         messages = self._build_conversation_messages(user_message, kb_context)
-        return await self.deepseek_service.chat_completion(messages)
+        return await self.llm_provider.chat_completion(messages)
             
     async def stream_message(self, user_message: str, use_knowledge_base: bool = True,
                            file_id: Optional[str] = None) -> AsyncGenerator[str, None]:
@@ -489,7 +489,7 @@ Based on these results, please provide a direct answer to the user's question. D
                 messages = self._build_conversation_messages(user_message, kb_context)
                 
                 full_response = ""
-                async for chunk in self.deepseek_service.stream_chat(messages):
+                async for chunk in self.llm_provider.stream_chat(messages):
                     full_response += chunk
                     yield chunk
                     
@@ -497,9 +497,9 @@ Based on these results, please provide a direct answer to the user's question. D
             
             self.logger.info("Successfully streamed response with intelligent routing")
             
-        except DeepSeekAPIError as e:
-            self.logger.error(f"DeepSeek API error in stream_message: {str(e)}")
-            raise
+        except LLMProviderError as e:
+            self.logger.error(f"LLM Provider API error in stream_message: {str(e)}")
+            raise ChatManagerError(f"LLM API error: {str(e)}")
         except KnowledgeBaseError as e:
             self.logger.error(f"Knowledge base error in stream_message: {str(e)}")
             # Continue without KB context if KB fails
@@ -507,7 +507,7 @@ Based on these results, please provide a direct answer to the user's question. D
                 self.logger.warning("Falling back to streaming without knowledge base context")
                 messages = self._build_conversation_messages(user_message, "")
                 full_response = ""
-                async for chunk in self.deepseek_service.stream_chat(messages):
+                async for chunk in self.llm_provider.stream_chat(messages):
                     full_response += chunk
                     yield chunk
                 self._update_conversation_history(user_message, full_response)
@@ -519,7 +519,7 @@ Based on these results, please provide a direct answer to the user's question. D
             self.logger.warning("Falling back to general conversation for failed Excel query")
             messages = self._build_conversation_messages(user_message, "")
             full_response = ""
-            async for chunk in self.deepseek_service.stream_chat(messages):
+            async for chunk in self.llm_provider.stream_chat(messages):
                 full_response += chunk
                 yield chunk
             self._update_conversation_history(user_message, full_response)
@@ -756,10 +756,10 @@ Based on these results, please provide a direct answer to the user's question. D
             True if all components are healthy, False otherwise
         """
         try:
-            # Check DeepSeek service health
-            deepseek_healthy = await self.deepseek_service.health_check()
-            if not deepseek_healthy:
-                self.logger.warning("DeepSeek service health check failed")
+            # Check if LLM API is healthy
+            llm_healthy = await self.llm_provider.health_check()
+            if not llm_healthy:
+                self.logger.error("LLM Provider health check failed")
                 return False
                 
             # Check knowledge base health

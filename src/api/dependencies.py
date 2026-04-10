@@ -6,6 +6,7 @@ application state, avoiding circular imports between main.py and endpoints.
 """
 
 from fastapi import HTTPException, status
+from src.interfaces.llm_provider import LLMProvider
 from ..services.chat_manager import ChatManager
 from ..services.knowledge_base import KnowledgeBaseManager
 from ..services.config_manager import ConfigManager
@@ -89,3 +90,22 @@ def get_text_to_sql_service() -> TextToSQLService:
             detail="Text-to-SQL service not available"
         )
     return text_to_sql_service
+
+
+def get_llm_provider() -> LLMProvider:
+    """
+    Get the LLM provider instance from application state.
+    
+    Returns:
+        LLMProvider instance
+        
+    Raises:
+        HTTPException: If LLM provider is not available
+    """
+    llm_provider = app_state.get("llm_provider")
+    if not llm_provider:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="LLM provider not available"
+        )
+    return llm_provider

@@ -15,7 +15,7 @@ from sqlglot import parse_one, exp
 from typing import Dict, List, Any, Optional, Tuple, Union
 from datetime import datetime
 
-from ..services.deepseek_service import DeepSeekService
+from ..interfaces.llm_provider import LLMProvider
 from ..services.sqlite_database_service import SQLiteDatabaseService
 from ..models.excel_models import ExcelDocument, ExcelSheetData
 
@@ -38,15 +38,15 @@ class TextToSQLService:
     and executes them on the SQLite database containing Excel data.
     """
     
-    def __init__(self, deepseek_service: DeepSeekService, sqlite_service: SQLiteDatabaseService):
+    def __init__(self, llm_provider: LLMProvider, sqlite_service: SQLiteDatabaseService):
         """
         Initialize the Text-to-SQL service.
         
         Args:
-            deepseek_service: DeepSeekService instance for SQL generation
+            llm_provider: LLMProvider instance for SQL generation (e.g., DeepSeekService)
             sqlite_service: SQLiteDatabaseService instance for query execution
         """
-        self.deepseek_service = deepseek_service
+        self.llm_provider = llm_provider
         self.sqlite_service = sqlite_service
         self.logger = logging.getLogger(__name__)
         
@@ -176,7 +176,7 @@ class TextToSQLService:
                                 schema_info: Dict[str, Any],
                                 conversation_context: Optional[List[Dict]] = None) -> str:
         """
-        Generate SQL query from natural language using DeepSeek API.
+        Generate SQL query from natural language using the configured LLM provider.
         
         Args:
             natural_language_query: Natural language query
@@ -205,8 +205,8 @@ class TextToSQLService:
         })
         
         try:
-            # Call DeepSeek API to generate SQL
-            response = await self.deepseek_service.chat_completion(messages)
+            # Call LLM API to generate SQL
+            response = await self.llm_provider.chat_completion(messages)
             
             # Extract SQL query from response
             sql_query = self._extract_sql_from_response(response)
@@ -305,7 +305,7 @@ Now generate the SQL query for the user's question.
         
     def _extract_sql_from_response(self, response: str) -> str:
         """
-        Extract SQL query from DeepSeek API response.
+        Extract SQL query from LLM API response.
         
         Args:
             response: API response string
